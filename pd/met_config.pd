@@ -1,0 +1,7 @@
+#N canvas 0 0 440 100 10;
+#X text 16 8 MET_ROOT = racine du depot (memoires-en-transit/);
+#X text 16 24 Chemins Pd: relatifs a MET_ROOT ex. SONS_PROTOTYPE/wav/...;
+#X text 16 40 MET_ROOT doit etre dans Pd Path (voir launch script ou Preferences).;
+#X obj 16 62 loadbang;
+#X msg 16 82 \; pd dsp 1;
+#X connect 3 0 4 0;

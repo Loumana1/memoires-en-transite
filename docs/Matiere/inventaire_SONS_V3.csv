@@ -1,0 +1,527 @@
+etat,bucket,file,dur,start,end,src
+CORTEX,AMBIANCE,A43_v3_cortex_ambiance.wav,19.691,1440.076,1459.767,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A44_v3_cortex_ambiance.wav,16.786,1460.731,1477.518,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A45_v3_cortex_ambiance.wav,14.641,1488.078,1502.72,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A46_v3_cortex_ambiance.wav,25.933,1510.086,1536.019,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A47_v3_cortex_ambiance.wav,3.949,1543.981,1547.93,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A48_v3_cortex_ambiance.wav,51.854,1560.163,1612.017,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A49_v3_cortex_ambiance.wav,32.035,1619.982,1652.017,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A50_v3_cortex_ambiance.wav,58.035,1655.983,1714.018,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A51_v3_cortex_ambiance.wav,60.035,1717.983,1778.018,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A52_v3_cortex_ambiance.wav,58.783,1801.047,1859.83,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A53_v3_cortex_ambiance.wav,29.512,1864.062,1893.574,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A54_v3_cortex_ambiance.wav,53.664,1920.126,1973.79,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A55_v3_cortex_ambiance.wav,28.746,1976.11,2004.856,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A56_v3_cortex_ambiance.wav,59.861,2010.012,2069.873,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A57_v3_cortex_ambiance.wav,12.828,2072.19,2085.018,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A58_v3_cortex_ambiance.wav,20.61,2091.261,2111.871,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A59_v3_cortex_ambiance.wav,59.736,2119.989,2179.725,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A60_v3_cortex_ambiance.wav,15.995,2181.598,2197.593,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A61_v3_cortex_ambiance.wav,50.411,2220.385,2270.796,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A62_v3_cortex_ambiance.wav,36.673,2280.11,2316.784,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A63_v3_cortex_ambiance.wav,90.762,2336.595,2427.357,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A64_v3_cortex_ambiance.wav,62.677,2464.352,2527.029,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A65_v3_cortex_ambiance.wav,41.63,2580.327,2621.956,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A66_v3_cortex_ambiance.wav,59.838,2639.981,2699.819,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A67_v3_cortex_ambiance.wav,59.829,2715.981,2775.81,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A68_v3_cortex_ambiance.wav,59.641,2780.35,2839.991,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A69_v3_cortex_ambiance.wav,14.909,2879.985,2894.894,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A01_v3_cortex_ambiance.wav,19.954,0.0,19.954,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A02_v3_cortex_ambiance.wav,17.67,24.193,41.862,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A03_v3_cortex_ambiance.wav,3.023,43.375,46.398,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A04_v3_cortex_ambiance.wav,37.218,49.993,87.211,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A05_v3_cortex_ambiance.wav,4.182,95.602,99.784,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A06_v3_cortex_ambiance.wav,16.465,180.072,196.538,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A07_v3_cortex_ambiance.wav,5.312,200.098,205.41,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A08_v3_cortex_ambiance.wav,5.946,221.454,227.4,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A09_v3_cortex_ambiance.wav,3.961,231.716,235.676,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A10_v3_cortex_ambiance.wav,2.188,242.852,245.04,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A11_v3_cortex_ambiance.wav,2.808,264.316,267.124,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A12_v3_cortex_ambiance.wav,14.536,269.079,283.615,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A13_v3_cortex_ambiance.wav,2.454,284.719,287.173,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A14_v3_cortex_ambiance.wav,4.836,296.072,300.908,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A15_v3_cortex_ambiance.wav,2.749,358.086,360.835,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A16_v3_cortex_ambiance.wav,5.092,431.057,436.149,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A17_v3_cortex_ambiance.wav,5.931,446.678,452.609,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A18_v3_cortex_ambiance.wav,2.271,495.417,497.689,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A19_v3_cortex_ambiance.wav,3.551,501.381,504.932,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A20_v3_cortex_ambiance.wav,5.092,551.057,556.149,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A21_v3_cortex_ambiance.wav,2.867,566.678,569.546,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A22_v3_cortex_ambiance.wav,3.41,573.965,577.375,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A23_v3_cortex_ambiance.wav,11.506,579.169,590.675,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A24_v3_cortex_ambiance.wav,17.389,591.913,609.302,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A25_v3_cortex_ambiance.wav,9.867,621.758,631.625,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A26_v3_cortex_ambiance.wav,4.604,640.228,644.832,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A27_v3_cortex_ambiance.wav,3.429,689.807,693.236,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A28_v3_cortex_ambiance.wav,5.919,708.195,714.115,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A29_v3_cortex_ambiance.wav,2.454,715.219,717.673,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A30_v3_cortex_ambiance.wav,2.76,728.037,730.797,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A31_v3_cortex_ambiance.wav,2.287,733.894,736.181,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A32_v3_cortex_ambiance.wav,4.218,747.073,751.292,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A33_v3_cortex_ambiance.wav,13.987,969.663,983.65,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A34_v3_cortex_ambiance.wav,4.448,988.183,992.631,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A35_v3_cortex_ambiance.wav,3.433,997.822,1001.255,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A36_v3_cortex_ambiance.wav,5.276,1016.044,1021.32,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A37_v3_cortex_ambiance.wav,2.562,1091.695,1094.257,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A38_v3_cortex_ambiance.wav,23.634,1104.187,1127.821,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A39_v3_cortex_ambiance.wav,13.436,1131.985,1145.421,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A40_v3_cortex_ambiance.wav,15.801,1152.136,1167.937,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A41_v3_cortex_ambiance.wav,12.685,1170.433,1183.118,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,A42_v3_cortex_ambiance.wav,2.297,1186.012,1188.309,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,FRAGMENTS,C002_v3_cortex.wav,1.996,36.134,38.129,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C003_v3_cortex.wav,5.276,40.044,45.32,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C004_v3_cortex.wav,0.996,61.086,62.082,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C005_v3_cortex.wav,0.965,82.502,83.467,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C006_v3_cortex.wav,11.39,124.839,136.229,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C007_v3_cortex.wav,0.684,137.636,138.321,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C008_v3_cortex.wav,5.264,140.602,145.866,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C009_v3_cortex.wav,1.799,147.783,149.582,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C010_v3_cortex.wav,2.808,156.316,159.124,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C012_v3_cortex.wav,2.454,176.719,179.173,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C013_v3_cortex.wav,10.03,183.987,194.016,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C014_v3_cortex.wav,8.524,196.158,204.682,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C016_v3_cortex.wav,10.345,229.991,240.336,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C017_v3_cortex.wav,6.956,242.001,248.957,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C018_v3_cortex.wav,8.027,249.981,258.008,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C019_v3_cortex.wav,8.073,259.985,268.058,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C021_v3_cortex.wav,11.967,295.981,307.948,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C025_v3_cortex.wav,8.887,394.982,403.869,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C026_v3_cortex.wav,8.906,416.017,424.923,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C027_v3_cortex.wav,8.79,451.981,460.77,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C034_v3_cortex.wav,12.101,596.043,608.143,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C035_v3_cortex.wav,4.143,615.981,620.123,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C036_v3_cortex.wav,9.928,621.981,631.909,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C037_v3_cortex.wav,9.968,633.045,643.013,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C038_v3_cortex.wav,9.389,647.987,657.375,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C039_v3_cortex.wav,2.284,663.484,665.768,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C040_v3_cortex.wav,6.48,675.039,681.519,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C041_v3_cortex.wav,7.775,682.606,690.382,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C042_v3_cortex.wav,10.935,699.482,710.416,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C043_v3_cortex.wav,4.83,717.241,722.07,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C044_v3_cortex.wav,10.003,735.231,745.234,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C045_v3_cortex.wav,12.797,766.551,779.348,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C047_v3_cortex.wav,10.499,808.019,818.518,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C048_v3_cortex.wav,7.421,832.016,839.437,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C051_v3_cortex.wav,11.055,903.981,915.036,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C056_v3_cortex.wav,7.704,1071.996,1079.7,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C060_v3_cortex.wav,4.94,1176.027,1180.967,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C061_v3_cortex.wav,11.491,1195.517,1207.008,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C062_v3_cortex.wav,6.469,1220.048,1226.518,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C064_v3_cortex.wav,10.818,1255.997,1266.815,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C065_v3_cortex.wav,7.659,1268.483,1276.143,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C071_v3_cortex.wav,7.632,1425.76,1433.392,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C074_v3_cortex.wav,10.417,1476.033,1486.45,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C075_v3_cortex.wav,8.401,1491.992,1500.393,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C081_v3_cortex.wav,11.91,1663.982,1675.892,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C083_v3_cortex.wav,7.553,1711.988,1719.541,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C088_v3_cortex.wav,11.081,1848.001,1859.082,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C089_v3_cortex.wav,8.911,1863.981,1872.892,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C001_v3_cortex.wav,16.454,0.0,16.454,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C011_v3_cortex.wav,14.536,161.079,175.615,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C015_v3_cortex.wav,17.465,208.247,225.712,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C020_v3_cortex.wav,21.897,269.983,291.881,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C022_v3_cortex.wav,23.289,316.004,339.293,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C023_v3_cortex.wav,23.874,344.06,367.934,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C024_v3_cortex.wav,21.779,372.141,393.92,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C028_v3_cortex.wav,26.739,463.983,490.722,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C029_v3_cortex.wav,15.538,491.98,507.518,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C030_v3_cortex.wav,21.736,508.732,530.469,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C031_v3_cortex.wav,15.787,534.982,550.769,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C032_v3_cortex.wav,16.395,554.983,571.377,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C033_v3_cortex.wav,16.413,573.043,589.456,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C046_v3_cortex.wav,17.617,781.896,799.513,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C049_v3_cortex.wav,16.008,847.982,863.99,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C050_v3_cortex.wav,19.979,879.997,899.976,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C052_v3_cortex.wav,28.343,944.318,972.661,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C053_v3_cortex.wav,13.738,983.981,997.72,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C054_v3_cortex.wav,23.84,1008.165,1032.005,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C055_v3_cortex.wav,17.037,1049.981,1067.018,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C057_v3_cortex.wav,20.258,1081.985,1102.242,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C058_v3_cortex.wav,15.536,1133.981,1149.518,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C059_v3_cortex.wav,15.215,1158.009,1173.224,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C063_v3_cortex.wav,15.662,1231.98,1247.642,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C066_v3_cortex.wav,14.151,1279.991,1294.142,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C067_v3_cortex.wav,15.747,1304.184,1319.931,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C068_v3_cortex.wav,26.288,1338.063,1364.351,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C069_v3_cortex.wav,17.536,1371.981,1389.517,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C070_v3_cortex.wav,13.05,1405.482,1418.532,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C072_v3_cortex.wav,16.036,1435.983,1452.019,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C073_v3_cortex.wav,16.499,1456.016,1472.516,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C076_v3_cortex.wav,15.159,1503.982,1519.141,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C077_v3_cortex.wav,14.788,1520.981,1535.769,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C078_v3_cortex.wav,21.817,1552.054,1573.871,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C079_v3_cortex.wav,21.759,1600.004,1621.764,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C080_v3_cortex.wav,23.637,1632.07,1655.707,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C082_v3_cortex.wav,16.745,1680.013,1696.758,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C084_v3_cortex.wav,18.029,1723.981,1742.01,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C085_v3_cortex.wav,15.286,1760.002,1775.288,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C086_v3_cortex.wav,14.486,1783.982,1798.468,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C087_v3_cortex.wav,31.891,1807.98,1839.871,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C090_v3_cortex.wav,26.739,1919.983,1946.722,ambiance opacité fin V6 Cortex.wav
+HIPPOCAMPE,FRAGMENTS,H001_v3_hippocampe.wav,0.766,0.0,0.766,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H002_v3_hippocampe.wav,4.58,4.981,9.561,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H003_v3_hippocampe.wav,4.365,11.731,16.096,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H004_v3_hippocampe.wav,1.067,17.992,19.059,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H005_v3_hippocampe.wav,3.223,21.983,25.206,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H006_v3_hippocampe.wav,8.036,29.981,38.017,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H007_v3_hippocampe.wav,1.153,39.982,41.135,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H008_v3_hippocampe.wav,9.875,48.009,57.884,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H009_v3_hippocampe.wav,8.852,58.734,67.585,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H010_v3_hippocampe.wav,6.852,69.031,75.883,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H011_v3_hippocampe.wav,10.452,76.892,87.344,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H012_v3_hippocampe.wav,2.041,92.009,94.05,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H013_v3_hippocampe.wav,1.533,96.362,97.895,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H014_v3_hippocampe.wav,5.118,101.641,106.759,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H015_v3_hippocampe.wav,4.801,112.134,116.935,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H016_v3_hippocampe.wav,4.408,121.239,125.647,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H017_v3_hippocampe.wav,2.176,129.963,132.139,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H018_v3_hippocampe.wav,2.13,138.621,140.752,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H019_v3_hippocampe.wav,11.183,142.779,153.962,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H020_v3_hippocampe.wav,1.424,155.133,156.557,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H021_v3_hippocampe.wav,12.809,157.429,170.238,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H022_v3_hippocampe.wav,3.909,172.104,176.013,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H023_v3_hippocampe.wav,1.352,179.986,181.339,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H024_v3_hippocampe.wav,0.952,187.107,188.059,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H025_v3_hippocampe.wav,3.264,189.984,193.248,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H026_v3_hippocampe.wav,0.912,196.061,196.973,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H027_v3_hippocampe.wav,4.608,199.046,203.654,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H028_v3_hippocampe.wav,9.441,212.68,222.12,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H029_v3_hippocampe.wav,2.03,223.98,226.01,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H030_v3_hippocampe.wav,4.999,232.002,237.0,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H031_v3_hippocampe.wav,2.475,239.988,242.463,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H032_v3_hippocampe.wav,7.334,250.932,258.266,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H033_v3_hippocampe.wav,4.455,260.035,264.49,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H034_v3_hippocampe.wav,2.148,268.169,270.317,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H037_v3_hippocampe.wav,10.193,327.993,338.186,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H039_v3_hippocampe.wav,5.889,461.98,467.869,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H040_v3_hippocampe.wav,5.402,488.084,493.486,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H041_v3_hippocampe.wav,8.145,496.001,504.147,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H042_v3_hippocampe.wav,3.32,505.046,508.366,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H043_v3_hippocampe.wav,11.87,577.315,589.185,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H044_v3_hippocampe.wav,4.029,599.985,604.014,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H045_v3_hippocampe.wav,8.572,611.983,620.555,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H046_v3_hippocampe.wav,12.39,652.541,664.931,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H047_v3_hippocampe.wav,4.084,685.982,690.066,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H048_v3_hippocampe.wav,8.787,691.981,700.769,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H049_v3_hippocampe.wav,3.197,708.485,711.682,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H051_v3_hippocampe.wav,11.787,737.98,749.768,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H052_v3_hippocampe.wav,9.282,751.985,761.268,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H053_v3_hippocampe.wav,11.643,775.017,786.66,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H054_v3_hippocampe.wav,9.789,809.99,819.779,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H055_v3_hippocampe.wav,7.472,827.033,834.505,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H056_v3_hippocampe.wav,4.913,849.981,854.894,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H057_v3_hippocampe.wav,7.026,905.536,912.562,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H058_v3_hippocampe.wav,7.957,934.982,942.94,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H059_v3_hippocampe.wav,3.974,957.982,961.956,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H060_v3_hippocampe.wav,6.205,970.023,976.227,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H061_v3_hippocampe.wav,7.592,976.988,984.581,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H063_v3_hippocampe.wav,9.78,1025.987,1035.767,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H064_v3_hippocampe.wav,2.384,1039.981,1042.365,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H065_v3_hippocampe.wav,2.902,1057.982,1060.884,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H066_v3_hippocampe.wav,12.021,1090.335,1102.356,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H068_v3_hippocampe.wav,5.643,1233.999,1239.642,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H069_v3_hippocampe.wav,2.418,1241.986,1244.404,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H070_v3_hippocampe.wav,3.854,1252.982,1256.836,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H071_v3_hippocampe.wav,7.042,1257.99,1265.031,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H072_v3_hippocampe.wav,9.966,1265.981,1275.946,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H073_v3_hippocampe.wav,9.475,1278.038,1287.513,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H074_v3_hippocampe.wav,3.815,1288.573,1292.388,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H076_v3_hippocampe.wav,4.801,1313.987,1318.788,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H035_v3_hippocampe.wav,18.107,274.3,292.407,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H036_v3_hippocampe.wav,15.777,305.992,321.769,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H038_v3_hippocampe.wav,21.635,409.982,431.617,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H050_v3_hippocampe.wav,18.453,717.98,736.433,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H062_v3_hippocampe.wav,18.597,993.981,1012.578,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H067_v3_hippocampe.wav,19.754,1193.98,1213.734,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H075_v3_hippocampe.wav,17.484,1294.148,1311.632,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H077_v3_hippocampe.wav,20.488,1319.986,1340.474,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H078_v3_hippocampe.wav,17.786,1345.982,1363.768,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H079_v3_hippocampe.wav,14.321,1368.044,1382.365,ambiance opacité fin V6 Hippocampe.wav
+RECONSTRUCTION,FRAGMENTS,R001_v3_reconstruction.wav,1.988,0.0,1.988,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R002_v3_reconstruction.wav,2.502,2.504,5.006,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R003_v3_reconstruction.wav,1.708,5.556,7.264,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R004_v3_reconstruction.wav,0.618,7.99,8.608,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R005_v3_reconstruction.wav,1.155,9.989,11.144,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R006_v3_reconstruction.wav,1.157,12.983,14.141,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R007_v3_reconstruction.wav,1.256,14.983,16.238,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R008_v3_reconstruction.wav,0.728,20.012,20.741,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R009_v3_reconstruction.wav,0.871,21.441,22.312,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R010_v3_reconstruction.wav,0.778,24.004,24.783,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R011_v3_reconstruction.wav,1.168,26.483,27.651,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R012_v3_reconstruction.wav,4.049,31.983,36.032,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R013_v3_reconstruction.wav,11.775,39.983,51.758,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R014_v3_reconstruction.wav,1.562,55.525,57.087,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R015_v3_reconstruction.wav,0.866,59.984,60.85,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R016_v3_reconstruction.wav,0.877,61.856,62.733,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R017_v3_reconstruction.wav,6.56,63.982,70.542,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R018_v3_reconstruction.wav,0.851,73.98,74.832,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R019_v3_reconstruction.wav,2.502,80.022,82.525,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R020_v3_reconstruction.wav,2.148,87.232,89.38,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R021_v3_reconstruction.wav,1.21,93.482,94.691,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R022_v3_reconstruction.wav,2.714,96.045,98.759,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R023_v3_reconstruction.wav,1.032,105.987,107.019,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R024_v3_reconstruction.wav,0.789,113.981,114.77,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R025_v3_reconstruction.wav,1.286,120.483,121.769,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R026_v3_reconstruction.wav,0.851,127.981,128.832,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R027_v3_reconstruction.wav,1.035,146.087,147.122,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R028_v3_reconstruction.wav,0.882,159.287,160.169,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R029_v3_reconstruction.wav,0.502,163.231,163.733,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R030_v3_reconstruction.wav,0.731,165.499,166.23,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R031_v3_reconstruction.wav,2.2,167.358,169.559,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R032_v3_reconstruction.wav,1.692,171.006,172.697,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R033_v3_reconstruction.wav,1.284,174.234,175.519,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R034_v3_reconstruction.wav,1.835,176.167,178.003,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R035_v3_reconstruction.wav,0.912,179.981,180.893,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R036_v3_reconstruction.wav,0.989,181.734,182.723,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R037_v3_reconstruction.wav,1.163,184.481,185.644,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R038_v3_reconstruction.wav,1.337,186.481,187.818,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R039_v3_reconstruction.wav,1.887,213.107,214.994,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R040_v3_reconstruction.wav,1.081,225.504,226.585,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R041_v3_reconstruction.wav,1.278,227.982,229.26,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R042_v3_reconstruction.wav,0.899,231.982,232.882,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R043_v3_reconstruction.wav,0.938,238.481,239.419,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R044_v3_reconstruction.wav,1.107,249.039,250.146,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R045_v3_reconstruction.wav,1.289,251.607,252.896,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R046_v3_reconstruction.wav,1.765,299.982,301.746,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R047_v3_reconstruction.wav,1.043,349.051,350.094,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R048_v3_reconstruction.wav,0.958,352.129,353.088,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R049_v3_reconstruction.wav,1.91,354.131,356.041,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R050_v3_reconstruction.wav,0.847,372.005,372.851,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R051_v3_reconstruction.wav,0.973,377.482,378.456,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R052_v3_reconstruction.wav,0.836,384.855,385.691,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R053_v3_reconstruction.wav,2.069,391.982,394.051,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R054_v3_reconstruction.wav,1.275,399.981,401.256,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R055_v3_reconstruction.wav,1.179,404.982,406.161,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R056_v3_reconstruction.wav,1.16,407.983,409.143,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R057_v3_reconstruction.wav,0.646,410.506,411.152,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R058_v3_reconstruction.wav,1.716,412.052,413.768,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R059_v3_reconstruction.wav,0.757,416.994,417.751,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R060_v3_reconstruction.wav,1.903,419.981,421.885,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R061_v3_reconstruction.wav,0.992,423.986,424.977,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R062_v3_reconstruction.wav,1.174,434.981,436.155,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R063_v3_reconstruction.wav,1.95,441.531,443.481,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R064_v3_reconstruction.wav,0.592,450.923,451.515,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R065_v3_reconstruction.wav,1.737,451.991,453.728,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R066_v3_reconstruction.wav,0.788,466.791,467.579,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R067_v3_reconstruction.wav,0.756,470.752,471.508,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R068_v3_reconstruction.wav,0.715,473.263,473.977,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R069_v3_reconstruction.wav,0.748,475.856,476.604,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R070_v3_reconstruction.wav,1.125,477.395,478.52,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R071_v3_reconstruction.wav,1.073,480.999,482.072,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R072_v3_reconstruction.wav,0.714,487.043,487.757,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R073_v3_reconstruction.wav,1.36,489.985,491.344,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R074_v3_reconstruction.wav,1.494,494.505,495.998,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R075_v3_reconstruction.wav,0.913,496.731,497.644,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R076_v3_reconstruction.wav,1.061,498.993,500.054,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R077_v3_reconstruction.wav,1.137,502.496,503.632,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R078_v3_reconstruction.wav,1.564,507.702,509.266,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R079_v3_reconstruction.wav,6.981,510.004,516.985,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R080_v3_reconstruction.wav,1.059,571.5,572.559,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R081_v3_reconstruction.wav,1.51,594.115,595.625,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R082_v3_reconstruction.wav,1.942,596.754,598.697,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R083_v3_reconstruction.wav,1.181,604.067,605.248,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R084_v3_reconstruction.wav,3.027,605.981,609.008,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R085_v3_reconstruction.wav,1.027,615.981,617.008,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R086_v3_reconstruction.wav,2.625,633.987,636.612,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R087_v3_reconstruction.wav,3.517,637.983,641.501,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R088_v3_reconstruction.wav,1.539,647.857,649.396,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R089_v3_reconstruction.wav,0.804,653.66,654.464,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R090_v3_reconstruction.wav,0.786,655.357,656.143,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R091_v3_reconstruction.wav,0.867,664.029,664.896,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R092_v3_reconstruction.wav,1.768,669.483,671.251,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R093_v3_reconstruction.wav,0.966,672.514,673.48,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R094_v3_reconstruction.wav,1.585,676.982,678.567,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R095_v3_reconstruction.wav,3.028,679.99,683.017,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R096_v3_reconstruction.wav,0.92,684.094,685.014,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R097_v3_reconstruction.wav,2.083,685.986,688.069,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R098_v3_reconstruction.wav,0.786,688.606,689.392,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R099_v3_reconstruction.wav,3.726,689.98,693.706,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R100_v3_reconstruction.wav,2.136,694.483,696.62,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R101_v3_reconstruction.wav,0.757,701.982,702.739,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R102_v3_reconstruction.wav,0.506,706.106,706.612,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R103_v3_reconstruction.wav,1.787,711.606,713.394,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R104_v3_reconstruction.wav,0.787,713.981,714.769,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R105_v3_reconstruction.wav,1.108,715.908,717.016,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R106_v3_reconstruction.wav,1.814,718.481,720.295,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R107_v3_reconstruction.wav,1.864,720.982,722.846,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R108_v3_reconstruction.wav,0.917,723.732,724.649,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R109_v3_reconstruction.wav,0.788,725.481,726.269,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R110_v3_reconstruction.wav,2.037,726.983,729.02,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R111_v3_reconstruction.wav,3.287,729.481,732.768,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R112_v3_reconstruction.wav,2.031,733.494,735.525,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R113_v3_reconstruction.wav,2.323,736.857,739.18,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R114_v3_reconstruction.wav,0.974,740.295,741.269,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R115_v3_reconstruction.wav,0.539,742.049,742.587,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R116_v3_reconstruction.wav,0.534,744.607,745.141,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R117_v3_reconstruction.wav,1.939,745.731,747.67,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R118_v3_reconstruction.wav,0.857,752.481,753.338,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R119_v3_reconstruction.wav,1.539,759.376,760.915,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R120_v3_reconstruction.wav,0.867,762.06,762.927,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R121_v3_reconstruction.wav,2.165,763.481,765.646,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R122_v3_reconstruction.wav,0.768,772.034,772.802,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R123_v3_reconstruction.wav,5.097,773.483,778.58,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R124_v3_reconstruction.wav,1.388,779.981,781.369,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R125_v3_reconstruction.wav,2.176,782.013,784.189,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R126_v3_reconstruction.wav,4.455,786.535,790.99,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R127_v3_reconstruction.wav,1.154,792.315,793.469,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R128_v3_reconstruction.wav,0.537,795.983,796.52,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R129_v3_reconstruction.wav,1.493,797.981,799.474,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R130_v3_reconstruction.wav,2.191,800.753,802.943,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R131_v3_reconstruction.wav,1.525,803.74,805.265,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R132_v3_reconstruction.wav,1.256,806.235,807.491,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R133_v3_reconstruction.wav,5.442,811.009,816.451,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R134_v3_reconstruction.wav,3.406,818.35,821.756,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R135_v3_reconstruction.wav,1.265,822.252,823.517,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R136_v3_reconstruction.wav,0.762,824.233,824.995,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R137_v3_reconstruction.wav,0.783,826.734,827.517,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R138_v3_reconstruction.wav,2.596,828.484,831.08,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R139_v3_reconstruction.wav,1.529,831.994,833.524,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R140_v3_reconstruction.wav,0.785,838.794,839.579,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R141_v3_reconstruction.wav,3.51,842.009,845.519,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R142_v3_reconstruction.wav,1.004,847.983,848.987,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R143_v3_reconstruction.wav,1.134,850.006,851.14,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R144_v3_reconstruction.wav,1.036,853.981,855.018,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R145_v3_reconstruction.wav,2.005,855.982,857.986,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R146_v3_reconstruction.wav,1.66,858.982,860.642,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R147_v3_reconstruction.wav,2.035,861.981,864.017,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R148_v3_reconstruction.wav,1.418,864.984,866.401,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R149_v3_reconstruction.wav,1.077,867.482,868.559,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R150_v3_reconstruction.wav,2.954,869.482,872.436,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R151_v3_reconstruction.wav,8.827,873.981,882.808,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R152_v3_reconstruction.wav,11.571,887.981,899.552,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R153_v3_reconstruction.wav,0.686,907.983,908.669,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R154_v3_reconstruction.wav,1.645,915.986,917.631,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R156_v3_reconstruction.wav,1.481,955.981,957.462,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R157_v3_reconstruction.wav,0.955,968.497,969.452,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R158_v3_reconstruction.wav,0.599,976.996,977.595,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R159_v3_reconstruction.wav,0.781,983.981,984.762,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R160_v3_reconstruction.wav,2.123,987.984,990.107,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R161_v3_reconstruction.wav,0.948,996.03,996.978,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R162_v3_reconstruction.wav,1.024,1004.994,1006.018,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R163_v3_reconstruction.wav,0.842,1008.356,1009.197,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R164_v3_reconstruction.wav,0.531,1016.986,1017.516,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R165_v3_reconstruction.wav,0.898,1019.982,1020.88,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R166_v3_reconstruction.wav,0.746,1023.731,1024.476,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R167_v3_reconstruction.wav,0.757,1025.983,1026.74,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R168_v3_reconstruction.wav,0.91,1032.483,1033.392,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R169_v3_reconstruction.wav,2.022,1033.92,1035.941,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R170_v3_reconstruction.wav,1.032,1036.86,1037.892,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R171_v3_reconstruction.wav,0.777,1038.615,1039.391,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R172_v3_reconstruction.wav,1.133,1041.006,1042.139,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R173_v3_reconstruction.wav,1.009,1043.048,1044.057,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R174_v3_reconstruction.wav,0.584,1045.494,1046.078,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R175_v3_reconstruction.wav,0.653,1047.36,1048.013,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R176_v3_reconstruction.wav,1.602,1050.732,1052.334,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R177_v3_reconstruction.wav,1.567,1054.738,1056.305,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R178_v3_reconstruction.wav,1.097,1058.483,1059.58,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R179_v3_reconstruction.wav,3.994,1061.749,1065.744,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R180_v3_reconstruction.wav,1.856,1088.038,1089.894,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R181_v3_reconstruction.wav,2.656,1093.984,1096.64,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R182_v3_reconstruction.wav,1.531,1097.989,1099.52,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R183_v3_reconstruction.wav,1.289,1109.982,1111.271,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R184_v3_reconstruction.wav,0.765,1121.138,1121.903,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R185_v3_reconstruction.wav,0.861,1122.731,1123.592,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R186_v3_reconstruction.wav,1.411,1124.607,1126.018,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R187_v3_reconstruction.wav,1.253,1134.001,1135.254,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R188_v3_reconstruction.wav,0.591,1138.445,1139.036,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R189_v3_reconstruction.wav,4.783,1139.483,1144.266,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R190_v3_reconstruction.wav,3.338,1145.857,1149.194,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R191_v3_reconstruction.wav,1.289,1150.98,1152.269,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R192_v3_reconstruction.wav,0.814,1155.983,1156.797,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R193_v3_reconstruction.wav,4.736,1167.732,1172.468,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R194_v3_reconstruction.wav,1.28,1180.613,1181.892,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R195_v3_reconstruction.wav,1.3,1189.981,1191.281,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R196_v3_reconstruction.wav,2.037,1191.981,1194.018,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R197_v3_reconstruction.wav,1.821,1194.733,1196.554,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R198_v3_reconstruction.wav,1.161,1209.982,1211.143,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R199_v3_reconstruction.wav,3.021,1225.983,1229.004,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R200_v3_reconstruction.wav,1.781,1231.987,1233.768,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R201_v3_reconstruction.wav,0.918,1235.983,1236.902,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R202_v3_reconstruction.wav,0.992,1238.981,1239.972,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R203_v3_reconstruction.wav,1.284,1240.733,1242.017,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R204_v3_reconstruction.wav,1.53,1242.983,1244.513,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R205_v3_reconstruction.wav,2.744,1245.482,1248.227,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R206_v3_reconstruction.wav,1.06,1248.981,1250.042,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R207_v3_reconstruction.wav,1.631,1250.981,1252.612,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R208_v3_reconstruction.wav,0.61,1253.26,1253.87,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R209_v3_reconstruction.wav,0.944,1254.981,1255.925,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R210_v3_reconstruction.wav,1.846,1267.608,1269.454,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R211_v3_reconstruction.wav,1.787,1295.356,1297.142,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R212_v3_reconstruction.wav,0.986,1303.983,1304.969,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R213_v3_reconstruction.wav,1.037,1312.982,1314.019,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R214_v3_reconstruction.wav,1.459,1315.481,1316.94,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R215_v3_reconstruction.wav,1.822,1319.983,1321.805,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R216_v3_reconstruction.wav,1.708,1328.124,1329.833,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R217_v3_reconstruction.wav,5.225,1347.043,1352.269,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R218_v3_reconstruction.wav,0.879,1367.985,1368.863,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R219_v3_reconstruction.wav,2.563,1384.693,1387.256,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R220_v3_reconstruction.wav,1.529,1399.421,1400.95,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R221_v3_reconstruction.wav,0.669,1410.099,1410.768,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R222_v3_reconstruction.wav,1.379,1412.732,1414.111,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R223_v3_reconstruction.wav,1.505,1416.003,1417.508,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R224_v3_reconstruction.wav,4.066,1424.012,1428.079,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R225_v3_reconstruction.wav,9.596,1435.982,1445.578,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R226_v3_reconstruction.wav,1.351,1453.985,1455.336,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R227_v3_reconstruction.wav,0.598,1463.983,1464.581,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R228_v3_reconstruction.wav,0.966,1471.985,1472.951,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R229_v3_reconstruction.wav,0.802,1479.983,1480.785,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R230_v3_reconstruction.wav,1.234,1485.983,1487.217,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R231_v3_reconstruction.wav,1.131,1492.062,1493.193,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R232_v3_reconstruction.wav,2.66,1515.982,1518.642,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R233_v3_reconstruction.wav,0.941,1527.98,1528.921,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R234_v3_reconstruction.wav,7.906,1548.112,1556.018,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R235_v3_reconstruction.wav,6.164,1559.981,1566.145,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R236_v3_reconstruction.wav,1.641,1576.002,1577.643,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R237_v3_reconstruction.wav,1.504,1578.538,1580.041,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R238_v3_reconstruction.wav,1.698,1582.03,1583.728,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R239_v3_reconstruction.wav,1.489,1584.984,1586.473,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R240_v3_reconstruction.wav,0.767,1599.938,1600.705,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R241_v3_reconstruction.wav,3.79,1605.229,1609.019,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R242_v3_reconstruction.wav,1.336,1618.461,1619.797,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R243_v3_reconstruction.wav,0.904,1620.613,1621.518,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R244_v3_reconstruction.wav,1.162,1622.034,1623.196,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R245_v3_reconstruction.wav,1.681,1627.984,1629.665,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R246_v3_reconstruction.wav,0.772,1630.983,1631.755,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R247_v3_reconstruction.wav,0.611,1632.442,1633.053,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R248_v3_reconstruction.wav,0.702,1635.983,1636.685,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R249_v3_reconstruction.wav,0.847,1640.07,1640.917,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R250_v3_reconstruction.wav,0.834,1641.484,1642.318,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R251_v3_reconstruction.wav,0.61,1642.86,1643.47,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R252_v3_reconstruction.wav,0.678,1644.325,1645.002,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R253_v3_reconstruction.wav,1.221,1647.983,1649.204,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R254_v3_reconstruction.wav,0.696,1656.983,1657.679,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R255_v3_reconstruction.wav,4.881,1662.272,1667.153,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R256_v3_reconstruction.wav,2.35,1669.006,1671.356,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R257_v3_reconstruction.wav,0.861,1671.981,1672.842,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R258_v3_reconstruction.wav,2.684,1674.01,1676.694,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R259_v3_reconstruction.wav,2.408,1677.983,1680.391,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R260_v3_reconstruction.wav,0.88,1683.982,1684.862,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R261_v3_reconstruction.wav,0.718,1687.981,1688.699,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R262_v3_reconstruction.wav,0.622,1689.981,1690.603,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R263_v3_reconstruction.wav,1.07,1691.981,1693.051,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R264_v3_reconstruction.wav,0.801,1694.038,1694.839,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R265_v3_reconstruction.wav,3.323,1696.231,1699.554,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R266_v3_reconstruction.wav,0.638,1701.984,1702.622,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R267_v3_reconstruction.wav,0.493,1704.043,1704.536,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R268_v3_reconstruction.wav,0.924,1704.982,1705.906,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R269_v3_reconstruction.wav,3.192,1706.731,1709.923,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R270_v3_reconstruction.wav,1.213,1710.485,1711.698,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R271_v3_reconstruction.wav,1.161,1712.991,1714.152,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R272_v3_reconstruction.wav,1.255,1714.982,1716.237,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R273_v3_reconstruction.wav,3.372,1718.148,1721.52,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R274_v3_reconstruction.wav,2.285,1721.983,1724.268,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R275_v3_reconstruction.wav,0.959,1726.058,1727.016,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R276_v3_reconstruction.wav,1.213,1727.983,1729.196,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R277_v3_reconstruction.wav,1.783,1730.002,1731.785,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R278_v3_reconstruction.wav,1.546,1733.982,1735.528,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R279_v3_reconstruction.wav,1.163,1735.994,1737.157,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R280_v3_reconstruction.wav,0.783,1737.983,1738.766,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R281_v3_reconstruction.wav,12.035,1739.983,1752.018,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R282_v3_reconstruction.wav,1.914,1755.103,1757.017,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R283_v3_reconstruction.wav,1.037,1760.982,1762.018,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R284_v3_reconstruction.wav,0.736,1763.028,1763.764,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R285_v3_reconstruction.wav,0.892,1771.002,1771.893,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R286_v3_reconstruction.wav,1.021,1773.041,1774.062,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R287_v3_reconstruction.wav,2.262,1775.119,1777.381,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R288_v3_reconstruction.wav,3.387,1778.982,1782.369,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,LONG_MOYEN,R155_v3_reconstruction.wav,15.264,928.98,944.244,ambiance opacité fin V6 Reconstruction.wav

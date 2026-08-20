@@ -1,0 +1,12 @@
+#N canvas 0 0 500 260 10;
+#X declare -path .. -path . -path lib;
+#X obj 40 40 loadbang;
+#X msg 40 70 0;
+#X obj 120 40 delay 80;
+#X msg 120 70 bang;
+#X obj 260 50 lib/player_state;
+#X connect 0 0 1 0;
+#X connect 1 0 4 1;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 4 0;

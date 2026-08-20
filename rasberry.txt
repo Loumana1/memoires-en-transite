@@ -1,0 +1,7 @@
+Connection raspberry pi 
+
+Ssh Simon@installation1.local
+
+User: Simon
+
+Mdp: Simon

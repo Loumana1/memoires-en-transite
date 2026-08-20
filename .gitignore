@@ -1,0 +1,40 @@
+# Mémoires en transit — ce que git ne suit pas.
+
+# ---------------------------------------------------------------- audio
+# 2,9 Go, dont 2,6 Go de masters. Trop lourd pour git.
+# ⚠ SONS_V3/WIP/ est la seule matière IRREMPLAÇABLE du projet : elle n'est
+# donc protégée par rien ici. La sauvegarder à la main sur un disque externe.
+# Tout le reste de SONS_V3/ se reconstruit avec scripts/slice_opacite_v3.py.
+SONS_V3/
+
+# ---------------------------------------------------------------- Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# ------------------------------------------------------- externals compilés
+# Recompilés par deploy/debian/install.sh sur la machine cible. Les sources
+# des externals (iem_ambi, iemmatrix) restent versionnées, elles.
+*.pd_darwin
+*.pd_darwin.dylib
+*.pd_linux
+*.l_arm64
+*.l_arm
+*.linux-arm64
+*.linux-arm
+*.linux-amd64
+*.o
+*.d
+*.lo
+*.la
+.libs/
+
+# ---------------------------------------------------------------- généré
+# Écrit par launch.sh à chaque démarrage (trace du device audio retenu).
+deploy/debian/derniere_carte.log
+
+# ---------------------------------------------------------------- système
+.DS_Store
+._*
+*.swp

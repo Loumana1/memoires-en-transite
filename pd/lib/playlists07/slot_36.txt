@@ -1,0 +1,13 @@
+SONS_V3/AMBIANCE/A05_v3_cortex_ambiance.wav A05_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A10_v3_cortex_ambiance.wav A10_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A15_v3_cortex_ambiance.wav A15_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A20_v3_cortex_ambiance.wav A20_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A25_v3_cortex_ambiance.wav A25_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A30_v3_cortex_ambiance.wav A30_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A35_v3_cortex_ambiance.wav A35_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A40_v3_cortex_ambiance.wav A40_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A45_v3_cortex_ambiance.wav A45_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A50_v3_cortex_ambiance.wav A50_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A55_v3_cortex_ambiance.wav A55_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A60_v3_cortex_ambiance.wav A60_v3_cortex_ambiance.wav;
+SONS_V3/AMBIANCE/A65_v3_cortex_ambiance.wav A65_v3_cortex_ambiance.wav;

@@ -1,0 +1,7 @@
+#N canvas 0 0 460 200 10;
+#X obj 40 20 inlet;
+#X obj 40 80 == 0;
+#X obj 40 150 outlet;
+#X text 140 20 INSTALL_MODE ON=1 -> vis 0 (masque) \; OFF=0 -> vis 1;;
+#X connect 0 0 1 0;
+#X connect 1 0 2 0;

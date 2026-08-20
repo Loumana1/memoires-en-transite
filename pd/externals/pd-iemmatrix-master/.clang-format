@@ -1,0 +1,32 @@
+# .clang-format
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+PPIndentWidth: 1
+IndentPPDirectives: AfterHash
+
+BreakBeforeBraces: Linux
+DerivePointerAlignment: true
+PointerAlignment: Right
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+AlignConsecutiveMacros: Consecutive
+
+SpaceBeforeParens: ControlStatements
+IndentCaseLabels: false
+
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortCaseLabelsOnASingleLine: true
+
+SortIncludes: false
+IncludeBlocks: Preserve
+
+ColumnLimit: 80
+ReflowComments: false

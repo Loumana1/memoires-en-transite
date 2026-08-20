@@ -1,0 +1,24 @@
+
+content of iem_ambi Release 1.21 from March 2018
+
+
+-------------------- sound spatialization stuff -------------------------------
+ambi_decode3			 calculates an Ambisonics decoder matrix with real, phantom and auxillary loudspeakers
+ambi_encode			 calculates an Ambisonics encoder matrix depending on source angles
+ambi_rot			 calculates an Ambisonics rotation matrix depending on rotation angles
+bin_ambi_reduced_decode_fft2	 calculates a reduced set of convolution arrays in frequency domain (a product of an Ambisonics decoder matrix
+					and the complex HRTF arrays, both relating to the virtual loudspeaker positions, which have to be left-right symmetric)
+bin_ambi_reduced_decode_fir2	 calculates a reduced set of convolution arrays in time domain (a product of an Ambisonics decoder matrix
+					and the HRIR arrays, both relating to the virtual loudspeaker positions, which have to be left-right symmetric)
+matrix_bundle_stat~		 renders a rectangular signal 2D-matrix multiplication without interpolation
+					(special case: the multiplication matrix has only one 1 per column)
+matrix_diag_mul_line~		 renders a signal 2D-diagonal-matrix multiplication with interpolation (like |*~|+|line~| in 1x1 case)
+matrix_diag_mul_line8~		 renders a signal 2D-diagonal-matrix multiplication with 8 samples step interpolation (like |*~|+|line~| 0.125 downsampled in 1x1 case)
+matrix_diag_mul_stat~		 renders a signal 2D-diagonal-matrix multiplication without interpolation (like |*~ 1| in 1x1 case)
+matrix_mul_line~		 renders a rectangular signal 2D-matrix multiplication with interpolation (like |*~|+|line~| in 1x1 case)
+matrix_mul_line8~		 renders a rectangular signal 2D-matrix multiplication with 8 samples step interpolation (like |*~|+|line~| 0.125 downsampled in 1x1 case)
+matrix_mul_stat~		 renders a rectangular signal 2D-matrix multiplication without interpolation (like |*~ 1| in 1x1 case)
+
+
+Ambisonics is a 3D sound spatialisation system with separated encode and decode rendering, calculations are based on spherical harmonics.
+
