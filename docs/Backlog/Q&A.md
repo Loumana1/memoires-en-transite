@@ -1,6 +1,6 @@
 # Q&A — ce qui doit être tranché
 
-**20 août 2026.** Questions ouvertes après lecture de `[../Sources/Simon - Cortex et Cortex-Ambiance.md](../Sources/Simon%20-%20Cortex%20et%20Cortex-Ambiance.md)`.
+**20 août 2026.** Questions ouvertes après lecture de `[../Sources/Simon - Cortex et Cortex-Ambiance.md](../Sources/Simon%20-%20Cortex%20et%20Cortex-Ambiance.md)` et `[../Sources/Specifications_Pure_Data_Hippocampe.md](../Sources/Specifications_Pure_Data_Hippocampe.md)` (reçu le 21 août).
 
 Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction avec l'implémentation. Ce qui est clair est dans `[TO DO.md](./TO%20DO.md)`.
 
@@ -14,7 +14,9 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 
 **8 répondues** le 20 août : Q1, Q2, Q3, Q4, Q19, Q20, Q21, Q24.
 
-**2 répondues** le 20 août (après-midi) : Q9, Q10 *(partiel —* `INTERMEDIAIRE` *reporté V1, voir [Q25](#q25))*.
+**1 répondue** le 20 août (après-midi) : Q9.
+
+**1 répondue** le 20 août (soir, plans V1) : Q10 **fermée** — deux plans ; `INTERMEDIAIRE` **abandonné** ; defaults réverb/LFO pour Proto 08.
 
 **2 répondues** le 20 août (soir) : Q11, Q25.
 
@@ -24,19 +26,29 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 
 **7 répondues** le 20 août (session Loumana) : Q5, Q6, Q7, Q13, Q15, Q16, Q17.
 
-**5 ouvertes**, dans cet ordre :
+**4 ouvertes Cortex**, dans cet ordre :
 
 
 |     | Question                                                                | Bloque quoi                                    |
 | --- | ----------------------------------------------------------------------- | ---------------------------------------------- |
-| 🔴  | [Q10](#q10) — niveaux exacts de réverb + LFO premier plan               | Presets complets des 12 voix                   |
-| 🟠  | [Q18](#q18) — quel niveau d'intelligibilité viser ?                     | Régler le filtre et la réverbération du Cortex |
+| 🟠  | [Q18](#q18) — quel niveau d'intelligibilité viser ?                     | Affiner filtre/réverb au-delà des defaults Q10 |
 | 🟡  | [Q12](#q12) — tables C9/C10 (probablement redondantes avec Q11 = 50/50) | Affiner le geste par attributs                 |
 | 🟡  | [Q22](#q22)                                                             | Filtre texture `INDETERMINE` (reporté Proto 08) |
 | 🟡  | [Q14](#q14)                                                             | Piézo                                          |
 
 
-**Pourquoi Q10 passait devant.** [Q1](#q1) = 12 voix simultanées ; les plans de présence ([Q9](#q9), [Q10](#q10)) et les gestes temporels ([Q11](#q11)) ne dépendent d'**aucun tag**. [Q11](#q11) tranche : `**EMERGER`/`RECOUVRIR` remplace le pulse** — spec dans `[../Zones/Cortex.md](../Zones/Cortex.md)` §8 bis.
+**4 ouvertes Hippocampe** (21 août, spec Simon reçue) :
+
+
+|     | Question                                                                         | Bloque quoi                                |
+| --- | -------------------------------------------------------------------------------- | ------------------------------------------ |
+| 🟠  | [Q26](#q26) — bibliothèque de mouvements spatiaux : lesquels ?                   | Implémentation du spatial Hippocampe       |
+| 🟠  | [Q27](#q27) — `INTERRUPTIBLE` : comment et quand couper ?                        | Changement dans le player                  |
+| 🟡  | [Q28](#q28) — quels comportements de Simon garder en V1 ?                        | Scope du moteur Hippocampe                 |
+| 🟡  | [Q14](#q14)                                                                      | Piézo (inclut maintenant Hippocampe)       |
+
+
+**Pourquoi Q10 n'est plus bloquante.** [Q1](#q1) = 12 voix ; les plans ([Q9](#q9), [Q10](#q10) **fermée V1**) et les gestes ([Q11](#q11)) ne dépendent d'**aucun tag**. Defaults implémentables dans le Proto 08 — révision à l'oreille sans rouvrir la question.
 
 ---
 
@@ -106,7 +118,7 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 
 - **Deux baffles d'ambiance fixes** pendant le Cortex ([Q1](#q1), [Q2](#q2)) : une *musicale*, une *texture*. Pas d'ambiance sur les baffles de parole.
 - Le croisement dramaturgique (Congo / milieu européen, etc.) se décide **une fois par passage dans le Cortex** : le sélecteur regarde les paroles tirées (ou leurs attributs) et choisit **une paire d'ambiances** pour les deux baffles — pas six micro-milieux.
-- `**INTERMEDIAIRE` dans Simon (§2.2.D) = profondeur de parole**, pas une couche d'ambiance par baffle. Pour la V1 : **deux plans de parole seulement** (`PREMIER_PLAN` + `ARRIERE_PLAN`) — le 3ᵉ plan de parole est **reporté**.
+- **`INTERMEDIAIRE` dans Simon (§2.2.D) = profondeur de parole** — **non retenu** pour ce projet. Deux plans seulement : `PREMIER_PLAN` + `ARRIERE_PLAN` ([Q10](#q10)).
 - Le Proto 07 (5 nappes / 5 baffles) était une **déviation** ; la cible Proto 08 revient à **2 nappes globales**.
 
 **Conséquences.** `[../Zones/Cortex.md](../Zones/Cortex.md)` §7 bis · `[../Matiere/Attributs.md](../Matiere/Attributs.md)` §6 · sélecteur futur : `gen_paires.py` pour les paires par baffle ; `**gen_ambiance_cortex.py`** (ou équivalent) pour **une** ligne ambiance par état Cortex.
@@ -346,39 +358,28 @@ Si l'un porte `POLITIQUE` et l'autre `FAMILIAL` **ou** `MEDIATIQUE` → **refus*
 
 ## Q10
 
-**🟠 Que sont concrètement les trois plans ?**
+**🟠 Que sont concrètement les plans de présence ?** — **TRANCHÉ le 20 août (V1)**
 
-Point 5 de la liste de Simon. C'est la question à laquelle il faut répondre pour construire quoi que ce soit.
+Point 5 de la liste de Simon. **Deux plans seulement** pour le projet : `PREMIER_PLAN` + `ARRIERE_PLAN`. Le 3ᵉ plan Simon (`INTERMEDIAIRE`) est **abandonné** — pas reporté, pas prévu : deux profondeurs suffisent et évitent la complexité inutile ([Q25](#q25) reste valide pour les ambiances globales, pas pour un 3ᵉ plan parole).
 
-**Les trois plans sont un objet de sound design, pas seulement un gain.** « Arrière-plan » ne veut pas dire « plus bas de 10 dB », ça veut dire « plus loin ». Donc pour chaque plan : gain, LPF, réverbération, HPF.
-
-
-|                 | Gain               | LPF (balayage)                                             | Réverbération            | HPF           |
-| --------------- | ------------------ | ---------------------------------------------------------- | ------------------------ | ------------- |
-| `PREMIER_PLAN`  | normal (référence) | **800 → max** (2000 Hz), **vitesse différente** des autres | **moins** que l'existant | **300 Hz**    |
-| `INTERMEDIAIRE` | *à compléter*      | *à compléter*                                              | *à compléter*            | *à compléter* |
-| `ARRIERE_PLAN`  | **−2 dB**          | **500 → 1000 Hz**                                          | **oui**                  | **aucun**     |
+**Les plans sont un objet de sound design, pas seulement un gain.** « Arrière-plan » = plus loin (gain + filtre + réverb), pas seulement −X dB.
 
 
-**Questions.**
+| Plan | Gain | LPF (balayage) | Réverb (delay V1) | HPF | LFO | Pendant le sample |
+|------|------|----------------|-------------------|-----|-----|-------------------|
+| `PREMIER_PLAN` | 0 dB (réf.) | **800 → 2000 Hz** | wet **0,06** · delay **120 ms** · fb **0,04** (moins que le 07 : 0,10 / 180 / 0,06) | **300 Hz** | oscillateur **#7** (vitesse hors rapports simples avec #0–5) | **fixe** |
+| `ARRIERE_PLAN` | **−2 dB** | **500 → 1000 Hz** | wet **0,12** · delay **200 ms** · fb **0,08** | **aucun** | indices **#0–5** (héritage `cortex_ctrl`) | **fixe** |
 
-- Combien de dB entre chaque plan ?
-- Un plan plus lointain est-il **aussi** plus filtré et plus réverbéré, ou seulement plus bas ?
-- Les trois plans sont-ils fixes, ou le plan est-il lui-même en mouvement lent (un fragment qui s'éloigne) ?
-- Comment ces trois plans se combinent-ils avec le balayage de LPF 500–2000 Hz déjà en place sur toutes les couches ?
 
-**Comment y répondre.** Les construire comme trois presets nommés, forçables à la main dans l'interface, et les écouter sur la même paire de fragments. C'est du travail d'oreille pur, faisable **maintenant**, sans aucun tag.
+**Réponse (20 août, fermée V1).**
 
-**Réponse (20 août, partielle).** Deux plans sur trois :
+- **`PREMIER_PLAN`** et **`ARRIERE_PLAN`** : valeurs du tableau ci-dessus — **defaults Proto 08**, révisables à l'oreille sans rouvrir Q10.
+- **`INTERMEDIAIRE`** : **abandonné.** Ne pas implémenter, ne pas documenter comme « à venir ».
+- **Plans fixes** pendant toute la durée du fragment (cohérent [Q11](#q11) mode permanent). Pas de plan qui « bouge » en V1.
+- **Réverb « pièce voisine »** sur l'arrière-plan : le delay ci-dessus est le **provisoire V1** ; une vraie réverb court/sombre reste un plus ([TO DO](./TO%20DO.md) §1), pas un prérequis au scaffold du 08.
+- **[Q18](#q18)** oriente l'intelligibilité cible (souvent A au premier, B/C à l'arrière) — affinage au-delà des defaults, pas blocage structurel.
 
-- `**PREMIER_PLAN**` : gain normal ; LPF balayé **800 Hz → max** (plafond = 2000 Hz du Cortex), avec une **vitesse de balayage différente** des autres plans ; **moins** de réverbération qu'aujourd'hui ; HPF **300 Hz**.
-- `**ARRIERE_PLAN**` : gain **−2 dB** ; LPF balayé **500 → 1000 Hz** ; **réverbération oui** ; **pas de HPF**.
-
-**Encore ouvert :** niveaux exacts de réverbération, vitesse LFO du premier plan, plans fixes ou mouvants ([Q18](../Backlog/Q&A.md#q18)).
-
-`**INTERMEDIAIRE` — reporté V1 ([Q25](#q25)).** Ce n'est **pas** une ambiance par baffle. Dans Simon (§2.2.D) c'est un 3ᵉ **plan de profondeur pour la parole**. Pour la V1 on n'en implémente que **deux** : `PREMIER_PLAN` + `ARRIERE_PLAN`. Le 3ᵉ plan parole pourra revenir plus tard si les deux ne suffisent pas à l'oreille.
-
-**Conséquences.** Spec détaillée dans `[../Zones/Cortex.md](../Zones/Cortex.md)` §5 bis. À implémenter dans le Proto 08 : chaque fragment d'une paire reçoit son propre preset de plan (deux gains + deux chaînes FX), le moteur choisissant qui est en premier plan et qui en arrière.
+**Conséquences.** Spec dans [`../Zones/Cortex.md`](../Zones/Cortex.md) §5 bis. Proto 08 : deux chaînes FX + deux gains sous chaque paire ; le moteur assigne qui est premier / arrière (C5–C7, [Q9](#q9)).
 
 ---
 
@@ -396,7 +397,7 @@ Point 5 de la liste de Simon. C'est la question à laquelle il faut répondre po
 
 **Aussi.** Que veut dire « dense » exactement — un débit de parole rapide, un fragment sans silence, plusieurs voix dans le même fragment ? Il faut une définition utilisable à l'écoute, sinon la colonne sera remplie de façon incohérente.
 
-**Réponse :** **Oui — bonne lecture.** C8 complète C5 : si les **deux** fragments sont `DENSITE_PAROLE = FORTE`, ils doivent être aux **extrémités** des plans — `PREMIER_PLAN` + `ARRIERE_PLAN` uniquement (pas deux plans « proches »). En V1 (deux plans seulement, [Q25](#q25)) c'est automatique ; la règle deviendra contraignante quand un 3ᵉ plan existera. À implémenter dans `gen_paires.py` · [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §2 ter.
+**Réponse :** **Oui — bonne lecture.** C8 complète C5 : si les **deux** fragments sont `DENSITE_PAROLE = FORTE`, ils doivent être aux **extrémités** des plans — `PREMIER_PLAN` + `ARRIERE_PLAN` uniquement. En V1 ([Q10](#q10) = deux plans seulement, `INTERMEDIAIRE` abandonné) c'est **automatique**. À implémenter dans `gen_paires.py` · [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §2 ter.
 
 **Encore ouvert :** définition opérationnelle de « dense » à l'oreille (débit, silence, multi-voix) — à documenter en remplissant la colonne `densite_parole`.
 
@@ -606,3 +607,76 @@ Ces trois cibles ne demandent pas les mêmes réglages, et surtout elles n'ont p
 **Contrainte non négociable, rappel.** Le micro et les piézos ne vont **jamais** vers `dac~`. Ils ne servent qu'à piloter.
 
 **Réponse :** *à remplir*
+
+---
+
+# I. Hippocampe — spec Simon reçue le 21 août
+
+**21 août 2026.** Questions issues de la lecture croisée de [`../Sources/Specifications_Pure_Data_Hippocampe.md`](../Sources/Specifications_Pure_Data_Hippocampe.md) contre l'implémentation actuelle ([`../Zones/Hippocampe.md`](../Zones/Hippocampe.md)).
+
+**Simon propose** un Hippocampe radicalement différent : un système associatif piloté par 5 dimensions d'attributs, avec 6 comportements (APPELER, RELIER, REPONDRE, REVENIR, SE_DEPLACER, DISPARAITRE) et une sous-zone Hippocampe–Ambiance à part entière.
+
+**Décisions prises le 21 août** (Loumana) — pas de question, directement dans [`TO DO.md`](./TO%20DO.md) :
+
+- **Couches** : ambiance + 2 longs (permanents) + 2 courts (interférences aléatoires). Pas le max 2 de Simon.
+- **Association** : oui, même architecture que Cortex (`gen_assoc_hippo.py` en Python).
+- **Silences/délais** : max **2 s**. Les 6–15 s de Simon sont rejetés.
+- **Spatial** : tirage global aléatoire dans une **bibliothèque de mouvements**, pas de mode par fragment.
+- **Hippocampe–Ambiance** : **pas de sous-zone**. Pas assez de matière, trop complexe. Les ambiances utilisent les attributs mais restent dans le pool partagé.
+- **TYPE_ASSOCIATION** : table **manuelle** dans le classeur.
+- **REVENIR** : **non**. État trop court (50 s). Rotation continue.
+- **MODE_LECTURE** : garder le prédécoupage. Ajouter `INTERRUPTIBLE` (bonne idée).
+
+---
+
+## Q26 — FERMÉE
+
+**Bibliothèque de mouvements spatiaux : quels mouvements ?**
+
+**Décision du 21 août (Loumana).** La bibliothèque est figée avec ces 5 recettes principales pour l'Hippocampe (appliquées aux 3 voyageurs et/ou à l'ambiance) :
+
+1. **Contre-rotation panoramique** (mode 1) : 2 souvenirs glissent en sens opposé, le 2ème ~2x plus vite. (L1: rot 0.04, sens 0 / L2: rot 0.07, sens 1).
+2. **Contre-rotation saut** (mode 3) : 2 souvenirs localisés se croisent, avec des sauts secs (xfade 35). (L1: step 1400, sens 0 / L2: step 750, sens 1).
+3. **Local + saut** : 3 voyageurs, 2 hésitent localement, 1 saute. (L1: mode 4, step 1100 / L2: mode 2, step 1600 / L3: mode 4, step 2200).
+4. **Opposition** : 2 sons face à face, même vitesse. (mode 3, sens 0 et 1, step 2000).
+5. **Fixe + orbite** : un ancré (mode 0), un qui tourne autour (mode 1, rot 0.03).
+
+*(Note: le mode peut être changé dynamiquement par Pure Data pendant que le son tourne. L'envoi de nouvelles valeurs à `s6_l1_mode` ou `step` met à jour le comportement instantanément).*
+
+---
+
+## Q27 — FERMÉE
+
+**`INTERRUPTIBLE` : comment et quand couper un fragment ?**
+
+**Le concept.** Simon propose `MODE_LECTURE = INTERRUPTIBLE` : Pure Data peut couper un fragment avant sa fin (H8, H40), via un fondu court ou une coupure nette.
+
+**Décision du 21 août (Loumana).** 
+- **Condition de déclenchement** : Externe (ex: capteur piézo, changement d'état de zone).
+- **Quels fragments** : Par attribut. C'est une métadonnée cochée dans le classeur Excel.
+- **Durée minimale** : Immédiate (0s). Le sample peut être coupé dès son lancement.
+- **Fondu de sortie** : Court (ex: 35 à 100 ms). Une coupure très nette, cohérente avec les effets secs de la zone.
+
+---
+
+## Q28 — FERMÉE
+
+**Quels comportements de Simon garder en V1 ?**
+
+Simon définit **6 comportements** (§9) avec **~25 variantes** au total. L'implémentation exhaustive est irréaliste en V1.
+
+**Décision du 21 août (Loumana).** On retient un sous-ensemble (MVP) très ciblé pour la V1, en utilisant rigoureusement le vocabulaire de Simon :
+
+1. `APPELER` : 
+   - **direct** (H15) : le fragment appelé démarre dès que l'appelant est terminé.
+   - **sans réponse** (H19) : l'appelant s'éteint sans déclencher de suite.
+2. `RELIER` : 
+   - **succession** (H20) : les fragments s'enchaînent de manière linéaire.
+3. `REPONDRE` :
+   - **immédiate** (H25) : la réponse se fait sur la même enceinte ou une voisine.
+   - **spatiale** (H27) : la réponse apparaît sur une enceinte très éloignée.
+4. `DISPARAITRE` : 
+   - **naturelle** (H38) : le fragment joue jusqu'à la fin de son fichier audio.
+   - **nette** (H40) : coupure prématurée (liée au mode `INTERRUPTIBLE` [Q27](#q27)).
+
+*(Note : `REVENIR` est abandonné pour la V1 (H30-33), et `SE_DEPLACER` (H34-37) est géré par la bibliothèque de mouvements spatiaux [Q26](#q26)).*

@@ -36,7 +36,7 @@ Les trois plans de présence sont le seul point de contact entre les deux mondes
 | `FONCTION_SOCIALE` | `NOMMER` · `CLASSER` · `RACONTER` · `TEMOIGNER` · `EXPLIQUER` | **plusieurs possibles** |
 | `DENSITE_PAROLE` | `FAIBLE` · `MOYENNE` · `FORTE` | une seule — **à ajouter au classeur** |
 
-`PRESENCE` (`ARRIERE_PLAN` / `INTERMEDIAIRE` / `PREMIER_PLAN`) **n'est pas un attribut du fichier.** C'est une décision du moteur au moment de la lecture — **tranché le 20 août** ([Q9](../Backlog/Q&A.md#q9)). Le tableau ne sert qu'à **interdire** certaines combinaisons de plans, via `DENSITE_PAROLE`. Valeurs concrètes des presets : [`../Zones/Cortex.md`](../Zones/Cortex.md) §5 bis ([Q10](../Backlog/Q&A.md#q10), `INTERMEDIAIRE` encore ouvert). Voir aussi [Q13](../Backlog/Q&A.md#q13).
+`PRESENCE` (`ARRIERE_PLAN` / `PREMIER_PLAN` — **`INTERMEDIAIRE` abandonné**, [Q10](../Backlog/Q&A.md#q10)) **n'est pas un attribut du fichier.** C'est une décision du moteur au moment de la lecture — **tranché le 20 août** ([Q9](../Backlog/Q&A.md#q9)). Le tableau ne sert qu'à **interdire** certaines combinaisons de plans, via `DENSITE_PAROLE`. Presets : [`../Zones/Cortex.md`](../Zones/Cortex.md) §5 bis ([Q10](../Backlog/Q&A.md#q10)). Voir aussi [Q13](../Backlog/Q&A.md#q13).
 
 Le fait que `TYPE_DISCOURS` et `FONCTION_SOCIALE` acceptent plusieurs valeurs a une conséquence à ne pas sous-estimer : la compatibilité entre deux fragments devient une question d'**intersection d'ensembles**, pas d'égalité. Un fragment `FAMILIAL + POLITIQUE` est compatible avec tout ce qui est compatible avec l'une des deux valeurs (règle C4). Dans le classeur, ces colonnes contiennent donc des listes, séparées par un caractère à fixer — proposition : `+`, comme dans les exemples de Simon.
 
@@ -81,7 +81,7 @@ Les lignes « `MEDIATIQUE + POLITIQUE` → `FAMILIAL` » du document de Simon d�
 | Les deux `DENSITE_PAROLE = FORTE` | **`PREMIER_PLAN` + `ARRIERE_PLAN` uniquement** — pas deux plans « proches » |
 | Autres cas | Toute paire de plans distincts (C5), selon attribution du moteur ([Q9](../Backlog/Q&A.md#q9)) |
 
-En **V1** (deux plans seulement, [Q25](../Backlog/Q&A.md#q25)), C8 est **satisfaite automatiquement** dès que C5 est respectée. La règle devient contraignante si un 3ᵉ plan (`INTERMEDIAIRE`) revient.
+En **V1** (deux plans seulement, [Q10](../Backlog/Q&A.md#q10) — `INTERMEDIAIRE` abandonné), C8 est **satisfaite automatiquement** dès que C5 est respectée.
 
 **Encore ouvert :** définition de « dense » à l'oreille — à fixer en remplissant `densite_parole`.
 

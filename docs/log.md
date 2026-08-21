@@ -23,6 +23,18 @@ Le prompt du chat = la décision. Le backlog n’est pas un contrat.
 
 ---
 
+---
+
+## 2026-08-20 — Q10 fermée V1 : deux plans, INTERMEDIAIRE abandonné
+
+**Prompt :** accepter defaults réverb/LFO ; pas de nappe/plan intermédiaire — oublier l'idée.
+
+**Décision — [Q10](./Backlog/Q&A.md#q10).** `PREMIER_PLAN` + `ARRIERE_PLAN` seulement. `INTERMEDIAIRE` **abandonné** (pas reporté). Defaults Proto 08 : réverb delay premier 0,06/120/0,04 · arrière 0,12/200/0,08 · LFO premier = osc. #7 · plans **fixes** pendant le sample.
+
+**Changement — [`Backlog/Q&A.md`](./Backlog/Q&A.md), [`Zones/Cortex.md`](./Zones/Cortex.md) §5 bis, [`Matiere/Attributs.md`](./Matiere/Attributs.md) §2 ter.**
+
+---
+
 ## 2026-08-20 — SONS_V3 : pool ambiances partagé + feuille Ambiances
 
 **Prompt :** rangement propre — ambiances à la racine de `SONS_V3/`, partagées entre zones ; feuille **Ambiances** dans le classeur.

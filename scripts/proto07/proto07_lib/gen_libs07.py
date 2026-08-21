@@ -11,6 +11,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", ".."))
 sys.path.insert(0, os.path.join(_REPO, "scripts"))
 from shared.pdbuild import P
+from shared.gain_registre import gain_map_from_registre, linear_gain_for_rel, fmt_gain
 from . import presets07 as PR
 from . import sons_audit07 as audit
 
@@ -637,6 +638,8 @@ def gen_player_state_07():
         if not pool:
             amb_pools[i] = amb_cx[i:] + amb_cx[:i]
 
+    gain_map = gain_map_from_registre(root)
+
     slot_specs = []
     for si in range(4):
         for di in range(3):
@@ -656,21 +659,26 @@ def gen_player_state_07():
     for s, files in slot_specs:
         with open(os.path.join(pl_dir, f"slot_{s}.txt"), "w", encoding="utf-8") as fh:
             for rel in files:
-                fh.write(f"{rel} {os.path.basename(rel)};\n")
+                g = fmt_gain(linear_gain_for_rel(rel, gain_map))
+                fh.write(f"{rel} {os.path.basename(rel)} {g};\n")
 
     sel_args = " ".join(str(s) for s, _ in slot_specs)
     nslots = len(slot_specs)
     p = P(980, 280 + nslots * 36)
     p.text(20, 6, "player_state_07 - SONS_V3 listes text (playlists07)")
     p.text(20, 22, "in0 bang \\, in1 slot froid \\, out0 audio \\, out1 nom")
-    p.text(20, 38, "slots 0..11 etat/duree \\; 20..27 frag \\; 30-31 nappe \\; 32..36 Cortex 5 amb")
+    p.text(20, 38, "slots 0..11 etat/duree \\; 20..27 frag \\; 30-31 nappe \\; 32..36 amb · gain registre")
     p.obj("in_b", 40, 50, "inlet")
     p.obj("in_slot", 140, 50, "inlet")
     p.obj("out", 40, 240, "outlet~")
     p.obj("out_name", 200, 240, "outlet")
     p.obj("readsf", 700, 80, "readsf~")
+    p.obj("f_gn", 700, 200, "f 1")
+    p.obj("gmul", 700, 160, "*~")
     p.obj("gain", 700, 120, "*~ 0.9")
-    p.con("readsf", 0, "gain", 0)
+    p.con("readsf", 0, "gmul", 0)
+    p.con("f_gn", 0, "gmul", 1)
+    p.con("gmul", 0, "gain", 0)
     p.con("gain", 0, "out", 0)
     p.obj("delay0", 40, 90, "delay 0")
     p.obj("tb", 40, 120, "t b")
@@ -740,7 +748,12 @@ def gen_player_state_07():
         p.con(f"sp{s}", 0, f"po{s}", 0)
         p.con(f"po{s}", 0, f"to{s}", 0)
         p.con(f"to{s}", 0, "t_open", 0)
-        p.con(f"sp{s}", 1, f"ps{s}", 0)
+        p.obj(f"spl2_{s}", 780, y + 16, "list split 1")
+        p.con(f"sp{s}", 1, f"spl2_{s}", 0)
+        p.con(f"spl2_{s}", 0, f"ps{s}", 0)
+        p.obj(f"fg{s}", 880, y + 16, "f 1")
+        p.con(f"spl2_{s}", 1, f"fg{s}", 0)
+        p.con(f"fg{s}", 0, "f_gn", 0)
         p.con(f"ps{s}", 0, f"tn{s}", 0)
         p.con(f"tn{s}", 0, "out_name", 0)
         if n >= 2:

@@ -127,26 +127,22 @@ Le paramètre `presets07.py → lpf=1500` n'est qu'une valeur initiale, écrasé
 
 ---
 
-## 5 bis. Plans de présence — TRANCHÉ partiellement le 20 août
+## 5 bis. Plans de présence — TRANCHÉ le 20 août (V1)
 
-[Q9](../Backlog/Q&A.md#q9) = **décision du moteur** : le plan n'est pas une colonne du classeur, Pure Data l'attribue à chaque lecture (C7 : les rôles varient). [Q10](../Backlog/Q&A.md#q10) fixe **deux plans sur trois** :
+[Q9](../Backlog/Q&A.md#q9) = **décision du moteur** : le plan n'est pas une colonne du classeur, Pure Data l'attribue à chaque lecture (C7 : les rôles varient). [Q10](../Backlog/Q&A.md#q10) = **deux plans seulement** ; le 3ᵉ plan Simon (`INTERMEDIAIRE`) est **abandonné** pour ce projet.
 
-| Plan | Gain | LPF (balayage) | Réverbération | HPF | Statut |
-|------|------|----------------|---------------|-----|--------|
-| `PREMIER_PLAN` | normal (référence) | **800 → 2000 Hz**, vitesse **différente** des autres | **moins** qu'aujourd'hui (wet/delay actuel ≈ 0,10 / 180 ms) | **300 Hz** | OREILLE |
-| `INTERMEDIAIRE` | — | — | — | — | **reporté V1** ([Q25](../Backlog/Q&A.md#q25)) — 3ᵉ profondeur de **parole**, pas ambiance par baffle |
-| `ARRIERE_PLAN` | **−2 dB** | **500 → 1000 Hz** | **oui** (vraie réverb « pièce voisine », pas seulement le delay court) | **aucun** (HPF désactivé) | OREILLE |
+| Plan | Gain | LPF (balayage) | Réverb (delay V1) | HPF | LFO | Sample |
+|------|------|----------------|-------------------|-----|-----|--------|
+| `PREMIER_PLAN` | 0 dB | **800 → 2000 Hz** | wet **0,06** · 120 ms · fb 0,04 | **300 Hz** | osc. **#7** | **fixe** |
+| `ARRIERE_PLAN` | **−2 dB** | **500 → 1000 Hz** | wet **0,12** · 200 ms · fb 0,08 | aucun | osc. **#0–5** | **fixe** |
 
-**Ce que ça change par rapport au §4.** Aujourd'hui les six couches partagent la même chaîne (HPF 450–630 Hz, LPF 500–2000 via `cortex_ctrl_07`, wet 0,10). Les plans **remplacent** ce traitement uniforme par **deux chaînes distinctes sous chaque paire** : un fragment en `PREMIER_PLAN`, l'autre en `ARRIERE_PLAN` (ou `INTERMEDIAIRE` quand il sera défini). Le balayage global §5 devient le **défaut de fond** ; chaque plan peut avoir ses propres bornes LPF et sa propre vitesse de LFO.
+Référence 07 (remplacée par les plans) : HPF 450–630 Hz, LPF 500–2000 via `cortex_ctrl_07`, wet 0,10 / delay 180 ms.
+
+**Ce que ça change par rapport au §4.** Les plans **remplacent** le traitement uniforme par **deux chaînes distinctes sous chaque paire** : un fragment en `PREMIER_PLAN`, l'autre en `ARRIERE_PLAN`. Chaque plan a ses bornes LPF, sa vitesse de LFO et sa réverb.
 
 **Architecture Proto 08.** Sous `cortex_pair_08`, chaque fragment passe par son propre `fx_router` avec le preset de plan choisi par le moteur, **puis** les deux sorties sont sommées. Deux gains séparés et interchangeables (C5–C7). Le gain de normalisation (`gain_db` du registre) s'applique **avant** le preset de plan, sur le `*~` en sortie de `readsf~`.
 
-**Encore à trancher ([Q10](../Backlog/Q&A.md#q10)).**
-
-- ~~Valeurs concrètes de `INTERMEDIAIRE`~~ — **reporté V1** ([Q25](../Backlog/Q&A.md#q25)). Deux plans suffisent pour commencer.
-- Niveaux exacts de réverbération (premier = combien de moins ? arrière = combien de plus ?) → aussi lié à [Q18](../Backlog/Q&A.md#q18).
-- Vitesse du LFO du premier plan (numéro à fixer à l'oreille parmi les 12 oscillateurs).
-- Les plans sont-ils **fixes** pendant une occurrence, ou le plan lui-même peut-il bouger lentement ?
+**Révision à l'oreille.** Les chiffres ci-dessus sont les **defaults Proto 08**. Une vraie réverb « pièce voisine » sur l'arrière-plan reste un plus ([TO DO](../Backlog/TO%20DO.md) §1). L'intelligibilité cible ([Q18](../Backlog/Q&A.md#q18)) peut affiner filtre/réverb sans rouvrir Q10.
 
 **Priorité.** Indispensable depuis [Q1](../Backlog/Q&A.md#q1) = A : 12 voix au même plan = bruit, pas superposition.
 
@@ -172,10 +168,10 @@ Le décalage garantit que deux paires ne se retrouvent jamais sur le même baffl
 
 **En Proto 08 : 6 paires sur 6 baffles**, décalage modulo 6. Le principe ne change pas — autant de paires que de baffles, donc une permutation du contenu sans collision. Le mouvement n'est pas perdu, il est seulement plus large.
 
-**Problème connu — en cours de résolution.** À l'intérieur d'une paire, les deux fragments sont **sommés à poids égal** (un simple `+~`). [Q9](../Backlog/Q&A.md#q9) tranche : le moteur attribue le plan ; [Q10](../Backlog/Q&A.md#q10) fixe déjà deux presets sur trois (§5 bis). Il manque encore l'implémentation sous `cortex_pair_08` : deux chaînes FX + deux gains interchangeables.
-→ [Q10](../Backlog/Q&A.md#q10) (`INTERMEDIAIRE` manquant), [Q11](../Backlog/Q&A.md#q11) et [TO DO](../Backlog/TO%20DO.md).
+**Problème connu — en cours de résolution.** À l'intérieur d'une paire, les deux fragments sont **sommés à poids égal** (un simple `+~`). [Q9](../Backlog/Q&A.md#q9) tranche : le moteur attribue le plan ; [Q10](../Backlog/Q&A.md#q10) fixe deux presets (§5 bis). Il manque l'implémentation sous `cortex_pair_08` : deux chaînes FX + deux gains interchangeables.
+→ [Q11](../Backlog/Q&A.md#q11) et [TO DO](../Backlog/TO%20DO.md) §0 bis.
 
-C'est le seul endroit où le comportement de zone et la logique de samples se touchent vraiment : **les trois plans de présence sont du timbre** (gain, et probablement filtre et réverbération), donc ils doivent être construits et figés maintenant ; **qui va dans quel plan** est de la logique de tags, donc plus tard. Il faut construire les trois plans comme des presets nommés, testables à la main.
+C'est le seul endroit où le comportement de zone et la logique de samples se touchent vraiment : **les plans de présence sont du timbre** (gain, filtre, réverbération), donc construits en §5 bis ; **qui va dans quel plan** est de la logique du moteur, plus tard via tags. Deux presets nommés, testables à la main dans le Proto 08.
 
 ---
 
@@ -334,7 +330,7 @@ Dans cet ordre, parce que chaque étape rend la suivante possible :
 
 1. ~~**Trancher la carte des 8 HP**~~ — fait le 20 août, [Q1](../Backlog/Q&A.md#q1) = A. §3.
 2. **Monter le Proto 08** avec la carte à 12 voix + 2 nappes, en gardant le tirage au hasard. C'est du câblage, pas du réglage : à ce stade on ne cherche pas encore le bon son, on cherche la bonne structure.
-3. **Implémenter les plans de présence** dans le Proto 08 — deux presets sur trois définis en §5 bis (`PREMIER_PLAN`, `ARRIERE_PLAN`). **`INTERMEDIAIRE` manque** → [Q10](../Backlog/Q&A.md#q10). Forçables à la main pour écouter sur la même paire.
+3. **Implémenter les plans de présence** dans le Proto 08 — spec §5 bis ([Q10](../Backlog/Q&A.md#q10) fermée). Forçables à la main pour écouter sur la même paire.
 4. **Ajouter une vraie réverbération « pièce voisine »** sur les paroles, et régler la distance à l'oreille avec le LPF. C'est ce qui répond au reproche d'intelligibilité de Simon. → [Q18](../Backlog/Q&A.md#q18).
 5. ~~**Trancher le conflit pulse / `EMERGER`-`RECOUVRIR`**~~ — fait le 20 août, [Q11](../Backlog/Q&A.md#q11). §8 bis. Pulse supprimé.
 6. **Implémenter les gestes** (`EMERGER` 6–10 s, `RECOUVRIR` 3–6 s, décalage par paire, 50/50) dans `cortex_pair_08`.
