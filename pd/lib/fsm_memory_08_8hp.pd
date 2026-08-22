@@ -90,7 +90,7 @@
 #X msg 310 790 4;
 #X msg 310 820 1;
 #X msg 310 850 1;
-#X msg 310 880 1;
+#X msg 310 880 0;
 #X msg 310 910 0;
 #X msg 310 940 0;
 #X msg 310 970 0;
@@ -129,11 +129,7 @@
 #X msg 650 1120 0;
 #X msg 650 1150 0;
 #X msg 650 1180 0;
-#X obj 800 40 r s6_cortex_hold;
-#X obj 800 70 t f f;
-#X obj 800 100 sel 1;
-#X obj 880 100 sel 0;
-#X text 800 140 08 hold Cortex + Boucle 15pct cycles libres;
+#X text 800 140 08 Boucle 15pct cycles libres · piezo via s6_force;
 #X connect 0 0 20 0;
 #X connect 20 3 27 1;
 #X connect 20 1 21 0;
@@ -331,8 +327,3 @@
 #X connect 73 3 129 0;
 #X connect 129 0 18 0;
 #X connect 68 0 19 0;
-#X connect 130 0 131 0;
-#X connect 131 0 132 0;
-#X connect 131 1 133 0;
-#X connect 132 0 24 0;
-#X connect 133 0 23 0;

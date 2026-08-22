@@ -42,7 +42,7 @@ BUCKET_TYPE = {
     "LONG_MOYEN": "long",
 }
 
-# Paroles — une feuille par zone
+# Paroles — Cortex / Reconstruction
 PAROLE_COLUMNS = (
     ("id", "ID", True),
     ("type", "Type", True),
@@ -54,6 +54,63 @@ PAROLE_COLUMNS = (
     ("famille_son", "Famille son", False),
     ("usage_prefere", "Usage préféré", False),
     ("notes", "Notes", False),
+)
+
+# Hippocampe — colonnes Simon §13.1 (vides OK)
+HIPPO_EXTRA_COLUMNS = (
+    ("type_fonctionnel", "Type fonctionnel", False),
+    ("force_associative", "Force associative", False),
+    ("type_association", "Type association", False),
+    ("famille_associative", "Famille associative", False),
+    ("familles_cibles", "Familles cibles", False),
+    ("ouverture", "Ouverture", False),
+    ("mode_lecture", "Mode lecture", False),
+    ("delai_reponse", "Délai réponse", False),
+)
+
+HIPPO_COLUMNS = PAROLE_COLUMNS + HIPPO_EXTRA_COLUMNS
+
+# Reconstruction — schéma Simon §26.1 (Q32) — distinct des feuilles paroles
+RECON_EXTRA_COLUMNS = (
+    ("type_matiere", "Type matière", False),
+    ("granularite", "Granularité", False),
+    ("duree_min_lecture_s", "Durée min lecture (s)", False),
+    ("mode_lecture", "Mode lecture", False),
+    ("provenance_materiau", "Provenance matériau", False),
+    ("source_id", "Source ID", False),
+    ("contexte_source", "Contexte source", False),
+    ("type_source", "Type source", False),
+    ("role_compositionnel", "Rôle compositionnel", False),
+    ("potentiel_compositionnel", "Potentiel compositionnel", False),
+    ("type_compatibilite", "Type compatibilité", False),
+    ("compatibles_avec", "Compatibles avec", False),
+    ("phonetique", "Phonétique", False),
+    ("timbre", "Timbre", False),
+    ("rythme", "Rythme", False),
+    ("energie", "Énergie", False),
+    ("contenu_semantique", "Contenu sémantique", False),
+    ("mutabilite", "Mutabilité", False),
+    ("reconnaissabilite_initiale", "Reconnaissabilité initiale", False),
+    ("reconnaissabilite_cible", "Reconnaissabilité cible", False),
+    ("charge_semantique", "Charge sémantique", False),
+    ("sensibilite_source", "Sensibilité source", False),
+    ("transformations_autorisees", "Transformations autorisées", False),
+    ("transformations_interdites", "Transformations interdites", False),
+    ("nombre_repetitions_max", "Nb répétitions max", False),
+    ("comportements_autorises", "Comportements autorisés", False),
+    ("nb_utilisations_max_fenetre", "Nb utilisations max fenêtre", False),
+    ("commentaire_artistique", "Commentaire artistique", False),
+)
+
+RECON_COLUMNS = (
+    ("id", "ID", True),
+    ("duree_s", "Durée (s)", True),
+) + RECON_EXTRA_COLUMNS + (("notes", "Notes", False),)
+
+NOTE_RECON = (
+    "Vert = auto (SONS_V3/RECONSTRUCTION/). "
+    "Schéma Simon §26.1 — colonnes vides OK en attendant la nouvelle banque (Q32). "
+    "Proto moteur : gen_formes_recon.py avec heuristiques durée."
 )
 
 # Ambiances — pool partagé
@@ -108,7 +165,11 @@ OLD_HEADER_MAP = {
 AMBIANCE_SHEET = "Ambiances"
 AMBIANCE_KEYS = {k for k, _, _ in AMBIANCE_COLUMNS}
 PAROLE_KEYS = {k for k, _, _ in PAROLE_COLUMNS}
-ALL_MANUAL = {k for k, _, manual in (*PAROLE_COLUMNS, *AMBIANCE_COLUMNS) if not manual}
+HIPPO_KEYS = {k for k, _, _ in HIPPO_COLUMNS}
+RECON_KEYS = {k for k, _, _ in RECON_COLUMNS}
+ALL_MANUAL = {k for k, _, manual in (
+    *PAROLE_COLUMNS, *HIPPO_EXTRA_COLUMNS, *RECON_EXTRA_COLUMNS, *AMBIANCE_COLUMNS
+) if not manual}
 
 
 def _natkey(name: str):
@@ -350,9 +411,19 @@ def main():
     print("catalogue_fragments.xlsx")
     for etat, title in ZONES:
         files = scan_zone_parole(etat)
+        if etat == "HIPPOCAMPE":
+            cols = HIPPO_COLUMNS
+            note = NOTE_PAROLE + " Colonnes associatives Simon §13.1 — vides OK."
+        elif etat == "RECONSTRUCTION":
+            cols = RECON_COLUMNS
+            note = NOTE_RECON
+        else:
+            cols = PAROLE_COLUMNS
+            note = NOTE_PAROLE
         kept = write_sheet(
-            wb, title, f"{etat}/  ·  {NOTE_PAROLE}",
-            PAROLE_COLUMNS, files, manual.get(title, {}),
+            wb, title, f"{etat}/  ·  {note}",
+            cols, files, manual.get(title, {}),
+            type_comment_idx=2 if etat != "RECONSTRUCTION" else None,
         )
         print(f"  {title}: {len(files)} paroles (dont {kept} avec données conservées)")
     amb = scan_ambiances(masters)

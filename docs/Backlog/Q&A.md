@@ -1,6 +1,6 @@
 # Q&A — ce qui doit être tranché
 
-**20 août 2026.** Questions ouvertes après lecture de `[../Sources/Simon - Cortex et Cortex-Ambiance.md](../Sources/Simon%20-%20Cortex%20et%20Cortex-Ambiance.md)` et `[../Sources/Specifications_Pure_Data_Hippocampe.md](../Sources/Specifications_Pure_Data_Hippocampe.md)` (reçu le 21 août).
+**20–21 août 2026.** Questions ouvertes après lecture de `[../Sources/Simon - Cortex et Cortex-Ambiance.md](../Sources/Simon%20-%20Cortex%20et%20Cortex-Ambiance.md)`, `[../Sources/Specifications_Pure_Data_Hippocampe.md](../Sources/Specifications_Pure_Data_Hippocampe.md)` (reçu le 21 août) et `[../Sources/Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md](../Sources/Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md)` (reçu le 21 août).
 
 Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction avec l'implémentation. Ce qui est clair est dans `[TO DO.md](./TO%20DO.md)`.
 
@@ -29,23 +29,24 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 **4 ouvertes Cortex**, dans cet ordre :
 
 
-|     | Question                                                                | Bloque quoi                                    |
-| --- | ----------------------------------------------------------------------- | ---------------------------------------------- |
-| 🟠  | [Q18](#q18) — quel niveau d'intelligibilité viser ?                     | Affiner filtre/réverb au-delà des defaults Q10 |
-| 🟡  | [Q12](#q12) — tables C9/C10 (probablement redondantes avec Q11 = 50/50) | Affiner le geste par attributs                 |
+|     | Question                                                                | Bloque quoi                                     |
+| --- | ----------------------------------------------------------------------- | ----------------------------------------------- |
+| 🟠  | [Q18](#q18) — quel niveau d'intelligibilité viser ?                     | Affiner filtre/réverb au-delà des defaults Q10  |
+| 🟡  | [Q12](#q12) — tables C9/C10 (probablement redondantes avec Q11 = 50/50) | Affiner le geste par attributs                  |
 | 🟡  | [Q22](#q22)                                                             | Filtre texture `INDETERMINE` (reporté Proto 08) |
-| 🟡  | [Q14](#q14)                                                             | Piézo                                          |
 
 
-**4 ouvertes Hippocampe** (21 août, spec Simon reçue) :
+**1 répondue** le 21 août (soir) : Q14 *(logique Simon — paramètres et matériel restent à fixer)*.
 
+**4 répondues** le 21 août (session Loumana, Reconstruction) : Q29, Q30, Q31, Q32.
 
-|     | Question                                                                         | Bloque quoi                                |
-| --- | -------------------------------------------------------------------------------- | ------------------------------------------ |
-| 🟠  | [Q26](#q26) — bibliothèque de mouvements spatiaux : lesquels ?                   | Implémentation du spatial Hippocampe       |
-| 🟠  | [Q27](#q27) — `INTERRUPTIBLE` : comment et quand couper ?                        | Changement dans le player                  |
-| 🟡  | [Q28](#q28) — quels comportements de Simon garder en V1 ?                        | Scope du moteur Hippocampe                 |
-| 🟡  | [Q14](#q14)                                                                      | Piézo (inclut maintenant Hippocampe)       |
+**3 répondues** le 21 août (soir, Reconstruction) : Q33, Q34, Q36.
+
+**1 répondue** le 21 août (soir) : Q35.
+
+**Hippocampe** (21 août) : [Q26](#q26), [Q27](#q27), [Q28](#q28) **fermées** — voir §I.
+
+**Reconstruction** : Q29–Q36 **fermées** le 21 août.
 
 
 **Pourquoi Q10 n'est plus bloquante.** [Q1](#q1) = 12 voix ; les plans ([Q9](#q9), [Q10](#q10) **fermée V1**) et les gestes ([Q11](#q11)) ne dépendent d'**aucun tag**. Defaults implémentables dans le Proto 08 — révision à l'oreille sans rouvrir la question.
@@ -118,7 +119,7 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 
 - **Deux baffles d'ambiance fixes** pendant le Cortex ([Q1](#q1), [Q2](#q2)) : une *musicale*, une *texture*. Pas d'ambiance sur les baffles de parole.
 - Le croisement dramaturgique (Congo / milieu européen, etc.) se décide **une fois par passage dans le Cortex** : le sélecteur regarde les paroles tirées (ou leurs attributs) et choisit **une paire d'ambiances** pour les deux baffles — pas six micro-milieux.
-- **`INTERMEDIAIRE` dans Simon (§2.2.D) = profondeur de parole** — **non retenu** pour ce projet. Deux plans seulement : `PREMIER_PLAN` + `ARRIERE_PLAN` ([Q10](#q10)).
+- `**INTERMEDIAIRE` dans Simon (§2.2.D) = profondeur de parole** — **non retenu** pour ce projet. Deux plans seulement : `PREMIER_PLAN` + `ARRIERE_PLAN` ([Q10](#q10)).
 - Le Proto 07 (5 nappes / 5 baffles) était une **déviation** ; la cible Proto 08 revient à **2 nappes globales**.
 
 **Conséquences.** `[../Zones/Cortex.md](../Zones/Cortex.md)` §7 bis · `[../Matiere/Attributs.md](../Matiere/Attributs.md)` §6 · sélecteur futur : `gen_paires.py` pour les paires par baffle ; `**gen_ambiance_cortex.py`** (ou équivalent) pour **une** ligne ambiance par état Cortex.
@@ -227,6 +228,8 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 
 **Réponse :** *on y va pas a pas, pour le moment seule le cortex a ete donné, il travaille sur l'hippocamp.  oui . oui s'applique a tout les fragments. oui, il tratravaille desssus , ca arrive.*
 
+**Complément (21 août).** Spec **Reconstruction + Reconstruction–Ambiance** reçue — `[Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md](../Sources/Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md)`. → §J.
+
 ---
 
 ## Q24
@@ -272,7 +275,7 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 3. Si toujours aucun : **abandonner C2**, ne garder que **C1** (Belgique + Congo, contextes opposés).
 4. **C1 ne se relâche jamais.**
 
-Tirage final parmi les candidats restants : **au hasard**, non déterministe — voir [Q6](#q6). Spec : [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §6 bis.
+Tirage final parmi les candidats restants : **au hasard**, non déterministe — voir [Q6](#q6). Spec : `[../Matiere/Attributs.md](../Matiere/Attributs.md)` §6 bis.
 
 ---
 
@@ -365,21 +368,21 @@ Point 5 de la liste de Simon. **Deux plans seulement** pour le projet : `PREMIER
 **Les plans sont un objet de sound design, pas seulement un gain.** « Arrière-plan » = plus loin (gain + filtre + réverb), pas seulement −X dB.
 
 
-| Plan | Gain | LPF (balayage) | Réverb (delay V1) | HPF | LFO | Pendant le sample |
-|------|------|----------------|-------------------|-----|-----|-------------------|
-| `PREMIER_PLAN` | 0 dB (réf.) | **800 → 2000 Hz** | wet **0,06** · delay **120 ms** · fb **0,04** (moins que le 07 : 0,10 / 180 / 0,06) | **300 Hz** | oscillateur **#7** (vitesse hors rapports simples avec #0–5) | **fixe** |
-| `ARRIERE_PLAN` | **−2 dB** | **500 → 1000 Hz** | wet **0,12** · delay **200 ms** · fb **0,08** | **aucun** | indices **#0–5** (héritage `cortex_ctrl`) | **fixe** |
+| Plan           | Gain        | LPF (balayage)    | Réverb (delay V1)                                                                   | HPF        | LFO                                                          | Pendant le sample |
+| -------------- | ----------- | ----------------- | ----------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------ | ----------------- |
+| `PREMIER_PLAN` | 0 dB (réf.) | **800 → 2000 Hz** | wet **0,06** · delay **120 ms** · fb **0,04** (moins que le 07 : 0,10 / 180 / 0,06) | **300 Hz** | oscillateur **#7** (vitesse hors rapports simples avec #0–5) | **fixe**          |
+| `ARRIERE_PLAN` | **−2 dB**   | **500 → 1000 Hz** | wet **0,12** · delay **200 ms** · fb **0,08**                                       | **aucun**  | indices **#0–5** (héritage `cortex_ctrl`)                    | **fixe**          |
 
 
 **Réponse (20 août, fermée V1).**
 
-- **`PREMIER_PLAN`** et **`ARRIERE_PLAN`** : valeurs du tableau ci-dessus — **defaults Proto 08**, révisables à l'oreille sans rouvrir Q10.
-- **`INTERMEDIAIRE`** : **abandonné.** Ne pas implémenter, ne pas documenter comme « à venir ».
+- `**PREMIER_PLAN**` et `**ARRIERE_PLAN**` : valeurs du tableau ci-dessus — **defaults Proto 08**, révisables à l'oreille sans rouvrir Q10.
+- `**INTERMEDIAIRE**` : **abandonné.** Ne pas implémenter, ne pas documenter comme « à venir ».
 - **Plans fixes** pendant toute la durée du fragment (cohérent [Q11](#q11) mode permanent). Pas de plan qui « bouge » en V1.
 - **Réverb « pièce voisine »** sur l'arrière-plan : le delay ci-dessus est le **provisoire V1** ; une vraie réverb court/sombre reste un plus ([TO DO](./TO%20DO.md) §1), pas un prérequis au scaffold du 08.
 - **[Q18](#q18)** oriente l'intelligibilité cible (souvent A au premier, B/C à l'arrière) — affinage au-delà des defaults, pas blocage structurel.
 
-**Conséquences.** Spec dans [`../Zones/Cortex.md`](../Zones/Cortex.md) §5 bis. Proto 08 : deux chaînes FX + deux gains sous chaque paire ; le moteur assigne qui est premier / arrière (C5–C7, [Q9](#q9)).
+**Conséquences.** Spec dans `[../Zones/Cortex.md](../Zones/Cortex.md)` §5 bis. Proto 08 : deux chaînes FX + deux gains sous chaque paire ; le moteur assigne qui est premier / arrière (C5–C7, [Q9](#q9)).
 
 ---
 
@@ -397,7 +400,7 @@ Point 5 de la liste de Simon. **Deux plans seulement** pour le projet : `PREMIER
 
 **Aussi.** Que veut dire « dense » exactement — un débit de parole rapide, un fragment sans silence, plusieurs voix dans le même fragment ? Il faut une définition utilisable à l'écoute, sinon la colonne sera remplie de façon incohérente.
 
-**Réponse :** **Oui — bonne lecture.** C8 complète C5 : si les **deux** fragments sont `DENSITE_PAROLE = FORTE`, ils doivent être aux **extrémités** des plans — `PREMIER_PLAN` + `ARRIERE_PLAN` uniquement. En V1 ([Q10](#q10) = deux plans seulement, `INTERMEDIAIRE` abandonné) c'est **automatique**. À implémenter dans `gen_paires.py` · [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §2 ter.
+**Réponse :** **Oui — bonne lecture.** C8 complète C5 : si les **deux** fragments sont `DENSITE_PAROLE = FORTE`, ils doivent être aux **extrémités** des plans — `PREMIER_PLAN` + `ARRIERE_PLAN` uniquement. En V1 ([Q10](#q10) = deux plans seulement, `INTERMEDIAIRE` abandonné) c'est **automatique**. À implémenter dans `gen_paires.py` · `[../Matiere/Attributs.md](../Matiere/Attributs.md)` §2 ter.
 
 **Encore ouvert :** définition opérationnelle de « dense » à l'oreille (débit, silence, multi-voix) — à documenter en remplissant la colonne `densite_parole`.
 
@@ -491,7 +494,7 @@ Autrement dit : quelle que soit la combinaison d'attributs, les deux comportemen
 
 **Et le re-déclenchement toutes les 14 s ?** Celui-là, en revanche, ressemble bien à une découpe rapide — voir [Q3](#q3).
 
-**Réponse :** **Oui — petite modulation de volume lente acceptée.** Conforme au Proto 07 (AM 13–33 s, profondeur ~0,10) : ce n'est ni delay ni découpe. **Idée future (non V1) :** HPF momentané ~350 Hz déclenché par le piézo — effet bref « pièce qui s'ouvre », lié à [Q14](#q14). Spec : [`../Zones/Cortex.md`](../Zones/Cortex.md) §7.
+**Réponse :** **Oui — petite modulation de volume lente acceptée.** Conforme au Proto 07 (AM 13–33 s, profondeur ~0,10) : ce n'est ni delay ni découpe. **Idée future (non V1) :** HPF momentané ~350 Hz déclenché par le piézo — effet bref « pièce qui s'ouvre », lié à [Q14](#q14). Spec : `[../Zones/Cortex.md](../Zones/Cortex.md)` §7.
 
 ---
 
@@ -523,7 +526,7 @@ Point 6 de la liste de Simon.
 
 `RECOUVRIR` existe pour l'ambiance musicale **et** pour la texture. Si les deux le font simultanément, les paroles du Cortex disparaissent complètement. Est-ce un moment recherché — un effacement total, une respiration de l'installation — ou faut-il un verrou empêchant les deux recouvrements de se superposer ?
 
-**Réponse :** **Verrou — jamais les deux en `RECOUVRIR` simultanément.** Si l'ambiance musicale est en recouvrement actif, la texture ne peut pas l'être en même temps (et inversement). Évite d'effacer complètement les paroles du Cortex. À implémenter dans le gestionnaire de comportements ambiance du Proto 08 · [`../Zones/Cortex.md`](../Zones/Cortex.md) §7 bis.
+**Réponse :** **Verrou — jamais les deux en `RECOUVRIR` simultanément.** Si l'ambiance musicale est en recouvrement actif, la texture ne peut pas l'être en même temps (et inversement). Évite d'effacer complètement les paroles du Cortex. À implémenter dans le gestionnaire de comportements ambiance du Proto 08 · `[../Zones/Cortex.md](../Zones/Cortex.md)` §7 bis.
 
 ---
 
@@ -587,7 +590,7 @@ Ces trois cibles ne demandent pas les mêmes réglages, et surtout elles n'ont p
 
 # H. Capteurs
 
-## Q14
+## Q14 — FERMÉE
 
 **Le piézo fait l'inverse de ce qui est implémenté**
 
@@ -606,17 +609,41 @@ Ces trois cibles ne demandent pas les mêmes réglages, et surtout elles n'ont p
 
 **Contrainte non négociable, rappel.** Le micro et les piézos ne vont **jamais** vers `dac~`. Ils ne servent qu'à piloter.
 
-**Réponse :** *à remplir*
+**Réponse (21 août) :** **Suivre Simon** (§3.8).
+
+**Piézo — logique retenue :**
+
+```text
+SI piezo_declenche
+ALORS arrêter Cortex–Ambiance (les 2 nappes)
+ET permettre le passage vers la zone suivante
+```
+
+- Le piézo est un **déclencheur de transition**, pas un capteur de présence globale.
+- **`s6_cortex_hold`** (micro RMS bas → gel FSM) **n'est pas retenu** — absent de Simon, contradictoire avec « permettre le passage ». À **retirer** du Proto 08 ou le laisser désactivé ; le simulateur RMS peut rester pour le dev sans piloter la FSM.
+- **Toutes zones** : en Reconstruction / Hippocampe, le piézo peut aussi déclencher `INTERRUPTIBLE` ([Q27](#q27)) sur les fragments marqués au classeur.
+
+**Encore à fixer** (calage à l'oreille + matériel — pas de reprise de Q14) :
+
+| Paramètre | Piste provisoire V1 |
+| --- | --- |
+| Seuil de déclenchement | À caler sur Pi avec `_test_piezo` |
+| Sortie nappes | **Fondu** plutôt que coupure sèche — base **0,5–2 s** (Simon laisse ouvert) |
+| Zone appelée | **Suivante** dans le cycle FSM (pas de saut arbitraire en V1) |
+| Délai avant retour ambiance | **≥ durée de l'état** suivant ou cooldown **10–30 s** — à écouter |
+| Nombre / emplacement piézos | **Matériel** — pas dans la spec Simon ; décision salle |
+
+**Conséquences.** `presence_08` : branche piézo + retrait hold · `cortex_amb_behav_08` : réaction fondu stop · FSM : entrée « force transition » · [`TO DO.md`](./TO%20DO.md) §5.
 
 ---
 
 # I. Hippocampe — spec Simon reçue le 21 août
 
-**21 août 2026.** Questions issues de la lecture croisée de [`../Sources/Specifications_Pure_Data_Hippocampe.md`](../Sources/Specifications_Pure_Data_Hippocampe.md) contre l'implémentation actuelle ([`../Zones/Hippocampe.md`](../Zones/Hippocampe.md)).
+**21 août 2026.** Questions issues de la lecture croisée de `[../Sources/Specifications_Pure_Data_Hippocampe.md](../Sources/Specifications_Pure_Data_Hippocampe.md)` contre l'implémentation actuelle (`[../Zones/Hippocampe.md](../Zones/Hippocampe.md)`).
 
 **Simon propose** un Hippocampe radicalement différent : un système associatif piloté par 5 dimensions d'attributs, avec 6 comportements (APPELER, RELIER, REPONDRE, REVENIR, SE_DEPLACER, DISPARAITRE) et une sous-zone Hippocampe–Ambiance à part entière.
 
-**Décisions prises le 21 août** (Loumana) — pas de question, directement dans [`TO DO.md`](./TO%20DO.md) :
+**Décisions prises le 21 août** (Loumana) — pas de question, directement dans `[TO DO.md](./TO%20DO.md)` :
 
 - **Couches** : ambiance + 2 longs (permanents) + 2 courts (interférences aléatoires). Pas le max 2 de Simon.
 - **Association** : oui, même architecture que Cortex (`gen_assoc_hippo.py` en Python).
@@ -647,11 +674,12 @@ Ces trois cibles ne demandent pas les mêmes réglages, et surtout elles n'ont p
 
 ## Q27 — FERMÉE
 
-**`INTERRUPTIBLE` : comment et quand couper un fragment ?**
+`**INTERRUPTIBLE` : comment et quand couper un fragment ?**
 
 **Le concept.** Simon propose `MODE_LECTURE = INTERRUPTIBLE` : Pure Data peut couper un fragment avant sa fin (H8, H40), via un fondu court ou une coupure nette.
 
 **Décision du 21 août (Loumana).** 
+
 - **Condition de déclenchement** : Externe (ex: capteur piézo, changement d'état de zone).
 - **Quels fragments** : Par attribut. C'est une métadonnée cochée dans le classeur Excel.
 - **Durée minimale** : Immédiate (0s). Le sample peut être coupé dès son lancement.
@@ -667,16 +695,325 @@ Simon définit **6 comportements** (§9) avec **~25 variantes** au total. L'impl
 
 **Décision du 21 août (Loumana).** On retient un sous-ensemble (MVP) très ciblé pour la V1, en utilisant rigoureusement le vocabulaire de Simon :
 
-1. `APPELER` : 
-   - **direct** (H15) : le fragment appelé démarre dès que l'appelant est terminé.
-   - **sans réponse** (H19) : l'appelant s'éteint sans déclencher de suite.
-2. `RELIER` : 
-   - **succession** (H20) : les fragments s'enchaînent de manière linéaire.
+1. `APPELER` :
+  - **direct** (H15) : le fragment appelé démarre dès que l'appelant est terminé.
+  - **sans réponse** (H19) : l'appelant s'éteint sans déclencher de suite.
+2. `RELIER` :
+  - **succession** (H20) : les fragments s'enchaînent de manière linéaire.
 3. `REPONDRE` :
-   - **immédiate** (H25) : la réponse se fait sur la même enceinte ou une voisine.
-   - **spatiale** (H27) : la réponse apparaît sur une enceinte très éloignée.
-4. `DISPARAITRE` : 
-   - **naturelle** (H38) : le fragment joue jusqu'à la fin de son fichier audio.
-   - **nette** (H40) : coupure prématurée (liée au mode `INTERRUPTIBLE` [Q27](#q27)).
+  - **immédiate** (H25) : la réponse se fait sur la même enceinte ou une voisine.
+  - **spatiale** (H27) : la réponse apparaît sur une enceinte très éloignée.
+4. `DISPARAITRE` :
+  - **naturelle** (H38) : le fragment joue jusqu'à la fin de son fichier audio.
+  - **nette** (H40) : coupure prématurée (liée au mode `INTERRUPTIBLE` [Q27](#q27)).
 
 *(Note : `REVENIR` est abandonné pour la V1 (H30-33), et `SE_DEPLACER` (H34-37) est géré par la bibliothèque de mouvements spatiaux [Q26](#q26)).*
+
+---
+
+# J. Reconstruction — spec Simon reçue le 21 août
+
+**21 août 2026.** Questions issues de la lecture croisée de `[../Sources/Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md](../Sources/Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md)` contre l'implémentation actuelle (`[../Zones/Reconstruction.md](../Zones/Reconstruction.md)`) et les décisions antérieures ([Q2](#q2), [Q10](#q10), [Q27](#q27)).
+
+**Simon propose** un moteur de composition : fragments-micro en banque préparée, agencement par rôles (`NOYAU`, `LIAISON`, `SUTURE`…), score de compatibilité, transformations profondes, formes de 2 à 60 s, spatialisation dramaturgique (convergence, dispersion…), plus une sous-zone **Reconstruction–Ambiance** avec neuf comportements dédiés.
+
+**Points d'accord** (pas de question — directement exploitables) :
+
+- Banque **préparée** en amont (Ableton) ; Pd ne redécoupe pas le Cortex/Hippocampe en direct (§ principe banque).
+- `MODE_LECTURE` inclut `INTEGRAL` / `EXTRAIT_VARIABLE` / `INTERRUPTIBLE` / `REPETABLE` — cohérent avec [Q27](#q27) (Hippocampe).
+- Pas de binarité Belgique/Congo **obligatoire** par forme (R3) — contraire au Cortex (C1), dramaturgiquement cohérent avec « identité-relation en mouvement ».
+- Garde-fous éthiques explicites (R12, R13) : pas de fausse déclaration, sources `PROTEGEE` selon `TRANSFORMATIONS_AUTORISEES`.
+- Architecture Python → Pd : même principe que `gen_paires.py` / `gen_assoc_hippo.py` (R16, §25).
+- État **120 s** dans le cycle — compatible avec plusieurs formes + silences si le moteur le permet.
+
+**Discordances majeures** (questions ci-dessous) :
+
+
+| Sujet     | Doc projet (`Reconstruction.md`, [Q2](#q2))       | Simon                                                                                       |
+| --------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Intention | Zone **lisible**, quasi sèche, fil suivi          | Forme **en train de se constituer**, opacité variable                                       |
+| Couches   | **2** : fil continu + interruptions               | Formes **multi-fragments** (2–12 unités), jusqu'à 4 sons simultanés                         |
+| Effets    | LPF 18–20 kHz, delay léger, **pas** de saturation | Granularisation, pitch, gel spectral, fusion profonde (§15)                                 |
+| Ambiance  | **Aucune** ([Q2](#q2) : « il n'en faut pas »)     | Sous-zone complète **Reconstruction–Ambiance** (§17–23)                                     |
+| Pulse     | `recon_pulse` toutes les **4,5 s** sur L2         | Silences structurants 0,05–12 s ; pas de re-déclenchement périodique                        |
+| Matière   | 287 fragments + **1** long                        | Banque micro (phonèmes, syllabes, mots…) + 11 granularités                                  |
+| Plans     | Non implémentés                                   | Superposition à **3 plans** dont `INTERMEDIAIRE` (R31) — [Q10](#q10) l'a abandonné ailleurs |
+
+
+**Décisions prises le 21 août** (Loumana) — pas de question, directement dans [`TO DO.md`](./TO%20DO.md) :
+
+- **[Q29](#q29) = A** — suivre Simon : Reconstruction = laboratoire compositionnel ; réécrire `Reconstruction.md`.
+- **[Q30](#q30) = A** — pas de sous-zone Reconstruction–Ambiance (confirme [Q2](#q2)).
+- **[Q31](#q31) = A** — moteur de formes (`gen_formes_recon.py`) ; `recon_pulse_*` supprimé.
+- **[Q32](#q32)** — banque actuelle = **provisoire** ; nouvelle matière Simon ~jours ; colonnes §26.1 sur feuille Reconstruction.
+- **[Q33](#q33) = C** — compatibilité hybride : score R8 si descripteurs remplis, sinon repli `compatibles_avec` / table manuelle.
+- **[Q34](#q34)** — silences **plafond 4 s** ; apparitions **rapides** (fondus courts), pas les émergences lentes de Simon (1–6 s).
+- **[Q36](#q36)** — **scope large** : tous les comportements et transformations Simon **sauf** l'incohérent — notamment **`INTERMEDIAIRE`** ([Q10](#q10)) et toute la sous-zone Reconstruction–Ambiance ([Q30](#q30) = A).
+- **[Q35](#q35) = A** — pas de buffer V1 ; `REINJECTER` = historique **IDs + recette JSON** ; pas de `writesf~`.
+
+---
+
+## Q29 — FERMÉE
+
+**🔴 « Zone lisible » ou « écriture automatique orientée » ?**
+
+**Ce que dit le projet.** `[Reconstruction.md](../Zones/Reconstruction.md)` §1 : après Cortex flou et Hippocampe mobile, la Reconstruction **laisse entendre** — quasi sec, fil principal suivi, interruptions courtes. C'est la zone la plus **claire** du cycle.
+
+**Ce que dit Simon.** §1.3–1.4 : écriture automatique **orientée** par les métadonnées ; le public entend une forme **en train de se constituer**, sans qu'elle devienne stable ni explicable ; opacité et reconnaissabilité **variables** (`COURBE_RECONNAISSABILITE`).
+
+**Pourquoi il faut trancher.** Ce n'est pas un écart de réglage. Soit on **réécrit** l'intention de la zone autour de Simon (composition dynamique, transformations, micro-agencements), soit on **retient** la lisibilité et on n'implémente qu'un **sous-ensemble** de la spec (sélection + agencement simple, sans granularisation ni formes opaques). Tant que ce n'est pas tranché, chaque ligne de Simon (R1–R56, RA1–RA17) est impossible à prioriser.
+
+**Options.**
+
+- **A** — **Suivre Simon** : la Reconstruction devient le laboratoire compositionnel ; `Reconstruction.md` est réécrit.
+- **B** — **Garder « lisible »** : fil + interruptions enrichies (meilleure matière, associations légères), effets minimaux ; la spec Simon sert surtout pour le **classeur** et la matière future.
+- **C** — **Hybride** : formes courtes composées (5–15 s) **lisibles** en V1 ; transformations profondes et opacité en V2.
+
+**Impact.** [Q30](#q30)–[Q36](#q36), réécriture de `[Reconstruction.md](../Zones/Reconstruction.md)`, scope Proto 08 vs 09.
+
+**Réponse (21 août) :** **A — suivre Simon.** La Reconstruction devient le laboratoire compositionnel (écriture automatique orientée, formes provisoires, transformations possibles). [`Reconstruction.md`](../Zones/Reconstruction.md) est **à réécrire** — l'intention « zone lisible / quasi sèche » est abandonnée.
+
+**Conséquences.** Scope FX et comportements via [Q36](#q36) ; pas de Reconstruction–Ambiance ([Q30](#q30)).
+
+---
+
+## Q30 — FERMÉE
+
+**🟠 Reconstruction–Ambiance : sous-zone ou pas ?**
+
+**Ce que dit le projet.** [Q2](#q2) (20 août) : « la reconstruction je dirais qu'il n'en faut pas ». `[Reconstruction.md](../Zones/Reconstruction.md)` §2 : L9 éteinte, pool `RECONSTRUCTION/AMBIANCE` vide — **normal**. Même logique que le rejet d'Hippocampe–Ambiance ([Q28](#q28) / TO DO Hippocampe).
+
+**Ce que dit Simon.** §17–23 : zone **Reconstruction–Ambiance** à part entière — attributs (`ROLE_AMBIANCE`, `STABILITE`, `POTENTIEL_FUSION`…), neuf comportements (`EMERGER`, `SOUTENIR`, `ENVELOPPER`, `MUTER`…), tableau §26.3 (**26 colonnes**). Ce n'est pas le pool partagé `SONS_V3/AMBIANCE/` : c'est un **milieu provisoire né de la reconstruction**.
+
+**Similitude avec Hippocampe.** Simon décrit une sous-zone ; le projet a **refusé** Hippocampe–Ambiance faute de matière et de complexité. Même tension ici, avec en plus la contradiction directe avec [Q2](#q2).
+
+**Options.**
+
+- **A** — **Pas de sous-zone** (confirmer [Q2](#q2)) : pas de pool dédié ; les résidus / traces restent dans la Reconstruction principale ou passent à la Boucle.
+- **B** — **Sous-zone légère** : pas de feuille séparée ; quelques fichiers `usage_prefere = recon_amb` dans la feuille Ambiances, comportements réduits (`SOUTENIR`, `LAISSER_TRACE` seulement).
+- **C** — **Sous-zone complète** comme Simon : feuille classeur + moteur ambiance + matière Ableton dédiée.
+
+**Impact.** Découpe masters, colonnes classeur, nombre de couches FSM, lien Boucle (RA9, R48).
+
+**Réponse (21 août) :** **A — pas de sous-zone.** Confirme [Q2](#q2) et le rejet Hippocampe–Ambiance. Pas de pool `RECONSTRUCTION/AMBIANCE`, pas de feuille §26.3. Les résidus / traces restent dans la Reconstruction principale ou passent à la Boucle ([Q35](#q35)).
+
+---
+
+## Q31 — FERMÉE
+
+**🟠 Fil + interruptions, ou formes multi-fragments ?**
+
+**Ce que fait le patch.** `FSM_N_8HP[2] = (2, …)` — **2 couches** : L1 fil (`LONG_MOYEN`, rotation lente) ; L2 interruptions (`FRAGMENTS`, `recon_pulse_08` toutes les 4,5 s). Pas d'association, pas de rôles, pas de silences structurants.
+
+**Ce que dit Simon.** §2.3, §11, §12 : une **forme** = 2–12 unités selon `TYPE_FORME` ; enchaînement `SELECTIONNER → AGENCER → SUTURER/FUSIONNER/SUPERPOSER → …` ; silences internes (R15) ; **pas** de pulse périodique.
+
+**Similitude.** Même pattern que [Q11](#q11) (Cortex) : pulse vs geste inside-sample — ici pulse vs **construction de forme**.
+
+**Options.**
+
+- **A** — **Remplacer le pulse** par un moteur de formes (Python précalcule une « recette » par activation ; Pd la joue).
+- **B** — **Garder 2 couches** mais enrichir L2 : chaque bang tire une **micro-forme** précalculée (2–4 fragments), L1 reste le fil.
+- **C** — **Garder l'existant** jusqu'à matière longue ([TO DO](../Backlog/TO%20DO.md) §4) ; le moteur Simon attend Proto 09+.
+
+**Impact.** `recon_pulse_`*, `gen_formes_recon.py`, nombre de lecteurs simultanés (jusqu'à 4 par R32).
+
+**Réponse (21 août) :** **A — moteur de formes.** Python précalcule une recette par activation (`gen_formes_recon.py`) ; Pd la joue. **`recon_pulse_*` supprimé** (même logique que [Q11](#q11) / `cortex_pulse`). Silences et durées viennent de la forme, pas d'une horloge fixe.
+
+**Conséquences.** Plusieurs lecteurs simultanés (jusqu'à 4, R32) ; spatial §14 Simon ; [Q34](#q34) pour les plages de silence.
+
+---
+
+## Q32 — FERMÉE
+
+**🟠 La banque actuelle suffit-elle ?**
+
+**Ce qu'on a.** `RECONSTRUCTION/FRAGMENTS` : **287** fichiers ; `LONG_MOYEN` : **1** seul (fil bloqué sur 120 s). Découpe automatique depuis le master Reconstruction — pas de granularité phonétique.
+
+**Ce que dit Simon.** §1.1, §2.1 : banque de **micro-unités** (phonèmes, syllabes, mots, souffles, motifs…) avec `GRANULARITE` renseignée **à la main** ; durées 0,05–20 s selon le type ; préparation Ableton **avant** Pd.
+
+**Similitude.** Comme [Q4](#q4) (contexte Belgique/Congo) : la dramaturgie Simon suppose une **classification** que la matière actuelle ne porte pas.
+
+**Sous-questions.**
+
+- Simon livre-t-il une **nouvelle banque** micro-découpée, ou re-classe-t-on les 287 existants ?
+- Faut-il un **second master** / passe Ableton dédiée Reconstruction ?
+- Les colonnes §26.1 (~30 colonnes) remplacent-elles le schéma paroles actuel (`[Attributs.md](../Matiere/Attributs.md)` §5) pour la feuille Reconstruction ?
+
+**Sous-question « colonnes §26.1 » — ce que ça voulait dire.**
+
+Le classeur Excel a **une feuille par zone**. Aujourd'hui (`Attributs.md` §5), les trois feuilles paroles — Cortex, Hippocampe, **Reconstruction** — partagent **les mêmes colonnes** : `contexte`, `type_discours`, `fonction_sociale`, `densite_parole`… C'est le vocabulaire **Cortex**.
+
+Simon §26.1 demande pour la Reconstruction un **autre tableau** : `granularite`, `role_compositionnel`, `mutabilite`, `charge_semantique`, `provenance_materiau`… (~30 colonnes). Ce n'est **pas** la même chose.
+
+La question était : est-ce que la feuille Reconstruction **garde** les colonnes Cortex/Hippo, ou **passe** aux colonnes Simon ?
+
+**Réponse (21 août).**
+
+- **Matière** : la banque actuelle (287 + 1 long) **n'est pas utilisable** comme cible finale — **pas d'attributs**. Nouvelle fournée Simon attendue dans **~quelques jours**. **En attendant** : développer le moteur avec ce qu'on a (tirage + heuristiques minimales : durée → granularité approximative, rôles par défaut).
+- **Classeur** : la feuille Reconstruction adopte les **colonnes Simon §26.1** — **oui, elles remplacent** le schéma paroles Cortex/Hippo **pour cette feuille seule**. Cortex et Hippocampe ne changent pas. Colonnes ajoutées **vides** ; remplissage quand la nouvelle matière arrive (Simon). Pas de re-classement urgent des 287 existants.
+- **287 actuels** : restent dans `SONS_V3/` et le classeur (lignes `id` + `duree_s` auto) ; servent au **proto moteur**, pas à la version finale taguée.
+
+**Conséquences.** `gen_catalogue_xlsx.py` : schéma Reconstruction distinct · [`Attributs.md`](../Matiere/Attributs.md) §5 bis · [Q33](#q33) **fermée** (C).
+
+---
+
+## Q33 — FERMÉE
+
+**Compatibilité entre fragments : descripteurs, table manuelle, ou les deux ?**
+
+**Ce que dit Simon.** §8.3 : **Méthode A** — descripteurs (`PHONETIQUE`, `TIMBRE`, `CONTENU_SEMANTIQUE`…) comparés selon `TYPE_COMPATIBILITE` ; **Méthode B** — colonne `COMPATIBLES_AVEC` (IDs ou familles) ; score R8 (+3 rôle, +3 compatibilité…) puis tirage **non maximal**.
+
+**Ce que fait le projet.** Hippocampe : **table manuelle** d'associations dans le classeur ([Q28](#q28), TO DO). Cortex : règles C1–C11 sur attributs.
+
+**Similitude.** Même dilemme que Hippocampe — Simon propose les deux ; le projet a choisi **manuel** pour l'associatif Hippo faute de descripteurs remplis.
+
+**Options.**
+
+- **A** — **Table manuelle** `compatibles_avec` / recettes préparées (comme Hippo) — descripteurs optionnels plus tard.
+- **B** — **Descripteurs + score R8** — exige remplissage massif du classeur par Simon.
+- **C** — **Hybride** : score sur descripteurs **lorsqu'ils existent**, repli sur table manuelle sinon.
+
+**Impact.** Charge de classification (heures d'écoute), complexité de `gen_formes_recon.py`.
+
+**Réponse (21 août) :** **C — hybride.**
+
+- Si descripteurs remplis (`PHONETIQUE`, `TIMBRE`, `CONTENU_SEMANTIQUE`…) → score R8 (+3 rôle, +3 compatibilité…) puis tirage parmi les meilleurs candidats.
+- Sinon → repli sur **`compatibles_avec`** ou **table manuelle** (comme Hippocampe).
+- En **proto** (287 sans attributs) : heuristiques minimales + table manuelle partielle si besoin.
+
+**Conséquences.** `gen_formes_recon.py` : deux chemins de sélection · colonnes descripteurs **optionnelles** au classeur (Simon remplit progressivement).
+
+---
+
+## Q34 — FERMÉE
+
+**Silences : plages de Simon ou plafond 2 s (Hippocampe) ?**
+
+**Décision Hippocampe (21 août).** Silences et délais **max 2 s** — les 6–15 s de Simon rejetés pour l'Hippocampe.
+
+**Ce que dit Simon (Reconstruction).** §11.3 : `MICRO_SILENCE` 0,05–0,4 s ; `SILENCE_LIAISON` 0,4–2,5 s ; `SILENCE_SUSPENSION` **2–6 s** ; `SILENCE_APRES_FORME` **3–12 s** (jusqu'à 15 s après ambiance dense).
+
+**Similitude partielle.** Micro-silences et liaisons ≤ 2,5 s passent sous le plafond Hippo ; **suspensions** et **silences après forme** le dépassent.
+
+**Question.** Applique-t-on le plafond **2 s** à toute la Reconstruction (cohérence inter-zones), ou la Reconstruction a-t-elle le droit aux silences longs parce que l'état dure **120 s** et que la dramaturgie repose sur la suspension (R15) ?
+
+**Réponse (21 août) :** **Plafond 4 s** — ni 2 s (Hippocampe), ni 12 s (Simon).
+
+| Type | Plage V1 |
+| --- | --- |
+| Micro-silence / liaison | 0,05–**1 s** |
+| Suspension / silence après forme | **1–4 s** max |
+| Entre deux formes dans les 120 s | **≤ 4 s** |
+
+**Apparitions : rapides, pas lentes.** Fondus d'entrée et sutures (R23) **courts** — base **35–300 ms** pour éviter le clic, montées **≤ 1 s** si un fondu est nécessaire. **Rejet** des émergences Simon type 1–6 s (RA6) : la matière **surge**, ne monte pas lentement.
+
+**Conséquences.** Presets Reconstruction · `gen_formes_recon.py` clamp silences/fondus · cohérent avec effets **secs** de la zone.
+
+---
+
+## Q35 — FERMÉE
+
+**Buffer d'enregistrement : `REINJECTER` mode B ?**
+
+**Ce que dit Simon.** §12.10, R47–R48 : enregistrer la **sortie** de la Reconstruction dans un buffer ; trace réutilisable par Reconstruction–Ambiance ou Boucle ; métadonnées temporaires (ID, sources, retours max).
+
+**Ce que dit le projet.** `[TO DO](../Backlog/TO%20DO.md)` §6 « Plus tard » : Boucle comme buffer (`writesf~`) **écartée le 18 août**. Mode A (rejouer fichiers + paramètres) reste possible sans buffer.
+
+**Similitude.** Simon confirme que sans buffer, Pd rejoue la recette — aligné avec l'écartage actuel.
+
+**Options.**
+
+- **A** — **Pas de buffer V1** : historique = IDs + recette JSON (comme Hippo sans `REVENIR`).
+- **B** — **Buffer court** : enregistrement ≤ durée d'une forme (35–60 s max), nombre de retours limité.
+- **C** — **Buffer complet** comme Simon + alimentation Boucle.
+
+**Impact.** Modules Pd (`writesf~` / table), stockage Pi, lien Boucle. **Performance** — voir encadré ci-dessous.
+
+**Impact performance (Pi d'expo, 8 HP)** — pour décider :
+
+| Facteur | Sans buffer (A) | Avec buffer (B/C) |
+| --- | --- | --- |
+| **CPU** | Rejouer N `readsf~` + FX par forme | **Même charge** à la création ; **moins** au retour (1 lecteur au lieu de 4) |
+| **RAM** | Faible (lecteurs + tables) | + **~10 Mo** par minute stéréo 44,1 kHz en float ; négligeable si ≤ 60 s |
+| **Disque (SD)** | Aucune écriture en continu | **`writesf~`** = I/O pendant le mix — risque de **clics** si SD lente + CPU déjà chargé ([Q36](#q36) = FX profonds) |
+| **Lecteurs simultanés** | Jusqu'à **4** fragments + spatial | Retour d'une trace = **1** piste — **allège** les passages suivants |
+| **Complexité patch** | Recette JSON + historique IDs | + gestion fichiers temporaires, ID, écrasement, nombre de retours |
+
+**En pratique.** Le buffer n'est **pas** un problème de RAM. Le risque réel sur Raspberry Pi : **CPU + disque en même temps** pendant une forme **dense** (granular, 4 voix, spatial) — l'enregistrement ajoute une couche d'I/O. **Mode A** (recette seule) reste le plus **sûr** pour l'expo ; **mode B** (buffer ≤ 60 s, 1–2 retours max) est faisable si enregistrement **après** le mix principal ou sur **buffer RAM** court, à valider à l'oreille sur le Pi réel.
+
+**Réponse (21 août) :** **A — pas de buffer V1.**
+
+- **`REINJECTER`** conserve IDs des fragments + **recette d'agencement** (ordre, sutures, FX, spatial, paramètres de forme) — rejouable par Pd sans fichier fusionné.
+- **Pas de `writesf~`** — évite I/O SD + CPU simultanés sur le Pi ([Q36](#q36) = FX profonds).
+- **Boucle** : peut recevoir la **recette** ou les IDs, pas une trace wav enregistrée. R56 (retour non identique) : variation sur enceinte, délai, niveau, filtrage à la relecture.
+- Buffer sonore = **plus tard** si test Pi favorable — reste dans TO DO §6 « envies ».
+
+**Conséquences.** `gen_formes_recon.py` écrit des recettes texte/JSON · pas de dossier `MEMOIRE_VIVANTE/` en V1 · lien Boucle **débloqué** côté spec (implémentation Alassane).
+
+---
+
+## Q36 — FERMÉE
+
+**Scope V1 : quels comportements et transformations ?**
+
+Simon définit **10 comportements** Reconstruction (§12) et **9** Reconstruction–Ambiance (§21), plus familles de transformations (§12.6, §15) — granularisation, inversion, gel spectral, pitch ±12 demi-tons…
+
+**Décision analogue.** [Q28](#q28) (Hippocampe) : MVP avec vocabulaire Simon strict, sous-ensemble des variantes.
+
+**Proposition de départ** (à valider — pas une réponse) :
+
+
+| Comportement Simon                                | Piste V1                                                                           |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `SELECTIONNER` + `AGENCER`                        | **Oui** — cœur du moteur                                                           |
+| `SUTURER` (R23 coupe + R24 silence)               | **Oui**                                                                            |
+| `SUPERPOSER` (R31–R33, max 3 sons)                | **Oui**, sans `INTERMEDIAIRE` si [Q10](#q10) s'étend                               |
+| `FUSIONNER`                                       | **Partiel** — chevauchement (R27) seulement ; pas R30 profond                      |
+| `TRANSFORMER`                                     | **Partiel** — mutabilité 1–2 : filtre, enveloppe, spatial ; pas granularisation V1 |
+| `REPETER`                                         | **Optionnel** — R35 simple seulement                                               |
+| `SUSPENDRE` / `DISSOUDRE`                         | **Oui** — léger                                                                    |
+| `REINJECTER`                                      | Lié [Q35](#q35)                                                                    |
+| Ambiance `EMERGER` / `SOUTENIR` / `LAISSER_TRACE` | Lié [Q30](#q30)                                                                    |
+
+
+**Réponse (21 août) :** **Scope large — tout Simon sauf l'incohérent.**
+
+**Retenu V1** (10 comportements §12) :
+
+- `SELECTIONNER` · `AGENCER` · `SUTURER` · `FUSIONNER` · `SUPERPOSER` · `TRANSFORMER` · `REPETER` · `SUSPENDRE` · `DISSOUDRE` · `REINJECTER` ([Q35](#q35) = A — recette seule, pas buffer wav).
+
+**Transformations** : familles §12.6 / §15 selon `MUTABILITE` et `TRANSFORMATIONS_AUTORISEES` — y compris granular, pitch, gel **si** le fragment l'autorise.
+
+**Exclusions explicites** :
+
+| Exclu | Raison |
+| --- | --- |
+| **`INTERMEDIAIRE`** (plan de superposition R31) | Abandonné projet-wide ([Q10](#q10)) — **2 plans** seulement : premier / arrière |
+| Comportements **Reconstruction–Ambiance** §21 | [Q30](#q30) = A — pas de sous-zone |
+| Émergences **lentes** 1–6 s | [Q34](#q34) — apparitions rapides |
+
+**Conséquences.** Charge d'implémentation **élevée** — prioriser l'ordre : sélection/agencement → suture/superposition → transformer → suspendre/dissoudre → réinjecter (recette).
+
+---
+
+## Q37
+
+**Points Simon §27 — qui répond ?**
+
+La liste de confirmation de Simon (25 points) n'est pas une contradiction, mais un **backlog de calibration**. Répartition proposée :
+
+
+| Pt    | Sujet                                                                    | Qui                                               |
+| ----- | ------------------------------------------------------------------------ | ------------------------------------------------- |
+| 1–4   | Noms attributs, provenance, compatibilité, scores                        | **Loumana** + Simon après [Q32](#q32)–[Q33](#q33) |
+| 5–9   | Fenêtre historique, probabilités formes/densités/provenance              | **Loumana** à l'oreille                           |
+| 10–12 | Max simultanés, durées suture/fusion, plages pitch/vitesse               | **Alassane** test Pd + **Loumana** oreille        |
+| 13–15 | Transformations par fragment, sources sensibles, anti-fausse-déclaration | **Simon** classeur + **Loumana** règles           |
+| 16–18 | Buffer                                                                   | [Q35](#q35)                                       |
+| 19–21 | Lien Reconstruction ↔ Ambiance ↔ Boucle                                  | [Q30](#q30), [Q35](#q35)                          |
+| 22    | Gains `SOUTENIR` / ducking                                               | **Alassane** + oreille                            |
+| 23–24 | Piézo, intervention public                                               | [Q14](#q14)                                       |
+| 25    | Relation globale des 4 zones                                             | **Loumana** + Simon séance écoute                 |
+
+
+*(Pas de question séparée — trace de responsabilités ; les points 23–24 prolongent [Q14](#q14).)*

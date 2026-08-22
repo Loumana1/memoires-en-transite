@@ -1,0 +1,10 @@
+# delay_ms action layer [fade_ms|recipe|duration_ms]
+0 play 1 0
+942 play 2 0
+3498 spatial 0 0
+6698 play 2 0
+11196 cut 2 88
+13399 play 2 0
+18032 play 2 0
+20650 cut 2 47
+22890 play 2 0

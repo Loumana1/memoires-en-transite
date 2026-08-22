@@ -24,7 +24,7 @@ CFG = dict(
     nch=8,
     nhp=8,
     n_layers=PR.MAX_LAYERS_8HP,
-    layer_gain=0.28,
+    layer_gain=PR.CORTEX_LAYER_GAIN,
     amb_gain=PR.CORTEX_AMB_GAIN,
     inj_gain=0.16,
     fsm="lib/fsm_memory_08_8hp",
@@ -64,7 +64,7 @@ def build_engine(cfg):
 
     e.obj("cxctrl", 640, 60, "lib/cortex_ctrl_08")
     e.obj("pres", 780, 60, "lib/presence_08")
-    e.obj("rpulse", 920, 60, "lib/recon_pulse_08")
+    e.obj("rform", 920, 60, "lib/recon_formes_08")
     e.obj("hasoc", 1060, 60, "lib/hippo_assoc_08")
     e.obj("binj", 1200, 60, "lib/boucle_inject_08")
     e.obj("hmot", 1340, 60, "lib/hippo_motion_08")
@@ -152,12 +152,19 @@ def build_engine(cfg):
         e.con("fsm", bang_out, f"del{i + 1}", 0)
 
     amb_gain = cfg["amb_gain"]
+    e.obj("duck", 300, 720, "lib/hippo_duck_08")
     for i in range(nl):
         y = 400 + i * 58
         n = i + 1
         hp, az = cfg["anchors"][i]
         loop = 1
-        lg = amb_gain if i == 12 else gain
+        if i < 12:
+            pg = PR.GAIN_PREMIER_PLAN if i % 2 == 0 else PR.GAIN_ARRIERE_PLAN
+            lg = gain * pg
+        elif i == 12:
+            lg = amb_gain
+        else:
+            lg = gain
         e.obj(f"p{n}", 40, y, f"lib/player_state_08 {loop}")
         e.obj(f"g{n}", 220, y, f"*~ {lg}")
         if i < 12:
@@ -178,11 +185,13 @@ def build_engine(cfg):
             e.obj("pk13", 320, y - 25, "pack 0 3")
             e.obj("ln13", 320, y, "line~")
             e.obj("mul13", 400, y, "*~")
+            e.obj("mul_dk", 560, y, "*~")
             e.con("amb1", 0, "pk13", 0)
             e.con("amb0", 0, "pk13", 0)
             e.con("pk13", 0, "ln13", 0)
             e.con("ln13", 0, "mul13", 1)
-            e.con("g13", 0, "mul13", 0)
+            e.con("g13", 0, "mul_dk", 0)
+            e.con("mul_dk", 0, "mul13", 0)
             src = "mul13"
         elif i > 0 and i < 12:
             pass
@@ -247,12 +256,22 @@ def build_engine(cfg):
                   f"lib/spatial_router_06 {n} {az} {hp} {cfg['nhp']} {cfg['nhp'] - 1}")
             e.con(f"otg{n}", 0, f"sr{n}", 0)
 
-    e.obj("r_rb", 40, 380, "r s6_recon_bang")
-    e.con("r_rb", 0, "p2", 0)
-    e.obj("r_h3", 160, 380, "r s6_hippo_b3")
-    e.obj("r_h4", 280, 380, "r s6_hippo_b4")
-    e.con("r_h3", 0, "p3", 0)
-    e.con("r_h4", 0, "p4", 0)
+    e.con("duck", 0, "mul_dk", 1)
+    for i in range(4):
+        e.con(f"g{i + 1}", 0, "duck", i)
+
+    for layer in range(1, 3):
+        lx = 40 + layer * 90
+        e.obj(f"r_r{layer}", lx, 360, f"r s6_recon_b{layer}")
+        e.obj(f"r_rc{layer}", lx, 380, f"r s6_recon_cut{layer}")
+        e.con(f"r_r{layer}", 0, f"p{layer}", 0)
+        e.con(f"r_rc{layer}", 0, f"p{layer}", 2)
+    for layer in range(1, 5):
+        lx = 120 + layer * 100
+        e.obj(f"r_h{layer}", lx, 380, f"r s6_hippo_b{layer}")
+        e.obj(f"r_c{layer}", lx, 400, f"r s6_hippo_cut{layer}")
+        e.con(f"r_h{layer}", 0, f"p{layer}", 0)
+        e.con(f"r_c{layer}", 0, f"p{layer}", 2)
 
     # inject Boucle one-shot (couche 10, hors n)
     yinj = 400 + nl * 58
@@ -319,15 +338,21 @@ def build_engine(cfg):
         e.con("sr13", c, "dec", c)
     e.obj("r_mas", 40, dac_y + 40, "r s6_master")
     e.obj("dac", 640, dac_y + 140, cfg["dac"])
+    e.obj("lb_lvl", 40, dac_y + 155, "loadbang")
+    e.obj("mlvl", 120, dac_y + 155, "metro 100")
+    e.con("lb_lvl", 0, "mlvl", 0)
     for k in range(cfg["nch"]):
         e.obj(f"vol{k}", 40 + k * 100, dac_y + 70, "*~ 1")
         e.con("dec", k, f"vol{k}", 0)
         e.con("r_mas", 0, f"vol{k}", 1)
         e.con(f"vol{k}", 0, "dac", k)
         e.obj(f"lvl{k}", 40 + k * 100, dac_y + 105, "env~ 16384")
-        e.obj(f"slvl{k}", 40 + k * 100, dac_y + 125, f"s s6_lvl{k + 1}")
+        e.obj(f"snap{k}", 40 + k * 100, dac_y + 125, "snapshot~")
+        e.obj(f"slvl{k}", 40 + k * 100, dac_y + 145, f"s s6_lvl{k + 1}")
         e.con(f"vol{k}", 0, f"lvl{k}", 0)
-        e.con(f"lvl{k}", 0, f"slvl{k}", 0)
+        e.con(f"lvl{k}", 0, f"snap{k}", 0)
+        e.con("mlvl", 0, f"snap{k}", 0)
+        e.con(f"snap{k}", 0, f"slvl{k}", 0)
     for n in range(1, nl):
         for k, vk in enumerate(cfg["direct"]):
             e.con(f"sr{n}", 3 + k, f"vol{vk}", 0)

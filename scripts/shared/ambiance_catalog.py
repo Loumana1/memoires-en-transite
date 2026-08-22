@@ -134,8 +134,9 @@ def _curated_pool(by_id: dict[str, tuple[str, float]]) -> list[str]:
 
 
 def ambiance_paths_by_type(root: str, verbose: bool = True) -> tuple[list[str], list[str]]:
-    """(musicale, texture) — slots 32 / 33, pool curated exclusive."""
+    """(musicale, texture) — slots 32 / 33, pool curated puis séparation heuristique."""
     by_id: dict[str, tuple[str, float]] = {}
+    manual = _read_xlsx_types(root)
     for row in _read_registre_amb(root):
         rel = _rel_wav(root, row["id"])
         if not rel:
@@ -147,7 +148,27 @@ def ambiance_paths_by_type(root: str, verbose: bool = True) -> tuple[list[str], 
         raise SystemExit(
             "SONS_V3/AMBIANCE: aucun fichier curated (A38, A41, A43…) — vérifier la matière"
         )
+
+    mus: list[str] = []
+    tex: list[str] = []
+    for rel in pool:
+        stem = os.path.splitext(os.path.basename(rel))[0]
+        sid = stem.split("_")[0] if "_" in stem else stem
+        row = next((r for r in _read_registre_amb(root) if r["id"].startswith(sid)), None)
+        start = row["start"] if row else 0.0
+        kind = classify_ambiance(sid, start, manual)
+        if kind == MUSICALE:
+            mus.append(rel)
+        else:
+            tex.append(rel)
+    if not mus:
+        mus = list(pool)
+    if not tex:
+        tex = [p for p in pool if p not in mus] or list(pool)
+    # Texture : au moins 5 fichiers pour éviter la répétition sur 40 s de Cortex
+    if len(tex) < 5:
+        extra = [p for p in mus if p not in tex]
+        tex.extend(extra[: max(0, 5 - len(tex))])
     if verbose:
-        print(f"  Ambiance curated: {len(pool)} fichiers (exclusive Loumana)")
-    # Même pool pour musicale HP7 et texture HP5 — tirages indépendants au runtime.
-    return list(pool), list(pool)
+        print(f"  Ambiance curated: {len(pool)} · musicale {len(mus)} · texture {len(tex)}")
+    return mus, tex

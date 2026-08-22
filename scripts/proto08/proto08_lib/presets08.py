@@ -10,7 +10,7 @@ MAX_LAYERS_8HP = 13
 
 FSM_N_8HP = {
     0: (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),   # 12 voix Cortex
-    1: (4, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0),    # 3 longs + 1 court Hippo
+    1: (4, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),    # 2 longs + 2 courts Hippo V1
     2: (2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
     3: (2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 }
@@ -39,8 +39,12 @@ LAYER_DEFAULT = dict(mode=0, rot=0.02, sens=0, step=800, xfade=30,
                      wet=0, delay=200, fb=0, lfo=0, on=0,
                      sat=0, hpf=20, lpf=20000, flfo=0)
 
-# Gain nappes Cortex (slots 32/33) — audibles dès l'entrée Cortex.
-CORTEX_AMB_GAIN = 0.58
+# Gain nappes Cortex — spec §7 : 0,25 · paroles un peu plus basses pour laisser respirer
+CORTEX_AMB_GAIN = 0.25
+CORTEX_LAYER_GAIN = 0.20
+# Gains plans présence §5 bis (linéaire)
+GAIN_PREMIER_PLAN = 1.0
+GAIN_ARRIERE_PLAN = 0.79
 
 
 def L(**kw):
@@ -51,17 +55,17 @@ def L(**kw):
 
 IDLE = L()
 
-# [Q10] defaults V1 — timbre underwater renforcé (réverb + LFO filtre)
-PLAN_PREMIER = dict(mode=0, on=1, sat=0.62, hpf=350, lpf=1800, flfo=0.38,
-                    wet=0.24, delay=320, fb=0.15, lfo=0.10)
-PLAN_ARRIERE = dict(mode=0, on=1, sat=0.58, hpf=80, lpf=900, flfo=0.32,
-                    wet=0.30, delay=420, fb=0.18, lfo=0.08)
+# [Q10] defaults §5 bis Cortex.md — premier = plus ouvert, arrière = pièce voisine (delay+fb)
+PLAN_PREMIER = dict(mode=0, on=1, sat=0.48, hpf=300, lpf=1400, flfo=0,
+                    wet=0.05, delay=110, fb=0.05, lfo=0.04)
+PLAN_ARRIERE = dict(mode=0, on=1, sat=0.52, hpf=60, lpf=750, flfo=0,
+                    wet=0.20, delay=260, fb=0.22, lfo=0.025)
 
-# FX nappes globales (fx_router couches 15/16 dans le patch moteur)
-AMB_MUSICALE_FX = dict(mode=0, on=1, sat=0.14, hpf=90, lpf=2400, flfo=0.28,
-                       wet=0.26, delay=480, fb=0.17, lfo=0.07)
-AMB_TEXTURE_FX = dict(mode=0, on=1, sat=0.10, hpf=140, lpf=1800, flfo=0.22,
-                      wet=0.20, delay=360, fb=0.13, lfo=0.05)
+# Nappes : sèches en Cortex (§7) — pas de wet/delay audibles
+AMB_MUSICALE_FX = dict(mode=0, on=1, sat=0, hpf=30, lpf=18000, flfo=0,
+                       wet=0, delay=40, fb=0, lfo=0)
+AMB_TEXTURE_FX = dict(mode=0, on=1, sat=0, hpf=40, lpf=16000, flfo=0,
+                      wet=0, delay=40, fb=0, lfo=0)
 
 
 def _CX_PREMIER(**kw):
@@ -81,15 +85,16 @@ def _cortex_twelve_parole():
     out = []
     for i in range(12):
         if i % 2 == 0:
-            out.append(_CX_PREMIER(sat=0.58 + (i % 4) * 0.01, hpf=290 + i * 2))
+            out.append(_CX_PREMIER(hpf=300 + (i % 4) * 15, lpf=1350 + i * 5))
         else:
-            out.append(_CX_ARRIERE(sat=0.52 + (i % 4) * 0.01, lpf=950 + i * 10))
+            out.append(_CX_ARRIERE(hpf=55 + i * 3, lpf=720 + i * 8,
+                                   wet=0.18 + (i % 3) * 0.02))
     return out
 
 
 def _HP(**kw):
-    d = dict(mode=4, step=1400, xfade=35, on=0, sat=0.08, hpf=40,
-             lpf=9000, wet=0.06, delay=80, fb=0.06, lfo=0.03)
+    d = dict(mode=4, step=1400, xfade=35, on=1, sat=0.06, hpf=40,
+             lpf=9000, wet=0.10, delay=140, fb=0.08, lfo=0.02)
     d.update(kw)
     return L(**d)
 
@@ -111,8 +116,8 @@ def amb_fx_msg(layer_idx: int, spec: dict) -> str:
             parts.append(f"s6_l{layer_idx}_{send} {fmt(spec[field])}")
     return " \\; ".join(parts)
 _RC0 = L(mode=1, rot=0.012, sens=0, sat=0, hpf=20, lpf=20000,
-         wet=0.08, delay=100, fb=0.1, lfo=0.04, on=1)
-_RC1 = L(mode=0, sat=0, hpf=25, lpf=18000, wet=0.05, delay=80, on=0)
+         wet=0.06, delay=100, fb=0.08, lfo=0.03, on=1)
+_RC1 = L(mode=0, sat=0.08, hpf=25, lpf=12000, wet=0.14, delay=180, fb=0.12, on=1)
 
 
 def _layers13(parole12, amb=_AM):
@@ -124,9 +129,9 @@ def _layers13(parole12, amb=_AM):
 
 PRESETS_8HP = {
     0: [
-        dict(ovl=45, play_reps=1, layers=_layers13(_cortex_twelve_parole())),
+        dict(ovl=70, play_reps=1, layers=_layers13(_cortex_twelve_parole())),
+        dict(ovl=95, play_reps=1, layers=_layers13(_cortex_twelve_parole())),
         dict(ovl=80, play_reps=1, layers=_layers13(_cortex_twelve_parole())),
-        dict(ovl=50, play_reps=1, layers=_layers13(_cortex_twelve_parole())),
     ],
     1: [
         dict(ovl=5, play_reps=1, layers=_layers13([
@@ -162,7 +167,7 @@ PRESETS_8HP = {
     3: [
         dict(ovl=5, play_reps=1, layers=_layers13([
             L(mode=2, step=1800, xfade=40, wet=0.25, delay=400, fb=0.3, on=1, sat=0.2, lpf=6000),
-            L(mode=0, wet=0.15, delay=300, on=1, sat=0.15),
+            L(mode=0, wet=0.18, delay=260, fb=0.22, on=1, sat=0.12, lpf=5500),
         ] + [IDLE] * 10)),
         dict(ovl=5, play_reps=1, layers=_layers13([
             L(mode=3, step=900, wet=0.2, delay=350, on=1, sat=0.18, lpf=7000),

@@ -14,6 +14,10 @@ from shared.pdbuild import P
 from shared.gain_registre import gain_map_from_registre, linear_gain_for_rel, fmt_gain
 from . import presets08 as PR
 from . import sons_audit08 as audit
+from . import hippo_recipes as HR
+from . import hippo_events_loader as HEL
+from . import recon_recipes as RR
+from . import recon_events_loader as REL
 
 LIBDIR = os.path.join(_REPO, "pd", "lib")
 
@@ -27,7 +31,7 @@ def gen_fsm_memory_08(fname="fsm_memory_08_8hp.pd", fsm_n=None, max_layers=None,
                       cycle1=None):
     """FSM 08: cycle 1 Cortex 40s → Hippo 50s → Recon 120s.
 
-    Extra vs 06: hold Cortex (s6_cortex_hold), pique Boucle 15% en cycle libre.
+    Extra vs 06: pique Boucle 15% en cycle libre. Piezo → s6_force (Q14).
     """
     max_layers = max_layers or PR.MAX_LAYERS_8HP
     fsm_n = PR.fsm_n_padded(fsm_n or PR.FSM_N_8HP, max_layers)
@@ -198,18 +202,7 @@ def gen_fsm_memory_08(fname="fsm_memory_08_8hp.pd", fsm_n=None, max_layers=None,
             p.con(f"nd_{li}{s}", 0, f"o_d{li}", 0)
     p.con("goto_t", 0, "o_bply", 0)
 
-    # présence: hold Cortex = stop timer ; relâche = relance durée courante
-    p.obj("r_hold", 800, 40, "r s6_cortex_hold")
-    p.obj("ht", 800, 70, "t f f")
-    p.obj("hs1", 800, 100, "sel 1")
-    p.obj("hs0", 880, 100, "sel 0")
-    p.con("r_hold", 0, "ht", 0)
-    p.con("ht", 0, "hs1", 0)
-    p.con("ht", 1, "hs0", 0)
-    p.con("hs1", 0, "m_stop", 0)
-    p.con("hs0", 0, "f_durlast", 0)
-
-    p.text(800, 140, "08 hold Cortex + Boucle 15pct cycles libres")
+    p.text(800, 140, "08 Boucle 15pct cycles libres · piezo via s6_force")
     _w(p, fname)
 
 
@@ -261,10 +254,27 @@ def gen_fsm_presets_08(fname="fsm_presets_08_8hp.pd", presets=None):
     _w(p, fname)
 
 
+def _motion_layer_msgs(p, tag, layer, spec, y):
+    """Crée msg+send pour une couche ; retourne liste noms msg pour trigger."""
+    names = []
+    for key, sfx in (("mode", "mode"), ("step", "step"), ("xfade", "xfade"),
+                     ("sens", "sens"), ("rot", "rot")):
+        if key not in spec:
+            continue
+        mn = f"{tag}m{layer}{key}"
+        sn = f"{tag}s{layer}{key}"
+        p.msg(mn, 200, y, str(spec[key]))
+        p.obj(sn, 640, y, f"s s6_l{layer}_{sfx}")
+        p.con(mn, 0, sn, 0)
+        names.append(mn)
+        y += 22
+    return names, y
+
+
 def gen_hippo_motion_08():
-    """Circulation 0.8-2.2 s: local / saut. xfade court."""
-    p = P(980, 640)
-    p.text(20, 10, "hippo_motion_08 circulation rapide local saut")
+    """Bibliothèque 5 recettes spatiales V1 (Q26)."""
+    p = P(1100, 820)
+    p.text(20, 10, "hippo_motion_08 — 5 recettes Q26 · metro 2-4.5s")
     p.obj("r_et", 40, 40, "r s6_etat")
     p.obj("sel_h", 40, 70, "sel 1")
     p.msg("m_stop", 140, 100, "stop")
@@ -276,95 +286,52 @@ def gen_hippo_motion_08():
     p.con("sel_h", 1, "m_stop", 0)
     p.con("m_stop", 0, "met", 0)
 
-    p.obj("ent", 40, 180, "t b b b b b")
+    p.obj("ent", 40, 180, "t b b b b b b")
     p.con("d_ent", 0, "ent", 0)
-    steps = [1100, 1600, 2200, 1400]
-    modes = [4, 2, 4, 2]
-    senss = [0, 1, 1, 0]
-    for i in range(1, 5):
-        y = 160 + i * 28
-        p.msg(f"mm{i}", 200, y, str(modes[i - 1]))
-        p.msg(f"mst{i}", 320, y, str(steps[i - 1]))
-        p.msg(f"mxf{i}", 440, y, "35")
-        p.msg(f"msn{i}", 560, y, str(senss[i - 1]))
-        p.obj(f"sm{i}", 640, y, f"s s6_l{i}_mode")
-        p.obj(f"ss{i}", 720, y, f"s s6_l{i}_step")
-        p.obj(f"sx{i}", 800, y, f"s s6_l{i}_xfade")
-        p.obj(f"sn{i}", 880, y, f"s s6_l{i}_sens")
-        p.con(f"mm{i}", 0, f"sm{i}", 0)
-        p.con(f"mst{i}", 0, f"ss{i}", 0)
-        p.con(f"mxf{i}", 0, f"sx{i}", 0)
-        p.con(f"msn{i}", 0, f"sn{i}", 0)
-        p.con("ent", i - 1, f"mm{i}", 0)
-        p.con("ent", i - 1, f"mst{i}", 0)
-        p.con("ent", i - 1, f"mxf{i}", 0)
-        p.con("ent", i - 1, f"msn{i}", 0)
+    init_triggers: list[str] = []
+    y = 160
+    for layer in (1, 2, 3, 4):
+        names, y = _motion_layer_msgs(p, "i", layer, HR.INIT_LAYERS[layer], y + layer * 2)
+        init_triggers.extend(names)
+    names13, _ = _motion_layer_msgs(p, "i", 13, HR.INIT_LAYERS[13], 300)
+    init_triggers.extend(names13)
+    for oi, mn in enumerate(init_triggers[:9]):
+        p.con("ent", min(oi, 5), mn, 0)
 
-    p.msg("mm13", 200, 310, "4")
-    p.msg("mst13", 320, 310, "1500")
-    p.msg("mxf13", 440, 310, "35")
-    p.obj("sm13", 640, 310, "s s6_l13_mode")
-    p.obj("ss13", 720, 310, "s s6_l13_step")
-    p.obj("sx13", 800, 310, "s s6_l13_xfade")
-    p.con("mm13", 0, "sm13", 0)
-    p.con("mst13", 0, "ss13", 0)
-    p.con("mxf13", 0, "sx13", 0)
-    p.con("ent", 4, "mm13", 0)
-    p.con("ent", 4, "mst13", 0)
-    p.con("ent", 4, "mxf13", 0)
     p.msg("m0_l13", 220, 100, "0")
+    p.obj("sm13_off", 640, 100, "s s6_l13_mode")
     p.con("sel_h", 1, "m0_l13", 0)
-    p.con("m0_l13", 0, "sm13", 0)
+    p.con("m0_l13", 0, "sm13_off", 0)
 
-    # tick: d'abord nouvelle vitesse + mode, ensuite une seule couche, puis intervalle
-    p.obj("tb_m", 40, 360, "t b b b")
-    p.con("met", 0, "tb_m", 0)
-    p.obj("rst", 200, 360, "random 1400")
-    p.obj("pst", 200, 390, "+ 800")
-    p.con("tb_m", 0, "rst", 0)
-    p.con("rst", 0, "pst", 0)
-    p.obj("rmd", 360, 360, "random 5")
-    p.obj("smd", 360, 390, "sel 0 1 2 3 4")
-    p.msg("md4a", 500, 360, "4")
-    p.msg("md4b", 500, 385, "4")
-    p.msg("md2a", 500, 410, "2")
-    p.msg("md2b", 500, 435, "2")
-    p.msg("md0", 500, 460, "4")
-    p.con("tb_m", 0, "rmd", 0)
-    p.con("rmd", 0, "smd", 0)
-    p.con("smd", 0, "md4a", 0)
-    p.con("smd", 1, "md4b", 0)
-    p.con("smd", 2, "md2a", 0)
-    p.con("smd", 3, "md2b", 0)
-    p.con("smd", 4, "md0", 0)
-    p.obj("rl", 40, 400, "random 4")
-    p.obj("pl", 40, 430, "+ 1")
-    p.obj("sell", 40, 460, "sel 1 2 3 4")
-    p.con("tb_m", 1, "rl", 0)
-    p.con("rl", 0, "pl", 0)
-    p.con("pl", 0, "sell", 0)
-    for i in range(1, 5):
-        p.obj(f"fs{i}", 200, 430 + i * 24, "f 1400")
-        p.obj(f"fm{i}", 360, 490 + i * 24, "f 4")
-        p.con("pst", 0, f"fs{i}", 1)
-        p.con("md4a", 0, f"fm{i}", 1)
-        p.con("md4b", 0, f"fm{i}", 1)
-        p.con("md2a", 0, f"fm{i}", 1)
-        p.con("md2b", 0, f"fm{i}", 1)
-        p.con("md0", 0, f"fm{i}", 1)
-        p.con("sell", i - 1, f"fs{i}", 0)
-        p.con("sell", i - 1, f"fm{i}", 0)
-        p.con(f"fs{i}", 0, f"ss{i}", 0)
-        p.con(f"fm{i}", 0, f"sm{i}", 0)
-    p.obj("rsn", 40, 500, "random 2")
-    p.con("tb_m", 1, "rsn", 0)
-    p.con("rsn", 0, "sn1", 0)
-    p.obj("rit", 40, 540, "random 2500")
-    p.obj("pit", 40, 570, "+ 2000")
-    p.con("tb_m", 2, "rit", 0)
+    p.obj("tb_tick", 40, 380, "t b b")
+    p.con("met", 0, "tb_tick", 0)
+    p.obj("rnd_r", 120, 380, "random 5")
+    p.con("tb_tick", 0, "rnd_r", 0)
+    p.obj("f_rec", 120, 410, "f 0")
+    p.con("rnd_r", 0, "f_rec", 0)
+    p.obj("r_rec", 40, 410, "r s6_hippo_motion")
+    p.con("r_rec", 0, "f_rec", 0)
+    p.obj("sel_r", 120, 440, "sel 0 1 2 3 4")
+    p.con("f_rec", 0, "sel_r", 0)
+
+    for rid, spec in enumerate(HR.RECIPES):
+        yb = 480 + rid * 55
+        p.obj(f"tr{rid}", 320, yb, "t b b b b b b b b b")
+        p.con("sel_r", rid, f"tr{rid}", 0)
+        msgs: list[str] = []
+        yy = yb
+        for layer in sorted(spec):
+            nms, yy = _motion_layer_msgs(p, f"a{rid}", layer, spec[layer], yy)
+            msgs.extend(nms)
+        for oi, mn in enumerate(msgs[:9]):
+            p.con(f"tr{rid}", oi, mn, 0)
+
+    p.obj("rit", 40, 760, "random 2500")
+    p.obj("pit", 40, 790, "+ 2000")
+    p.con("tb_tick", 1, "rit", 0)
     p.con("rit", 0, "pit", 0)
     p.con("pit", 0, "met", 1)
-    p.text(20, 610, "0.8-2.2s entre baffles - metro suivant 2-4.5s")
+    p.text(20, 800, "recettes Q26 · s6_hippo_motion force 0-4")
     _w(p, "hippo_motion_08.pd")
 
 
@@ -450,17 +417,23 @@ def gen_cortex_ctrl_08():
     for i in range(12):
         x = 40 + (i % 6) * 140
         y = 380 + (i // 6) * 130
-        hz = 0.068 + i * 0.017
+        hz = 0.063 + i * 0.019
+        if i % 2 == 0:
+            # PREMIER_PLAN : 800–2000 Hz
+            amp, base, lo, hi = 600, 1400, 800, 2000
+        else:
+            # ARRIERE_PLAN : 500–1000 Hz
+            amp, base, lo, hi = 250, 750, 500, 1000
         p.obj(f"os{i}", x, y, f"osc~ {hz:.3f}")
-        p.obj(f"sc{i}", x, y + 28, "*~ 750")
-        p.obj(f"of{i}", x, y + 56, "+~ 1250")
+        p.obj(f"sc{i}", x, y + 28, f"*~ {amp}")
+        p.obj(f"of{i}", x, y + 56, f"+~ {base}")
         p.obj(f"sn{i}", x, y + 84, "snapshot~")
-        p.obj(f"cl{i}", x, y + 112, "clip 500 2000")
+        p.obj(f"cl{i}", x, y + 112, f"clip {lo} {hi}")
         p.obj(f"sl{i}", x, y + 140, f"s s6_l{i + 1}_lpf")
         p.con(f"os{i}", 0, f"sc{i}", 0)
         p.con(f"sc{i}", 0, f"of{i}", 0)
-        p.con("metro_l", 0, f"sn{i}", 0)
         p.con(f"of{i}", 0, f"sn{i}", 0)
+        p.con("metro_l", 0, f"sn{i}", 0)
         p.con(f"sn{i}", 0, f"cl{i}", 0)
         p.con(f"cl{i}", 0, f"sl{i}", 0)
 
@@ -468,17 +441,13 @@ def gen_cortex_ctrl_08():
 
 
 def gen_presence_08():
-    """Piezo/micro + rms_sim. Jamais vers les HP. Hold Cortex si énergie basse."""
-    p = P(720, 480)
-    p.text(20, 8, "presence_08 INPUT_ON + SIM - adc jamais vers dac")
+    """Piezo/micro + rms_sim. Q14: déclenche transition + fondu nappes — pas de hold."""
+    p = P(820, 520)
+    p.text(20, 8, "presence_08 Q14 piezo → zone suivante + fade amb · pas s6_cortex_hold")
     p.obj("r_on", 40, 40, "r s6_input_on")
     p.obj("r_sim", 160, 40, "r s6_rms_sim")
     p.obj("r_et", 280, 40, "r s6_etat")
-    p.obj("f_on", 40, 70, "f 0")
-    p.obj("f_sim", 160, 70, "f 0")
     p.obj("f_et", 280, 70, "f 0")
-    p.con("r_on", 0, "f_on", 1)
-    p.con("r_sim", 0, "f_sim", 1)
     p.con("r_et", 0, "f_et", 1)
 
     p.obj("adc", 40, 110, "adc~")
@@ -518,79 +487,207 @@ def gen_presence_08():
     p.obj("en", 120, 330, "t f f")
     p.con("sp_adc", 0, "en", 0)
     p.con("div", 0, "en", 0)
-
     p.obj("s_rms", 120, 360, "s s6_presence_rms")
     p.con("en", 1, "s_rms", 0)
 
-    # si Cortex et énergie < 0.12 → hold ; si > 0.45 → relâche (favorise sortie)
-    p.obj("eq_cx", 280, 110, "== 0")
-    p.obj("sp_cx", 280, 140, "spigot")
-    p.con("r_et", 0, "eq_cx", 0)
-    p.con("eq_cx", 0, "sp_cx", 1)
-    p.con("en", 0, "sp_cx", 0)
-    p.obj("lt", 280, 180, "< 0.12")
-    p.obj("gt", 400, 180, "> 0.45")
-    p.obj("selt", 280, 220, "sel 1")
-    p.obj("selg", 400, 220, "sel 1")
-    p.msg("h1", 280, 260, "1")
-    p.msg("h0", 400, 260, "0")
-    p.obj("s_h", 280, 300, "s s6_cortex_hold")
-    p.con("sp_cx", 0, "lt", 0)
-    p.con("sp_cx", 0, "gt", 0)
-    p.con("lt", 0, "selt", 0)
-    p.con("gt", 0, "selg", 0)
-    p.con("selt", 0, "h1", 0)
-    p.con("selg", 0, "h0", 0)
-    p.con("h1", 0, "s_h", 0)
-    p.con("h0", 0, "s_h", 0)
-    # hors Cortex: jamais hold
-    p.obj("sel_n", 520, 110, "sel 0")
-    p.con("r_et", 0, "sel_n", 0)
-    p.con("sel_n", 1, "h0", 0)
+    # Piezo: seuil 0.35, front montant (change), cooldown 3 s
+    p.obj("th_p", 120, 400, "> 0.35")
+    p.obj("ch_p", 120, 430, "change")
+    p.obj("eq1", 120, 460, "== 1")
+    p.obj("sp_p", 120, 490, "spigot")
+    p.obj("lk", 120, 490, "f 0")
+    p.obj("cd", 200, 490, "delay 3000")
+    p.con("en", 0, "th_p", 0)
+    p.con("th_p", 0, "ch_p", 0)
+    p.con("ch_p", 0, "eq1", 0)
+    p.con("eq1", 0, "sp_p", 0)
+    p.con("lk", 0, "sp_p", 1)
+    p.obj("pt", 280, 460, "t b b b")
+    p.con("sp_p", 0, "pt", 0)
+    p.con("pt", 0, "lk", 0)
+    p.msg("lk1", 280, 490, "1")
+    p.con("lk1", 0, "lk", 0)
+    p.con("lk1", 0, "cd", 0)
+    p.con("cd", 0, "lk", 0)
+
+    # Zone suivante: (etat + 1) % 4 → s6_force
+    p.obj("p1", 400, 460, "+ 1")
+    p.obj("m4", 400, 490, "% 4")
+    p.obj("s_frc", 480, 490, "s s6_force")
+    p.con("f_et", 0, "p1", 0)
+    p.con("pt", 1, "p1", 0)
+    p.con("p1", 0, "m4", 0)
+    p.con("m4", 0, "s_frc", 0)
+
+    p.obj("s_pf", 480, 430, "s s6_piezo_fade")
+    p.con("pt", 2, "s_pf", 0)
+
+    # INTERRUPTIBLE — un fondu commun pour tous les cuts
+    p.obj("rf", 400, 520, "random 66")
+    p.obj("af", 400, 545, "+ 35")
+    p.con("pt", 0, "rf", 0)
+    p.con("rf", 0, "af", 0)
+    for layer in range(1, 5):
+        p.obj(f"sc{layer}", 560, 520 + (layer - 1) * 28, f"s s6_hippo_cut{layer}")
+        p.con("af", 0, f"sc{layer}", 0)
+    for layer in range(1, 3):
+        p.obj(f"sr{layer}", 560, 640 + (layer - 1) * 28, f"s s6_recon_cut{layer}")
+        p.con("af", 0, f"sr{layer}", 0)
+
     p.text(20, 400, "pas de cable adc vers dac (anti larsen)")
     _w(p, "presence_08.pd")
 
 
-def gen_recon_pulse_08():
-    """En Reconstruction: bang périodique couche 2 = interruptions COURT."""
-    p = P(480, 260)
-    p.text(20, 8, "recon_pulse_08 interrupts 1-5 s sur couche 2")
+def _spatial_msg(recipe_idx: int) -> str:
+    spec = RR.SPATIAL_RECIPES[recipe_idx % len(RR.SPATIAL_RECIPES)]
+    parts = []
+    for layer, params in spec.items():
+        for key, val in params.items():
+            parts.append(f"s6_l{layer}_{key} {val}")
+    return "\\; ".join(parts)
+
+
+def gen_recon_formes_08():
+    """Lit recon_formes/events.txt — moteur compositionnel Reconstruction [Q31]."""
+    events = REL.load_events(LIBDIR)
+    p = P(900, 120 + len(events) * 48)
+    p.text(20, 8, "recon_formes_08 — gen_formes_recon.py · remplace recon_pulse")
     p.obj("r_et", 40, 40, "r s6_etat")
     p.obj("sel", 40, 70, "sel 2")
-    p.msg("off", 140, 100, "stop")
-    p.obj("met", 40, 140, "metro 4500")
-    p.obj("s_b", 40, 180, "s s6_recon_bang")
-    p.con("r_et", 0, "sel", 0)
-    p.con("sel", 0, "met", 0)
-    p.con("sel", 1, "off", 0)
-    p.con("off", 0, "met", 0)
-    p.con("met", 0, "s_b", 0)
-    _w(p, "recon_pulse_08.pd")
+    p.obj("tb0", 40, 100, "t b b")
+    p.con("sel", 0, "tb0", 0)
+
+    prev = "tb0"
+    prev_t = 0
+    y = 130
+    ev_i = 0
+    for ev in events:
+        act = ev["action"]
+        t_abs = max(0, int(ev["t"]))
+        dly_ms = max(0, t_abs - prev_t)
+        prev_t = t_abs
+        p.obj(f"d{ev_i}", 40, y, f"delay {dly_ms}")
+        p.con(prev, 0, f"d{ev_i}", 0)
+        if act == "play":
+            layer = int(ev.get("layer", 1))
+            p.obj(f"s{ev_i}", 200, y, f"s s6_recon_b{layer}")
+            p.con(f"d{ev_i}", 0, f"s{ev_i}", 0)
+        elif act == "cut":
+            layer = int(ev.get("layer", 2))
+            fade = int(ev.get("fade_ms", 50))
+            p.msg(f"fd{ev_i}", 200, y, str(fade))
+            p.obj(f"s{ev_i}", 320, y, f"s s6_recon_cut{layer}")
+            p.con(f"d{ev_i}", 0, f"fd{ev_i}", 0)
+            p.con(f"fd{ev_i}", 0, f"s{ev_i}", 0)
+        elif act == "spatial":
+            recipe = int(ev.get("recipe", 0))
+            body = _spatial_msg(recipe)
+            p.msg(f"sp{ev_i}", 200, y, body)
+            p.con(f"d{ev_i}", 0, f"sp{ev_i}", 0)
+        elif act == "silence":
+            # silence compositionnel — pas de bang lecteur
+            pass
+        prev = f"d{ev_i}"
+        y += 44
+        ev_i += 1
+
+    p.msg("rst", 40, y + 20, "stop")
+    p.con("sel", 1, "rst", 0)
+    p.text(20, y + 50, f"{ev_i} events · état 2 · spatial Simon §14")
+    _w(p, "recon_formes_08.pd")
 
 
 def gen_hippo_assoc_08():
-    """A déclenche B: bangs décalés couches 3–4. Crochet tags vide."""
-    p = P(560, 300)
-    p.text(20, 8, "hippo_assoc_08 A vers B hasard - crochet tags vide")
+    """Lit events.txt — planifie play/cut/motion pour l'état Hippocampe."""
+    events = HEL.load_events(LIBDIR)
+    p = P(720, 120 + len(events) * 48)
+    p.text(20, 8, "hippo_assoc_08 — séquences gen_assoc_hippo.py")
     p.obj("r_et", 40, 40, "r s6_etat")
     p.obj("sel", 40, 70, "sel 1")
-    p.obj("tb", 40, 100, "t b b")
-    p.obj("d3", 40, 140, "delay 2200")
-    p.obj("d4", 160, 140, "delay 4100")
-    p.obj("s3", 40, 180, "s s6_hippo_b3")
-    p.obj("s4", 160, 180, "s s6_hippo_b4")
-    p.obj("s_tag", 300, 140, "s s6_tag_hook")
-    p.msg("none", 300, 100, "symbol none")
-    p.con("r_et", 0, "sel", 0)
-    p.con("sel", 0, "tb", 0)
-    p.con("tb", 0, "d3", 0)
-    p.con("tb", 1, "d4", 0)
-    p.con("d3", 0, "s3", 0)
-    p.con("d4", 0, "s4", 0)
-    p.con("sel", 0, "none", 0)
-    p.con("none", 0, "s_tag", 0)
-    p.text(20, 220, "v1 random Q08-12 - tags plus tard Q08-16")
+    p.obj("tb0", 40, 100, "t b b")
+    p.con("sel", 0, "tb0", 0)
+
+    p.obj("s_tag", 520, 100, "s s6_tag_hook")
+    p.msg("tag0", 520, 70, "symbol hippo_v1")
+    p.con("tb0", 1, "tag0", 0)
+    p.con("tag0", 0, "s_tag", 0)
+
+    prev = "tb0"
+    prev_t = 0
+    y = 130
+    ev_i = 0
+    for ev in events:
+        act = ev["action"]
+        if act in ("silence", "noop"):
+            continue
+        t_abs = max(0, int(ev["t"]))
+        dly_ms = max(0, t_abs - prev_t)
+        prev_t = t_abs
+        p.obj(f"d{ev_i}", 40, y, f"delay {dly_ms}")
+        p.con(prev, 0, f"d{ev_i}", 0)
+        if act == "play":
+            layer = int(ev.get("layer", 3))
+            p.obj(f"s{ev_i}", 200, y, f"s s6_hippo_b{layer}")
+            p.con(f"d{ev_i}", 0, f"s{ev_i}", 0)
+        elif act == "cut":
+            layer = int(ev.get("layer", 3))
+            fade = int(ev.get("fade_ms", 50))
+            p.msg(f"fd{ev_i}", 200, y, str(fade))
+            p.obj(f"s{ev_i}", 320, y, f"s s6_hippo_cut{layer}")
+            p.con(f"d{ev_i}", 0, f"fd{ev_i}", 0)
+            p.con(f"fd{ev_i}", 0, f"s{ev_i}", 0)
+        elif act == "motion":
+            recipe = int(ev.get("recipe", 0))
+            p.msg(f"m{ev_i}", 200, y, str(recipe))
+            p.obj(f"s{ev_i}", 320, y, "s s6_hippo_motion")
+            p.con(f"d{ev_i}", 0, f"m{ev_i}", 0)
+            p.con(f"m{ev_i}", 0, f"s{ev_i}", 0)
+        prev = f"d{ev_i}"
+        y += 44
+        ev_i += 1
+
+    p.msg("rst", 40, y + 20, "stop")
+    p.con("sel", 1, "rst", 0)
+    p.text(20, y + 50, f"{ev_i} events · deltas · L3/L4 courts")
     _w(p, "hippo_assoc_08.pd")
+
+
+def gen_hippo_duck_08():
+    """HA8 — duck ambiance (−4 à −10 dB) quand parole Hippo active."""
+    p = P(640, 320)
+    p.text(20, 8, "hippo_duck_08 HA8 gate parole L1-L4")
+    for i in range(4):
+        p.obj(f"in{i}", 40 + i * 100, 40, "inlet~")
+    p.obj("out", 40, 260, "outlet~")
+    p.obj("m01", 40, 100, "max~")
+    p.obj("m23", 240, 100, "max~")
+    p.obj("mall", 140, 140, "max~")
+    p.obj("env", 140, 180, "env~ 512")
+    p.obj("met", 300, 140, "metro 40")
+    p.obj("snap", 140, 210, "snapshot~")
+    p.obj("th", 300, 180, "> 0.012")
+    p.obj("sel", 300, 210, "sel 1")
+    p.msg("pk_d", 420, 200, "0.45 20")
+    p.msg("pk_u", 420, 230, "1 200")
+    p.obj("ln", 520, 210, "line~")
+    p.con("in0", 0, "m01", 0)
+    p.con("in1", 0, "m01", 1)
+    p.con("in2", 0, "m23", 0)
+    p.con("in3", 0, "m23", 1)
+    p.con("m01", 0, "mall", 0)
+    p.con("m23", 0, "mall", 1)
+    p.con("mall", 0, "env", 0)
+    p.con("met", 0, "snap", 0)
+    p.con("env", 0, "snap", 0)
+    p.con("snap", 0, "th", 0)
+    p.con("th", 0, "sel", 0)
+    p.con("sel", 0, "pk_d", 0)
+    p.con("sel", 1, "pk_u", 0)
+    p.con("pk_d", 0, "ln", 0)
+    p.con("pk_u", 0, "ln", 0)
+    p.con("ln", 0, "out", 0)
+    p.text(20, 290, "duck ~-7dB · relache 200ms")
+    _w(p, "hippo_duck_08.pd")
 
 
 def gen_boucle_inject_08():
@@ -622,6 +719,50 @@ def gen_boucle_inject_08():
     _w(p, "boucle_inject_08.pd")
 
 
+def _hippo_interruptible_map(root: str) -> dict[str, int]:
+    """id → 0/1 depuis feuille Hippocampe (mode_lecture)."""
+    xlsx = os.path.join(root, "docs", "Matiere", "catalogue_fragments.xlsx")
+    out: dict[str, int] = {}
+    if not os.path.isfile(xlsx):
+        return out
+    try:
+        import openpyxl
+    except ImportError:
+        return out
+    wb = openpyxl.load_workbook(xlsx, read_only=True, data_only=True)
+    try:
+        if "Hippocampe" not in wb.sheetnames:
+            return out
+        ws = wb["Hippocampe"]
+        rows = list(ws.iter_rows(min_row=2, max_row=2, values_only=True))
+        if not rows or not rows[0]:
+            return out
+        headers = [str(h or "").strip().lower() for h in rows[0]]
+        try:
+            mi = headers.index("mode lecture")
+        except ValueError:
+            return out
+        for row in ws.iter_rows(min_row=3, values_only=True):
+            if not row or not row[0]:
+                continue
+            sid = str(row[0]).strip()
+            mode = str(row[mi] if mi < len(row) else "").upper()
+            if "INTERRUPT" in mode:
+                out[sid] = 1
+    finally:
+        wb.close()
+    return out
+
+
+def _interruptible_for(rel: str, hippo_map: dict[str, int], slot: int) -> int:
+    stem = os.path.splitext(os.path.basename(rel))[0]
+    if stem in hippo_map:
+        return hippo_map[stem]
+    if slot in (3, 4):
+        return 0
+    return 0
+
+
 def gen_player_state_08():
     """Lecteur SONS_V3 — listes [text], pas un open par fichier."""
     root = os.path.abspath(os.path.join(LIBDIR, "..", ".."))
@@ -648,6 +789,7 @@ def gen_player_state_08():
             raise SystemExit(f"pool ambiance slot {32 + i}: vide")
 
     gain_map = gain_map_from_registre(root)
+    hippo_int = _hippo_interruptible_map(root)
 
     slot_specs = []
     for si in range(4):
@@ -671,14 +813,22 @@ def gen_player_state_08():
                 g = fmt_gain(linear_gain_for_rel(rel, gain_map))
                 fh.write(f"{rel} {os.path.basename(rel)} {g};\n")
 
+    for s, files in slot_specs:
+        with open(os.path.join(pl_dir, f"slot_{s}.txt"), "w", encoding="utf-8") as fh:
+            for rel in files:
+                g = fmt_gain(linear_gain_for_rel(rel, gain_map))
+                intr = _interruptible_for(rel, hippo_int, s)
+                fh.write(f"{rel} {os.path.basename(rel)} {g} {intr};\n")
+
     sel_args = " ".join(str(s) for s, _ in slot_specs)
     nslots = len(slot_specs)
-    p = P(980, 280 + nslots * 36)
+    p = P(980, 320 + nslots * 36)
     p.text(20, 6, "player_state_08 - SONS_V3 listes text (playlists08)")
-    p.text(20, 22, "in0 bang \\, in1 slot froid \\, out0 audio \\, out1 nom")
-    p.text(20, 38, "slots 0..11 etat/duree \\; 20..31 frag \\; 40-41 nappe \\; 32-33 amb · gain registre")
+    p.text(20, 22, "in0 bang \\, in1 slot \\, in2 cut/fade ms \\, out0 audio \\, out1 nom")
+    p.text(20, 38, "gain+interruptible · fade cut 35-100ms · arg1=loop")
     p.obj("in_b", 40, 50, "inlet")
     p.obj("in_slot", 140, 50, "inlet")
+    p.obj("in_cut", 240, 50, "inlet")
     p.obj("out", 40, 240, "outlet~")
     p.obj("out_name", 200, 240, "outlet")
     p.obj("readsf", 700, 80, "readsf~")
@@ -689,6 +839,27 @@ def gen_player_state_08():
     p.con("f_gn", 0, "gmul", 1)
     p.con("gmul", 0, "gain", 0)
     p.con("gain", 0, "out", 0)
+    p.obj("f_int", 860, 160, "f 0")
+    p.obj("sp_cut", 860, 190, "spigot")
+    p.con("f_int", 0, "sp_cut", 1)
+    p.obj("t_cut", 860, 220, "t f b")
+    p.con("in_cut", 0, "t_cut", 0)
+    p.con("t_cut", 0, "def_fd", 0)
+    p.con("t_cut", 1, "sp_cut", 0)
+    p.con("t_cut", 1, "t_stop", 0)
+    p.obj("def_fd", 860, 250, "f 50")
+    p.msg("m_stop", 980, 310, "stop")
+    p.obj("d_rst", 980, 340, "delay 120")
+    p.obj("t_stop", 900, 270, "t f b")
+    p.obj("del_stop", 980, 295, "del 50")
+    p.con("def_fd", 0, "t_stop", 0)
+    p.con("t_stop", 0, "del_stop", 1)
+    p.con("t_stop", 1, "del_stop", 0)
+    p.con("del_stop", 0, "m_stop", 0)
+    p.con("m_stop", 0, "readsf", 0)
+    p.con("m_stop", 0, "d_rst", 0)
+    p.msg("m_ref", 980, 370, "1")
+    p.con("d_rst", 0, "m_ref", 0)
     p.obj("delay0", 40, 90, "delay 0")
     p.obj("tb", 40, 120, "t b")
     p.obj("f_slot", 140, 120, "f")
@@ -760,9 +931,14 @@ def gen_player_state_08():
         p.obj(f"spl2_{s}", 780, y + 16, "list split 1")
         p.con(f"sp{s}", 1, f"spl2_{s}", 0)
         p.con(f"spl2_{s}", 0, f"ps{s}", 0)
+        p.obj(f"spl3_{s}", 880, y + 32, "list split 1")
+        p.con(f"spl2_{s}", 1, f"spl3_{s}", 0)
         p.obj(f"fg{s}", 880, y + 16, "f 1")
-        p.con(f"spl2_{s}", 1, f"fg{s}", 0)
+        p.con(f"spl3_{s}", 0, f"fg{s}", 0)
         p.con(f"fg{s}", 0, "f_gn", 0)
+        p.obj(f"fi{s}", 960, y + 32, "f 0")
+        p.con(f"spl3_{s}", 1, f"fi{s}", 0)
+        p.con(f"fi{s}", 0, "f_int", 0)
         p.con(f"ps{s}", 0, f"tn{s}", 0)
         p.con(f"tn{s}", 0, "out_name", 0)
         if n >= 2:
@@ -821,13 +997,11 @@ def gen_cortex_amb_08():
         p.obj(f"lg{idx}", x, 110, f"*~ {depth:.2f}")
         p.obj(f"la{idx}", x, 140, f"+~ {base:.2f}")
         p.obj(f"g{idx}", x, 180, "*~")
-        p.obj(f"lp{idx}", x, 220, "lop~ 2800")
         p.con(f"lfo{idx}", 0, f"lg{idx}", 0)
         p.con(f"lg{idx}", 0, f"la{idx}", 0)
         p.con(f"in{idx}", 0, f"g{idx}", 0)
         p.con(f"la{idx}", 0, f"g{idx}", 1)
-        p.con(f"g{idx}", 0, f"lp{idx}", 0)
-        p.con(f"lp{idx}", 0, f"out{hp}", 0)
+        p.con(f"g{idx}", 0, f"out{hp}", 0)
     _w(p, "cortex_amb_08.pd")
 
 
@@ -933,6 +1107,20 @@ def gen_cortex_amb_behav_08():
         p.con(f"pk_e{i}", 0, f"lg{i}", 0)
         p.con(f"pk_r{i}", 0, f"lg{i}", 0)
 
+    # Piezo Q14 — fondu sortie nappes 0,5–2 s
+    p.obj("r_pf", 40, 380, "r s6_piezo_fade")
+    p.obj("rp", 40, 410, "random 1501")
+    p.obj("ap", 120, 410, "+ 500")
+    p.obj("tp", 200, 410, "t b")
+    p.con("r_pf", 0, "tp", 0)
+    p.con("tp", 0, "rp", 0)
+    p.con("rp", 0, "ap", 0)
+    for i in range(2):
+        p.obj(f"pkf{i}", 280 + i * 100, 410, "pack 0 1500")
+        p.con("ap", 0, f"pkf{i}", 1)
+        p.con("tp", 0, f"pkf{i}", 0)
+        p.con(f"pkf{i}", 0, f"lg{i}", 0)
+
     _w(p, "cortex_amb_behav_08.pd")
 
 
@@ -961,8 +1149,10 @@ def gen_cortex_pair_08():
         y = 80
 
         p.obj(f"gb{pr}", x + 88, y + 96, "line~")
+        p.obj(f"gar{pr}", x + 88, y + 68, "*~ 0.79")
         p.obj(f"mb{pr}", x + 88, y + 132, "*~")
-        p.con(f"in{b}", 0, f"mb{pr}", 0)
+        p.con(f"in{b}", 0, f"gar{pr}", 0)
+        p.con(f"gar{pr}", 0, f"mb{pr}", 0)
         p.con(f"gb{pr}", 0, f"mb{pr}", 1)
 
         p.obj(f"ma{pr}", x, y + 132, "*~ 1")
@@ -1025,14 +1215,25 @@ def gen_cortex_pair_08():
 
 
 def ensure():
+    for script in (
+        os.path.join(_REPO, "scripts", "gen_assoc_hippo.py"),
+        os.path.join(_REPO, "scripts", "gen_formes_recon.py"),
+    ):
+        if os.path.isfile(script):
+            import subprocess
+            subprocess.run([sys.executable, script], cwd=_REPO, check=False)
+    stale = os.path.join(LIBDIR, "recon_pulse_08.pd")
+    if os.path.isfile(stale):
+        os.remove(stale)
     gen_fsm_memory_08()
     gen_fsm_presets_08()
     gen_hippo_motion_08()
     gen_amb_route_08()
     gen_cortex_ctrl_08()
     gen_presence_08()
-    gen_recon_pulse_08()
+    gen_recon_formes_08()
     gen_hippo_assoc_08()
+    gen_hippo_duck_08()
     gen_boucle_inject_08()
     gen_player_state_08()
     gen_cortex_amb_08()

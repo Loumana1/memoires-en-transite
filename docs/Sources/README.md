@@ -18,8 +18,10 @@ Les documents de ce dossier sont conservés **tels quels**. On ne les corrige pa
 | Document | Auteur | Date | Périmètre | Tri fait |
 |----------|--------|------|-----------|----------|
 | [`Simon - Cortex et Cortex-Ambiance.md`](./Simon%20-%20Cortex%20et%20Cortex-Ambiance.md) | Simon Mahungu | août 2026 | Cortex et Cortex-Ambiance uniquement | oui, 20 août — 24 questions dans `Q&A.md` |
+| [`Specifications_Pure_Data_Hippocampe.md`](./Specifications_Pure_Data_Hippocampe.md) | Simon Mahungu | août 2026 | Hippocampe (+ Hippocampe–Ambiance décrite, rejetée en V1) | oui, 21 août — §I `Q&A.md` ; Q26–Q28 fermées |
+| [`Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md`](./Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md) | Simon Mahungu | août 2026 | Reconstruction + Reconstruction–Ambiance | oui, 21 août — §J `Q&A.md` ; Q29–Q37 ouvertes |
 
-L'Hippocampe, la Reconstruction et la Boucle n'ont **aucun** document source. Voir [Q19](../Backlog/Q&A.md#q19).
+La **Boucle** n'a toujours **aucun** document source dédié. Voir [Q19](../Backlog/Q&A.md#q19).
 
 Le guide Ableton de Simon du 15 août n'a jamais été transcrit ici. Ce qu'il en reste d'utile est dans [`../Matiere/Pipeline.md`](../Matiere/Pipeline.md) : il décrit la préparation des 4 masters, pas le fonctionnement du patch.
 

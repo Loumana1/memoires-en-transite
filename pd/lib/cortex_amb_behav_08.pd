@@ -55,6 +55,12 @@
 #X obj 620 330 pack 1.15 7000;
 #X obj 700 282 delay 3;
 #X obj 700 330 delay 3;
+#X obj 40 380 r s6_piezo_fade;
+#X obj 40 410 random 1501;
+#X obj 120 410 + 500;
+#X obj 200 410 t b;
+#X obj 280 410 pack 0 1500;
+#X obj 380 410 pack 0 1500;
 #X connect 1 0 4 0;
 #X connect 3 0 4 1;
 #X connect 4 0 2 0;
@@ -126,3 +132,12 @@
 #X connect 55 0 53 0;
 #X connect 52 0 8 0;
 #X connect 53 0 8 0;
+#X connect 56 0 59 0;
+#X connect 59 0 57 0;
+#X connect 57 0 58 0;
+#X connect 58 0 60 1;
+#X connect 59 0 60 0;
+#X connect 60 0 3 0;
+#X connect 58 0 61 1;
+#X connect 59 0 61 0;
+#X connect 61 0 8 0;

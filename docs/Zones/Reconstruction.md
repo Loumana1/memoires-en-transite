@@ -1,79 +1,77 @@
 # Zone Reconstruction — comportement sonore
 
-**Pas encore travaillée à l'oreille.** Aucun paramètre figé, et c'est normal : cette zone n'a pas encore fait l'objet d'une séance dédiée.
+**Mise à jour 21 août 2026** — [Q29](../Backlog/Q&A.md#q29)=A : moteur **compositionnel** (spec Simon), pas « zone lisible ».
 
-Simon n'a pas livré de spec pour cette zone. → [Q19](../Backlog/Q&A.md#q19).
+Spec source : [`Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md`](../Sources/Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md). Décisions : [Q&A §J](../Backlog/Q&A.md#j-reconstruction--spec-simon-reçue-le-21-août).
 
 ---
 
 ## 1. Intention
 
-La zone **lisible**. Après la masse floue du Cortex et la circulation de l'Hippocampe, la Reconstruction laisse entendre. Presque pas d'effets, un fil principal qu'on suit, et des interruptions courtes qui viennent le contredire.
+La Reconstruction **compose** un territoire sonore provisoire : agencement de fragments, sutures, silences, mouvements spatiaux, puis dissolution. Ce n'est plus une zone où l'on « comprend » — la reconnaissabilité varie selon la forme (courbe CLAIR ↔ OPAQUE).
 
-C'est aussi la zone la plus longue du cycle : **120 s**, contre 40 et 50. Elle a le temps de s'installer.
-
----
-
-## 2. Invariants — vrais quel que soit le sample
-
-1. Quasi sec. LPF à 18–20 kHz, saturation nulle. C'est la seule zone où la matière est presque telle quelle.
-2. Deux couches seulement : un **fil** continu et des **interruptions**.
-3. Le fil tourne lentement (rotation ambisonique) ; les interruptions apparaissent ailleurs.
-4. Pas de nappe : L9 est éteinte. **Confirmé** le 20 août par [Q2](../Backlog/Q&A.md#q2) — « la reconstruction, je dirais qu'il n'en faut pas ». C'est le seul point du projet où l'implémentation était déjà exactement conforme à la décision : `RECONSTRUCTION/AMBIANCE` est vide et n'a pas à être rempli.
+Durée d'état : **120 s** (`CYCLE1_8HP`).
 
 ---
 
-## 3. Couches et traitement
+## 2. Invariants V1 (Proto 08)
 
-`FSM_N_8HP[2] = (2, …)` — 2 couches.
+1. **Moteur de formes** — `gen_formes_recon.py` précalcule une recette ; Pd lit `pd/lib/recon_formes/events.txt`. **`recon_pulse_*` supprimé** ([Q31](../Backlog/Q&A.md#q31)).
+2. **Deux couches actives** — L1 fil (long) + L2 interruptions (courts). Pas de sous-zone Reconstruction–Ambiance ([Q30](../Backlog/Q&A.md#q30)=A).
+3. **Silences ≤ 4 s** ; apparitions **rapides** (pas d'émergences 1–6 s comme Cortex) ([Q34](../Backlog/Q&A.md#q34)).
+4. **Mutabilité FX 1–3** selon fragment ; superposition **2 plans** de présence (pas `INTERMEDIAIRE`) ([Q36](../Backlog/Q&A.md#q36), [Q10](../Backlog/Q&A.md#q10)).
+5. **Garde-fous R12/R13** — le générateur limite les chaînes de fragments à forte charge sémantique (anti fausse citation).
+6. **`REINJECTER` / Boucle** — historique IDs + `recipe.json` ; **pas** de `writesf~` ([Q35](../Backlog/Q&A.md#q35)=A).
 
-| Couche | Rôle | Matière | Mode spatial |
-|--------|------|---------|--------------|
-| L1 | le fil | `RECONSTRUCTION/LONG_MOYEN`, repli sur `FRAGMENTS` | 1 — rotation, `rot` 0,012 |
-| L2 | interruptions | `RECONSTRUCTION/FRAGMENTS` | 0 ou 3 selon la variante |
+---
+
+## 3. Couches et spatial
+
+`FSM_N_8HP[2] = (2, 1, 0, …)` — 2 couches.
+
+| Couche | Rôle | Matière (proto) | Spatial |
+|--------|------|-----------------|---------|
+| L1 | fil / noyau | `RECONSTRUCTION/LONG_MOYEN` → repli `FRAGMENTS` longs | modes Simon §14 via `recon_recipes.py` |
+| L2 | interruptions | `RECONSTRUCTION/FRAGMENTS` | idem |
 | L9 | — | éteinte | — |
 
-Valeurs, variante 1 (`presets07.py`, `_RC0` et `_RC1`) :
-
-| Paramètre | L1 (fil) | L2 (interruptions) | Statut |
-|-----------|----------|--------------------|--------|
-| saturation | `0` | `0` | OREILLE |
-| HPF | `20 Hz` | `25 Hz` | OREILLE |
-| LPF | `20000 Hz` | `18000 Hz` | OREILLE |
-| wet delay | `0.08` | `0.05` | OREILLE |
-| temps de delay | `100 ms` | `80 ms` | OREILLE |
-| feedback | `0.1` | `0` | OREILLE |
-| `lfo` d'amplitude | `0.04` | `0` | OREILLE |
-| vitesse de rotation | `0.012` | — | OREILLE |
-
-Les variantes 2 et 3 changent la rotation (0,010 puis 0,008) et passent L2 en mode 3 (séquence, `step` 2200 ms, `xfade` 80 ms).
-
-| Élément | Valeur | Source | Statut |
-|---------|--------|--------|--------|
-| Durée de l'état | `120 s` | `CYCLE1_8HP` | OREILLE |
-| Interruptions | `s6_recon_bang` toutes les **4,5 s** sur L2 | `recon_pulse_07` | OREILLE |
-| Cascade (`ovl`) | `5 ms` | `presets07.py` | OREILLE |
+**Bibliothèque spatiale V1** : `CONVERGENCE`, `CONSTELLATION`, `HALO`, `DISPERSION` — tirées dans la recette, appliquées par `recon_formes_08`.
 
 ---
 
-## 4. Problème de matière
+## 4. Matière et classeur
 
-| Pool | Nombre de fichiers |
-|------|--------------------|
-| `RECONSTRUCTION/FRAGMENTS` | 287 |
-| `RECONSTRUCTION/LONG_MOYEN` | **1** |
-| `RECONSTRUCTION/AMBIANCE` | 0 — **normal**, la zone n'en veut pas ([Q2](../Backlog/Q&A.md#q2)) |
+| Pool | État |
+|------|------|
+| `RECONSTRUCTION/FRAGMENTS` | 287 fichiers — **proto** moteur |
+| `RECONSTRUCTION/LONG_MOYEN` | 1 fichier — fil unique en attendant Simon |
+| Nouvelle banque Simon | ~jours — cible finale ([Q32](../Backlog/Q&A.md#q32)) |
 
-Le fil principal tire dans **un seul fichier**. Sur 120 s d'état, c'est le même son qui revient. Ce n'est pas un réglage à faire, c'est de la matière qui manque : il faut des fragments longs de Reconstruction dans le master Ableton. → [TO DO](../Backlog/TO%20DO.md).
+Feuille **Reconstruction** du classeur : colonnes Simon **§26.1** (distinctes Cortex/Hippo). Colonnes vides OK ; compatibilité hybride quand remplies ([Q33](../Backlog/Q&A.md#q33)).
 
-Tant que ce déséquilibre existe, il est difficile de juger la zone à l'oreille — donc inutile d'en régler les effets finement.
+Regénération :
+```bash
+python3 scripts/gen_formes_recon.py
+python3 scripts/gen_prototype_08_8hp.py
+python3 scripts/gen_catalogue_xlsx.py
+```
 
 ---
 
-## 5. Ce qu'il faut faire pour figer cette zone
+## 5. Contraste avec les autres zones
 
-1. **Obtenir de la matière longue** pour le fil. Bloquant.
-2. Décider si 120 s est la bonne durée, une fois la matière disponible.
-3. Régler le rythme des interruptions (4,5 s aujourd'hui) et leur mode spatial.
-4. Vérifier que le contraste avec l'Hippocampe s'entend : l'Hippocampe bouge vite et sec, la Reconstruction tourne lentement et ouvert.
-5. Figer, écrire une strophe dans [`../log.md`](../log.md).
+| | Cortex | Hippocampe | Reconstruction |
+|---|--------|------------|----------------|
+| Logique | masse + plans | association | **composition** |
+| Densité | 12 voix | 4 voies | 2 + forme |
+| Lisibilité | floue | suivable | **variable** (courbe) |
+| Précalcul | playlists | `gen_assoc_hippo.py` | **`gen_formes_recon.py`** |
+
+---
+
+## 6. Ce qu'il reste à figer à l'oreille
+
+1. Nouvelle banque + remplissage feuille §26.1 — **Simon**.
+2. Calibrage des 4 modes spatiaux et mutabilité FX 1–3.
+3. Lien Reconstruction → Boucle (variation R56 à la relecture).
+4. Durée 120 s une fois la matière longue disponible.

@@ -1,6 +1,8 @@
 # TO DO — ce qui est clair
 
-**20 août 2026.** Ce qui suit ne demande **aucune décision artistique** : soit c'est un bug, soit c'est une demande sur laquelle le document de Simon et l'implémentation sont d'accord.
+**20–21 août 2026.** Ce qui suit ne demande **aucune décision artistique** : soit c'est un bug, soit c'est une demande sur laquelle le document de Simon et l'implémentation sont d'accord.
+
+**Ajouts 21 août** (specs Reconstruction + Reconstruction–Ambiance, [Q14](./Q&A.md#q14), [Q29–Q36](./Q&A.md#j-reconstruction--spec-simon-reçue-le-21-août)) — voir §1 Reconstruction, §2 classeur Recon, §4 matière, §5 piézo.
 
 Ce qui demande une décision est dans `[Q&A.md](./Q&A.md)`. **Une tâche marquée « bloquée par Qn » ne se code pas avant que Qn soit répondue.**
 
@@ -93,14 +95,26 @@ Objectif : les zones sonnent de façon décidée et stable **avant** que la logi
   - `REPONDRE` : **immédiate** (H25) ou **spatiale** (H27).
   - `DISPARAITRE` : **naturelle** (H38) ou **nette** (H40, lié à `INTERRUPTIBLE`).
 - [ ] **Confirmer les pourcentages de force associative.** Simon propose 25/55/80 % (H1). Ce sont des **bases de test provisoires** à valider à l'oreille. À caler dans `gen_assoc_hippo.py`.
-- [ ] **Mettre à jour [Q19](./Q%26A.md#q19)** : « il travaille dessus, ça arrive » → **c'est arrivé**. Spec reçue le 21 août.
+- [x] ~~**Mettre à jour [Q19](./Q%26A.md#q19)**~~ — specs Hippocampe et Reconstruction reçues le 21 août.
 
 
 
 ### Reconstruction et Boucle
 
-- [ ] Reconstruction : rien à régler utilement avant d'avoir de la matière longue (voir §4).
+**Spec Simon reçue le 21 août** — [`Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md`](../Sources/Specifications_Pure_Data_Reconstruction_Reconstruction_Ambiance.md). Décisions : [Q&A §J](./Q%26A.md#j-reconstruction--spec-simon-reçue-le-21-août) ([Q29](./Q&A.md#q29)–[Q36](./Q&A.md#q36) **fermées**).
+
+- [ ] ~~Reconstruction : rien à régler utilement avant matière longue~~ — **obsolète** ([Q29](./Q&A.md#q29)=A : moteur compositionnel). Ancienne ligne conservée pour trace.
+- [ ] **Réécrire [`Reconstruction.md`](../Zones/Reconstruction.md)** — [Q29](./Q&A.md#q29)=A ; abandon intention « zone lisible ».
+- [ ] **`gen_formes_recon.py`** — précalcule recettes (rôles, sutures, silences ≤ 4 s, spatial) ; compatibilité hybride [Q33](./Q&A.md#q33) ; proto sur 287 fichiers sans tags.
+- [ ] **Supprimer `recon_pulse_*`** — remplacé par lecture de recettes ([Q31](./Q&A.md#q31)).
+- [ ] **Bibliothèque spatiale Reconstruction** — modes Simon §14 (`CONVERGENCE`, `CONSTELLATION`, `HALO`, `DISPERSION`…).
+- [ ] **Chaîne FX Reconstruction** — mutabilité 1–3 ([Q36](./Q&A.md#q36)) ; superposition **2 plans** (pas `INTERMEDIAIRE`, [Q10](./Q&A.md#q10)).
+- [ ] **Garde-fous R12/R13** dans le générateur (anti fausse citation).
+- [ ] **`REINJECTER`** — historique IDs + recette JSON ; **pas** de `writesf~` ([Q35](./Q&A.md#q35)=A).
+- [ ] **Pas de Reconstruction–Ambiance** ([Q30](./Q&A.md#q30)=A) — pas de pool ni feuille §26.3.
+
 - [ ] Boucle : aligner les deux jeux de valeurs contradictoires (voir §3).
+- [ ] **Lien Reconstruction → Boucle** : recette/IDs ; variation R56 à la relecture ([Q35](./Q&A.md#q35)).
 
 ---
 
@@ -115,6 +129,7 @@ Détail et architecture : `[../Matiere/Attributs.md](../Matiere/Attributs.md)`.
 - [x] ~~**Rendre les ID stables**~~ — fait le 20 août. Registre `docs/Matiere/registre_ids.csv`, appariement par (master, état, rôle, début ± 0,3 s).
 - [x] ~~**Découpe incrémentale**~~ — fait le 20 août. `slice_opacite_v3.py` ne vide plus rien, respecte le rangement manuel, signale les orphelins sans les supprimer. `gen_catalogue_xlsx.py` fusionnait déjà le classeur sur l'ID.
 - [x] ~~**Aligner les colonnes du classeur sur le §5 d'`Attributs.md`.**~~ — fait le 20 août. **4 feuilles** : Cortex / Hippocampe / Reconstruction (paroles) + **Ambiances** (`SONS_V3/AMBIANCE/`). Regen : `python3 scripts/gen_catalogue_xlsx.py`. « Traitement souhaité » **écarté** ([Q20](./Q&A.md#q20)).
+- [ ] **Feuille Reconstruction : colonnes Simon §26.1** — schéma **distinct** de Cortex/Hippo ([Q32](./Q&A.md#q32)) ; mettre à jour `gen_catalogue_xlsx.py` + [`Attributs.md`](../Matiere/Attributs.md) §5 bis. Colonnes vides OK en attendant la nouvelle banque.
 - [ ] Écrire le **sélecteur** — spec algorithme dans `Attributs.md` §6 ([Q5](./Q&A.md#q5), [Q6](./Q&A.md#q6), [Q7](./Q&A.md#q7), [Q8](./Q&A.md#q8)). **`gen_paires.py`** + **`gen_ambiance_cortex.py`** ([Q25](./Q&A.md#q25)). Bloqué par le **remplissage du tableau** ([Q4](./Q&A.md#q4) : C1 différée).
 - [ ] **Mesurer si C1 est tenable avant de la coder.** [Q4](./Q&A.md#q4) : « je ne sais pas encore s'il y a assez de fragments ». Avec 6 paires il faut 6 Belgique + 6 Congo disponibles à chaque instant. La réponse retenue en cas de pénurie est « il répète ». À vérifier par l'audit `gen_paires.py` en mode rapport, sur un tableau partiellement rempli, avant d'écrire la moindre règle. **C2 :** symétrie + interdictions dures ([Q8](./Q&A.md#q8)) — spec [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §2 bis.
 - [ ] `s6_tag_hook` est écrit par `hippo_assoc_07` et reçu par personne. C'est le point d'accroche prévu. À laisser tel quel jusqu'à ce que le sélecteur existe.
@@ -145,6 +160,8 @@ Tous constatés le 20 août en relisant le code contre la doc. Aucun ne demande 
 ## 4. Matière — dépend de Simon
 
 - [ ] `RECONSTRUCTION/LONG_MOYEN` **ne contient qu'un seul fichier**, contre 287 dans `FRAGMENTS`. Le fil principal de la zone tire donc toujours le même son sur 120 s d'état. Il faut des fragments longs de Reconstruction dans le master.
+- [ ] **Nouvelle banque Reconstruction** (micro-fragments + attributs) — Simon, livraison ~jours ([Q32](./Q&A.md#q32)). Cible finale du moteur ; les 287 actuels servent au **proto** `gen_formes_recon.py`.
+- [ ] **Remplir feuille Reconstruction** (colonnes §26.1) quand la matière arrive — **Simon**.
 - [ ] **Matière ambiance Hippocampe.** Plus de dossiers `<zone>/AMBIANCE/` — tout passe par `SONS_V3/AMBIANCE/` + feuille **Ambiances** (`usage_prefere`). [Q2](./Q&A.md#q2) exige une matière **totalement différente** du Cortex : demander un master dédié à Simon, ou extraire des plages du master Hippo (à décider).
 - [x] ~~**Vérifier la longueur des plages continues** dans les masters d'ambiance~~ — mesuré le 20 août, condition de [Q3](./Q&A.md#q3) remplie : **17 segments de 30 s et plus**, dont sept autour de 60 s et un de 91 s. Les « 7 minutes » de Simon n'existent pas en revanche, le plafond réel est 91 s. À noter : le tri manuel du 18 août appliquait déjà la règle sans le savoir — les 27 fichiers gardés dans `CORTEX/AMBIANCE` ont une médiane de 41,6 s, les 42 déplacés vers `FRAGMENTS` une médiane de 4,6 s.
 - [ ] **Inscrire la règle des 30 s dans la découpe** ([Q3](./Q&A.md#q3) = B). Relever `AMBI_MIN_SEG` de 2 s à 30 s dans `slice_opacite_v3.py`. Attention : la découpe étant devenue incrémentale, les 52 segments courts déjà sur le disque ne disparaîtront pas — ils seront signalés comme orphelins. Il faut décider explicitement de ce qu'on en fait (les laisser en `FRAGMENTS`, ce qui est déjà le cas pour 42 d'entre eux, ou les sortir des pools).
@@ -158,8 +175,9 @@ Tous constatés le 20 août en relisant le code contre la doc. Aucun ne demande 
 ## 5. Salle et matériel
 
 - [ ] **Les deux baffles d'ambiance ne doivent pas être côte à côte** (Simon §1.1 et §3.2), pour élargir la perception de l'espace. À reporter sur le plan de salle du CWB et du Bozar.
-- [ ] **Piézos : le matériel n'existe pas.** Le cahier des charges prévoit 2 micros d'ambiance, jamais de piézos. Décider combien, où, et sur quoi. Bloqué par [Q14](./Q&A.md#q14).
-- [ ] Calibrage en salle : FORCE puis AUTO sur 8 HP, en vérifiant que le Cortex est flou, l'Hippocampe suivable, la Reconstruction lisible.
+- [ ] **Piézos — matériel** : combien, où, sur quoi coller — **Loumana** / salle. Le cahier des charges initial ne prévoyait que 2 micros d'ambiance.
+- [ ] **Implémenter piézo (logique Simon)** — [Q14](./Q&A.md#q14) **fermée** : `presence_08` → fondu nappes Cortex **0,5–2 s** + autoriser transition FSM (zone **suivante**) ; **retirer `s6_cortex_hold`**. Lier piézo → `INTERRUPTIBLE` ([Q27](./Q&A.md#q27)) si fragment marqué.
+- [ ] Calibrage en salle : FORCE puis AUTO sur 8 HP, en vérifiant que le Cortex est flou, l'Hippocampe suivable, la Reconstruction en **composition** ([Q29](./Q&A.md#q29)).
 
 ---
 
@@ -184,7 +202,7 @@ Le risque n'est pas le plantage, c'est **le silence que personne ne remarque**. 
 
 Conservé pour mémoire. Rien ici n'est nécessaire pour la V1.
 
-- Boucle comme **buffer** réel : enregistrer ce qui a sonné et le réinjecter, plutôt que retirer dans un pool. C'est la « mémoire fantôme » du cahier des charges d'origine (`writesf~` vers `MEMOIRE_VIVANTE`). Écarté le 18 août.
+- Boucle comme **buffer** réel : enregistrer ce qui a sonné et le réinjecter, plutôt que retirer dans un pool. C'est la « mémoire fantôme » du cahier des charges d'origine (`writesf~` vers `MEMOIRE_VIVANTE`). Écarté le 18 août ; **confirmé** [Q35](./Q&A.md#q35)=A (recette JSON seule en V1).
 - Un fragment qui **voyage d'une zone à l'autre** en gardant son identité.
 - Table pondérée mot / timbre / souffle / contraste pour « le fragment A déclenche le fragment B ».
 - Segmentation des longs wav **en direct** dans Pure Data, au lieu d'une découpe préalable.

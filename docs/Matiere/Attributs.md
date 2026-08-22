@@ -154,6 +154,18 @@ Même colonnes sur les trois feuilles — **paroles seulement** (`FRAGMENTS` + `
 
 Deux exigences sur `gen_catalogue_xlsx.py` : **conserver** les cellules remplies (clé = `id`) ; ajouter des lignes vides pour les nouveaux fichiers sans écraser l'existant.
 
+### Feuille Reconstruction — schéma Simon — TRANCHÉ le 21 août
+
+[Q32](../Backlog/Q&A.md#q32) : la feuille **Reconstruction** n'utilise **plus** les colonnes paroles Cortex/Hippo ci-dessus. Elle reçoit le vocabulaire Simon §26.1 (`granularite`, `role_compositionnel`, `mutabilite`, `charge_semantique`, `provenance_materiau`, `type_matiere`, `mode_lecture`, `transformations_autorisees`… — liste complète dans la spec source).
+
+| Colonne | Source |
+|---------|--------|
+| `id` · `duree_s` | auto |
+| colonnes §26.1 Simon | oreille — **Simon**, quand la nouvelle banque arrive |
+| `notes` | oreille |
+
+**21 août (proto moteur)** : colonnes Simon **présentes mais vides** ; les 287 fichiers actuels servent au développement avec heuristiques (durée, tirage). Pas de re-classement urgent.
+
 ---
 
 ## 6. Architecture proposée pour le moteur

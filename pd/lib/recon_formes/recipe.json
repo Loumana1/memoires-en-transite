@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "type_forme": "AGENCEMENT",
+  "densite_composition": "DENSE",
+  "courbe_reconnaissabilite": "OSCILLANTE",
+  "mode_spatial": "CONVERGENCE",
+  "resolution_forme": "SUSPENSION",
+  "silence_apres_forme_s": 3,
+  "ids": [
+    "R155_v3_reconstruction",
+    "R281_v3_reconstruction",
+    "R014_v3_reconstruction",
+    "R004_v3_reconstruction",
+    "R176_v3_reconstruction",
+    "R025_v3_reconstruction"
+  ],
+  "spatial_recipe": 0,
+  "duree_etat_ms": 120000
+}
