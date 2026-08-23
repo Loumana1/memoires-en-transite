@@ -108,23 +108,29 @@ def _ambiance_pool(root):
 
 
 def usable_ambiance(root, etat="CORTEX"):
-    """Pool partagé — etat ignoré (compat Proto 08)."""
+    """Pool mélodique partagé — etat ignoré (Cortex, Hippocampe, Reconstruction).
+
+    Tirait dans les 69 ambiances jusqu'au 22 août : la nappe de l'Hippocampe
+    pouvait donc sortir n'importe quoi, y compris la matière écartée à
+    l'oreille. Elle passe sur la même sélection A45–A69 que les nappes du
+    Cortex. La Boucle n'est pas concernée : sa couche tire dans les paroles.
+    """
     del etat
-    files = _ambiance_pool(root)
-    if not files:
-        # legacy : CORTEX/AMBIANCE
-        files = _pool(root, "CORTEX", "AMBIANCE")
-    return [_rel(root, p) for p in files]
+    return _catalog().melodic_pool(root, verbose=False)
 
 
-def usable_cortex_amb_pools(root, n=2, verbose=True):
-    """Deux pools : [0]=musicale slot 32, [1]=texture slot 33."""
-    del n
+def _catalog():
     try:
-        from shared.ambiance_catalog import ambiance_paths_by_type
+        from shared import ambiance_catalog
     except ImportError:
         import sys
         sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", "scripts"))
-        from shared.ambiance_catalog import ambiance_paths_by_type
-    mus, tex = ambiance_paths_by_type(root, verbose=verbose)
-    return [mus, tex]
+        from shared import ambiance_catalog
+    return ambiance_catalog
+
+
+def usable_cortex_amb_pools(root, n=2, verbose=True):
+    """Deux nappes Cortex (slots 32 / 33) — même pool mélodique partagé."""
+    del n
+    a, b = _catalog().ambiance_paths_by_type(root, verbose=verbose)
+    return [a, b]

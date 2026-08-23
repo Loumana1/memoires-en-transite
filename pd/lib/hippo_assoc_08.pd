@@ -9,11 +9,11 @@
 #X obj 200 130 s s6_hippo_b1;
 #X obj 40 174 delay 0;
 #X obj 200 174 s s6_hippo_b2;
-#X obj 40 218 delay 1399;
+#X obj 40 218 delay 744;
 #X obj 200 218 s s6_hippo_b2;
 #X obj 40 262 delay 2101;
 #X obj 200 262 s s6_hippo_b3;
-#X obj 40 306 delay 651;
+#X obj 40 306 delay 772;
 #X obj 200 306 s s6_hippo_b3;
 #X obj 40 350 delay 1954;
 #X obj 200 350 s s6_hippo_b4;

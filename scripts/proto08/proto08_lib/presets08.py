@@ -3,6 +3,8 @@
 Cycle AUTO: Cortex 40 s → Hippo 50 s → Recon 2 min.
 [Q10] deux plans : PREMIER_PLAN + ARRIERE_PLAN (INTERMEDIAIRE abandonné).
 """
+from . import layout08 as LAY
+
 ETAT_NOMS = ["CORTEX", "HIPPOCAMPE", "RECONSTRUCTION", "BOUCLE"]
 
 # 12 paroles Cortex + 1 nappe Hippo/Recon (couche 13).
@@ -24,27 +26,102 @@ BOUCLE_PROBA = 15
 BOUCLE_DUR_MS = 6000
 
 # L1–L12 → cortex_pair_08 (HP1–6). L13 = nappe mobile Hippo.
-ANCHORS_8HP = [
-    (1, 0), (1, 0), (2, 45), (2, 45), (3, 90), (3, 90),
-    (4, 135), (4, 135), (5, 180), (5, 180), (6, 225), (6, 225),
-    (4, 135),
-]
-DECODE_8HP_AZ = [0, 45, 90, 135, 180, 225, 270, 315]
+# Seul le baffle est choisi ici : l'azimut vient du layout, il n'est plus
+# recopié à la main à côté du numéro.
+LAYER_HP_8HP = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 4]
+ANCHORS_8HP = LAY.anchors(LAYER_HP_8HP)
+DECODE_8HP_AZ = LAY.azimuths()
 
 # Baffles ambiance Cortex fixés — non adjacents ([Q25]).
 AMBI_MUSICAL_HP = 7   # 1-indexed HP7
 AMBI_TEXTURE_HP = 5   # HP5 (écart avec HP7)
+
+if AMBI_TEXTURE_HP in LAY.neighbours(AMBI_MUSICAL_HP):
+    raise SystemExit(
+        f"presets08: les deux baffles d'ambiance HP{AMBI_MUSICAL_HP} et "
+        f"HP{AMBI_TEXTURE_HP} sont voisins dans la salle — [Q25] les veut "
+        f"ecartes pour elargir l'espace"
+    )
 
 LAYER_DEFAULT = dict(mode=0, rot=0.02, sens=0, step=800, xfade=30,
                      wet=0, delay=200, fb=0, lfo=0, on=0,
                      sat=0, hpf=20, lpf=20000, flfo=0)
 
 # Gain nappes Cortex — spec §7 : 0,25 · paroles un peu plus basses pour laisser respirer
-CORTEX_AMB_GAIN = 0.25
+# Les nappes sont normalisées à -45 dB RMS par normaliser_niveaux.py, contre
+# -23 pour les fragments : 22 dB d'écart que le mixage du patch doit rendre,
+# c'était le pari de CIBLE_AMBIANCE. À 0.42 il n'en rendait que 6,5, et avec
+# 12 fragments contre 2 nappes celles-ci jouaient ~23 dB sous la masse du
+# Cortex — inaudibles. À 2.0 elles passent ~10 dB dessous ; +3 dB à l'écoute
+# Loumana (22 août) → 2.825, soit ~7 dB sous la masse des voix.
+CORTEX_AMB_GAIN = 2.825
 CORTEX_LAYER_GAIN = 0.20
 # Gains plans présence §5 bis (linéaire)
 GAIN_PREMIER_PLAN = 1.0
 GAIN_ARRIERE_PLAN = 0.79
+
+# Voyage spatial Cortex : la voix d'arrière-plan quitte son baffle, parcourt un
+# demi-tour (phi) et revient. Une seule fois par passage, sur 2 baffles tirés.
+# Le décodage ordre 1 donne +6 dB sur le HP d'axe : TRAVEL_GAIN compense.
+CORTEX_TRAVEL_GAIN = 0.45
+CORTEX_TRAVEL_MS = 15000
+CORTEX_TRAVEL_ARC = 180
+CORTEX_TRAVEL_XFADE = 500
+CORTEX_TRAVEL_DELAY_MIN = 5000
+CORTEX_TRAVEL_DELAY_RAND = 10000
+
+# Plages du balayage LPF « underwater » — c'est ce qui sépare les deux plans à
+# l'oreille : l'avant est ouvert, l'arrière est sourd (§5 bis).
+CORTEX_LPF_AVANT = (800, 2000)
+CORTEX_LPF_ARRIERE = (500, 1000)
+
+# Échange avant / arrière : la voix d'arrière-plan passe devant, celle de
+# devant recule. Gains et plages de filtre glissent ensemble. Quelques
+# rendez-vous par passage, sur une paire tirée à chaque fois.
+CORTEX_SWAP_COUNT = 4
+CORTEX_SWAP_MS = 7000
+CORTEX_SWAP_RISE = 2500        # montée et descente ; le reste est tenu
+CORTEX_SWAP_FIRST = 3000       # premier rendez-vous après l'entrée en Cortex
+CORTEX_SWAP_EVERY = 8000       # écart nominal entre deux rendez-vous
+CORTEX_SWAP_JITTER = 2500      # tiré en plus, pour ne pas être métronomique
+# Gains des deux plans pendant l'échange (voir GAIN_PREMIER/ARRIERE_PLAN).
+CORTEX_SWAP_DELTA = GAIN_PREMIER_PLAN - GAIN_ARRIERE_PLAN
+# Volet spatial : la voix qui remonte devant se décale aussi en azimut. Bien
+# plus court que l'arc du voyage (CORTEX_TRAVEL_ARC) — ici on veut un
+# déhanchement, pas un déplacement. Une paire ne fait jamais les deux à la
+# fois : chaque paire n'a qu'un encodeur, et deux gestes ne peuvent pas écrire
+# le même azimut.
+CORTEX_SWAP_ARC = 60
+CORTEX_SWAP_ENC = 0.4          # part envoyée à l'encodeur pendant l'échange
+
+CORTEX_SPECTRAL_RECIPES = [
+    "MUR_TREMBLE", "RIPPLE", "DOMINO_OUVERTURE", "CLUSTER_BREATHE",
+]
+
+CORTEX_SPECTRAL_PROBA = 0.65          # probabilité d'un geste par passage Cortex
+CORTEX_SPECTRAL_T0_MIN = 8000         # ms avant 1er déclenchement (éviter le boot)
+CORTEX_SPECTRAL_T0_RAND = 12000       # jitter additionnel
+
+# Par recette
+CORTEX_SPECTRAL_MUR_FACTOR = 3.0
+CORTEX_SPECTRAL_MUR_MS = 4000
+
+CORTEX_SPECTRAL_RIPPLE_MS = 3200
+CORTEX_SPECTRAL_RIPPLE_NEIGH_DELAY = 90   # ms
+CORTEX_SPECTRAL_RIPPLE_NEIGH_AMP = 0.6
+
+CORTEX_SPECTRAL_DOMINO_MS = 4000
+CORTEX_SPECTRAL_DOMINO_STEP_MS = 80
+CORTEX_SPECTRAL_DOMINO_LPF = (800, 1600, 800)
+
+CORTEX_SPECTRAL_CLUSTER_MS = 6000
+CORTEX_SPECTRAL_CLUSTER_LFO = 0.6         # Hz
+CORTEX_SPECTRAL_CLUSTER_LPF = (450, 1100)
+
+
+def layers_for_hp(hp: int) -> list[int]:
+    """Indices 1-based des couches L sur ce baffle parole."""
+    return [i + 1 for i, h in enumerate(LAYER_HP_8HP[:12]) if h == hp]
 
 
 def L(**kw):
@@ -59,7 +136,7 @@ IDLE = L()
 PLAN_PREMIER = dict(mode=0, on=1, sat=0.48, hpf=300, lpf=1400, flfo=0,
                     wet=0.05, delay=110, fb=0.05, lfo=0.04)
 PLAN_ARRIERE = dict(mode=0, on=1, sat=0.52, hpf=60, lpf=750, flfo=0,
-                    wet=0.20, delay=260, fb=0.22, lfo=0.025)
+                    wet=0.28, delay=260, fb=0.30, lfo=0.025)
 
 # Nappes : sèches en Cortex (§7) — pas de wet/delay audibles
 AMB_MUSICALE_FX = dict(mode=0, on=1, sat=0, hpf=30, lpf=18000, flfo=0,

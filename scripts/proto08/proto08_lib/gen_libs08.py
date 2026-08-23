@@ -3,6 +3,7 @@
 N'écrit QUE des fichiers *_08. Réutilise le DSP 06 (fx_router_06,
 spatial_router_06, decode_8hp_06, visu_cerveau_06, install_mode_06).
 """
+import math
 import os
 import shutil
 import sys
@@ -12,6 +13,7 @@ _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", ".."))
 sys.path.insert(0, os.path.join(_REPO, "scripts"))
 from shared.pdbuild import P
 from shared.gain_registre import gain_map_from_registre, linear_gain_for_rel, fmt_gain
+from . import layout08 as LAY
 from . import presets08 as PR
 from . import sons_audit08 as audit
 from . import hippo_recipes as HR
@@ -25,6 +27,38 @@ LIBDIR = os.path.join(_REPO, "pd", "lib")
 def _w(p, fname):
     p.write(os.path.join(LIBDIR, fname))
     print(f"OK lib: {fname}")
+
+
+def gen_decode_8hp_08():
+    """Décodage ordre 1 / 2D construit depuis layout08.
+
+    Le 06 portait la matrice en dur pour un octogone régulier. Ici elle est
+    recalculée à partir des azimuts réellement déclarés, donc corriger la
+    position d'un baffle dans `layout08.py` suffit à obtenir un décodage juste.
+    """
+    n = LAY.NHP
+    p = P(900, 380)
+    p.obj("in_w", 40, 40, "inlet~")
+    p.obj("in_x", 40, 70, "inlet~")
+    p.obj("in_y", 40, 100, "inlet~")
+    p.obj("mtx", 200, 140, f"mtx_*~ {n} 3 100")
+    for i in range(n):
+        p.obj(f"o{i}", 20 + i * 105, 300, "outlet~")
+        p.con("mtx", i, f"o{i}", 0)
+    p.obj("lb", 40, 150, "loadbang")
+    p.obj("dl", 40, 180, "delay 200")
+    p.msg("m_mtx", 40, 220, LAY.decode_matrix_msg())
+    p.con("lb", 0, "dl", 0)
+    p.con("dl", 0, "m_mtx", 0)
+    p.con("m_mtx", 0, "mtx", 0)
+    p.con("in_w", 0, "mtx", 1)
+    p.con("in_x", 0, "mtx", 2)
+    p.con("in_y", 0, "mtx", 3)
+    geom = "octogone regulier" if LAY.is_regular() else "geometrie mesuree"
+    p.text(20, 10, f"decode {n}HP ordre 1 / 2D — {geom} — genere depuis layout08;")
+    p.text(20, 26,
+           f"azimuts HP1..{n}: {' '.join(LAY.fmt(a) for a in LAY.azimuths())} deg;")
+    _w(p, "decode_8hp_08.pd")
 
 
 def gen_fsm_memory_08(fname="fsm_memory_08_8hp.pd", fsm_n=None, max_layers=None,
@@ -75,20 +109,24 @@ def gen_fsm_memory_08(fname="fsm_memory_08_8hp.pd", fsm_n=None, max_layers=None,
     p.con("frc_t", 1, "m_stop", 0)
 
     p.obj("lb_t", 620, 100, "t b b")
+    p.obj("delay_boot", 460, 220, "delay 550")
     p.obj("delay_reset", 620, 140, f"delay {PR.RESET_MS}")
     p.obj("drt", 620, 180, "t b b")
     p.obj("spig_rst", 620, 220, "spigot")
     p.con("in_sess", 0, "lb_t", 0)
+    p.con("lb_t", 0, "delay_boot", 0)
     p.con("lb_t", 1, "delay_reset", 0)
     p.con("delay_reset", 0, "drt", 0)
     p.con("drt", 1, "delay_reset", 0)
     p.con("drt", 0, "spig_rst", 0)
     p.con("a_t", 2, "spig_rst", 1)
 
+    # 3 outlets seulement : stp_t vient de f_step (m_st0), pas d'un 4e bang
+    # (un 4e bang incrémentait f_step → goto Hippocampe au lieu de Cortex)
     p.obj("start_t", 460, 260, "t b b b")
     p.msg("m_st0", 560, 300, "0")
     p.msg("m_c11", 620, 300, "1")
-    p.con("lb_t", 0, "start_t", 0)
+    p.con("delay_boot", 0, "start_t", 0)
     p.con("spig_rst", 0, "start_t", 0)
     p.con("start_t", 2, "m_st0", 0)
     p.con("start_t", 1, "m_c11", 0)
@@ -202,7 +240,7 @@ def gen_fsm_memory_08(fname="fsm_memory_08_8hp.pd", fsm_n=None, max_layers=None,
             p.con(f"nd_{li}{s}", 0, f"o_d{li}", 0)
     p.con("goto_t", 0, "o_bply", 0)
 
-    p.text(800, 140, "08 Boucle 15pct cycles libres · piezo via s6_force")
+    p.text(800, 140, "08 boot: session→550ms→start_t→goto Cortex · piezo s6_force")
     _w(p, fname)
 
 
@@ -369,6 +407,67 @@ def gen_amb_route_08():
     _w(p, "amb_route_08.pd")
 
 
+SEED_PROBE = "/tmp/memoires_seed_probe"
+
+
+def gen_seed_source_08():
+    """Graine d'exécution tirée de l'horloge, diffusée sur s6_seed.
+
+    Pd sème ses générateurs à valeur fixe : mesuré au banc, `noise~` rend
+    0.536548 et `random 1000000` rend 743639 à *tous* les lancements. Sans une
+    entropie extérieure, chaque démarrage rejoue donc la même suite de tirages —
+    mêmes fragments sur les mêmes baffles, mêmes gestes aux mêmes instants.
+    C'est ce que Loumana entendait en signalant que HP1 et HP2 sortaient
+    toujours C026 et C061 après cinq démarrages.
+
+    Pd vanilla n'a pas d'horloge, mais `[file stat]` donne la date de
+    modification d'un fichier : on en écrit un au démarrage, on lit sa mtime,
+    et la seconde du jour sert de graine.
+    """
+    p = P(720, 440)
+    p.text(20, 8, "seed_source_08 - une graine par lancement (horloge) -> s6_seed")
+    p.obj("lb", 40, 40, "loadbang")
+    p.obj("t3", 40, 70, "t b b b b")
+    p.con("lb", 0, "t3", 0)
+
+    # Effacer d'abord : vérifié au banc, `open … w` sur un fichier existant ne
+    # rafraîchit pas sa date de modification, et la graine restait figée à
+    # l'heure de la toute première exécution.
+    p.obj("fd", 300, 130, "file delete")
+    p.msg("m_del", 300, 100, f"symbol {SEED_PROBE}")
+    p.con("t3", 3, "m_del", 0)
+    p.con("m_del", 0, "fd", 0)
+
+    # Recréer le fichier pose sa date à maintenant ; le contenu n'importe pas.
+    p.obj("fh", 40, 160, "file handle")
+    p.msg("m_open", 40, 100, f"open {SEED_PROBE} w")
+    p.msg("m_close", 500, 130, "close")
+    p.con("t3", 2, "m_open", 0)
+    p.con("m_open", 0, "fh", 0)
+    p.con("t3", 1, "m_close", 0)
+    p.con("m_close", 0, "fh", 0)
+
+    p.msg("m_path", 40, 200, f"symbol {SEED_PROBE}")
+    p.obj("st", 40, 230, "file stat")
+    p.obj("rt", 40, 260, "route mtime")
+    p.obj("up", 40, 290, "unpack f f f f f f")
+    p.con("t3", 0, "m_path", 0)
+    p.con("m_path", 0, "st", 0)
+    p.con("st", 0, "rt", 0)
+    p.con("rt", 0, "up", 0)
+
+    # 193 est le plus grand multiplicateur qui garde le produit sous 2^24, donc
+    # exact en flottant 32 bits. Deux lancements à une seconde d'écart reçoivent
+    # des graines distantes de 193, assez pour décorréler les tirages : à graine
+    # +1 le premier tirage bouge à peine.
+    p.obj("xs", 40, 330, "expr (($f4*60+$f5)*60+$f6)*193")
+    for i in range(6):
+        p.con("up", i, "xs", i)
+    p.obj("s_seed", 40, 370, "s s6_seed")
+    p.con("xs", 0, "s_seed", 0)
+    _w(p, "seed_source_08.pd")
+
+
 def gen_cortex_ctrl_08():
     """Cortex: 12 voix, balayage LPF underwater L1-L12, FX nappes L15-L16."""
     p = P(920, 580)
@@ -378,7 +477,10 @@ def gen_cortex_ctrl_08():
     p.obj("sel", 40, 70, "sel 0 1")
     p.con("r_et", 0, "sel", 0)
 
-    p.obj("tb", 40, 110, "t b b b")
+    # Sortie 3 en premier : elle sème les tirages de l'échange avant que la
+    # sortie 0 ne les déclenche, sinon le premier rendez-vous du passage
+    # utiliserait encore la graine précédente.
+    p.obj("tb", 40, 110, "t b b b b")
     p.con("sel", 0, "tb", 0)
     p.msg("n12", 40, 150, "12")
     p.obj("s_n", 40, 190, "s s6_cortex_n")
@@ -414,30 +516,210 @@ def gen_cortex_ctrl_08():
     p.con("m_go", 0, "metro_l", 0)
     p.con("m_stop", 0, "metro_l", 0)
 
+    # L'oscillateur ne donne plus directement des hertz mais une position 0–1
+    # dans une plage, pour que la plage elle-même puisse glisser pendant
+    # l'échange avant/arrière : $f2 = quantité d'échange reçue de swap{pr}.
+    lo_av, hi_av = PR.CORTEX_LPF_AVANT
+    lo_ar, hi_ar = PR.CORTEX_LPF_ARRIERE
+    d_lo, d_hi = lo_ar - lo_av, hi_ar - hi_av
+
+    # Vitesse des osc (multiplicateur via MUR_TREMBLE)
+    p.obj("r_speed", 40, 380, "r s6_cx_spec_speed")
+    p.obj("t_speed", 40, 410, "t b f")
+    p.con("r_speed", 0, "t_speed", 0)
+    p.obj("lb_speed", 180, 380, "loadbang")
+    p.msg("m_speed1", 180, 410, "1")
+    p.obj("s_speed_init", 180, 440, "s s6_cx_spec_speed")
+    p.con("lb_speed", 0, "m_speed1", 0)
+    p.con("m_speed1", 0, "s_speed_init", 0)
+
+    # Override spigot (fermé par les gestes spectraux)
+    p.obj("r_spec", 300, 380, "r s6_cx_spec")
+    p.obj("eq0_spec", 300, 410, "== 0")
+    p.con("r_spec", 0, "eq0_spec", 0)
+
     for i in range(12):
         x = 40 + (i % 6) * 140
-        y = 380 + (i // 6) * 130
+        y = 480 + (i // 6) * 180
         hz = 0.063 + i * 0.019
         if i % 2 == 0:
-            # PREMIER_PLAN : 800–2000 Hz
-            amp, base, lo, hi = 600, 1400, 800, 2000
+            lo, hi, sl, sh = lo_av, hi_av, d_lo, d_hi
         else:
-            # ARRIERE_PLAN : 500–1000 Hz
-            amp, base, lo, hi = 250, 750, 500, 1000
-        p.obj(f"os{i}", x, y, f"osc~ {hz:.3f}")
-        p.obj(f"sc{i}", x, y + 28, f"*~ {amp}")
-        p.obj(f"of{i}", x, y + 56, f"+~ {base}")
-        p.obj(f"sn{i}", x, y + 84, "snapshot~")
-        p.obj(f"cl{i}", x, y + 112, f"clip {lo} {hi}")
-        p.obj(f"sl{i}", x, y + 140, f"s s6_l{i + 1}_lpf")
+            lo, hi, sl, sh = lo_ar, hi_ar, -d_lo, -d_hi
+        
+        p.obj(f"hz_val{i}", x, y, f"f {hz:.3f}")
+        p.obj(f"mul_spd{i}", x, y + 25, "* 1")
+        p.obj(f"os{i}", x, y + 50, "osc~")
+        
+        # Init de la freq et mise à jour
+        p.con("m_go", 0, f"hz_val{i}", 0)
+        p.obj(f"lb_hz{i}", x + 60, y, "loadbang")
+        p.con(f"lb_hz{i}", 0, f"hz_val{i}", 0)
+        p.con("t_speed", 1, f"mul_spd{i}", 1)
+        p.con("t_speed", 0, f"hz_val{i}", 0)
+        
+        p.con(f"hz_val{i}", 0, f"mul_spd{i}", 0)
+        p.con(f"mul_spd{i}", 0, f"os{i}", 0)
+        
+        p.obj(f"sc{i}", x, y + 75, "*~ 0.5")
+        p.obj(f"of{i}", x, y + 100, "+~ 0.5")
+        p.obj(f"sn{i}", x, y + 125, "snapshot~")
+        e_lo = f"({lo}{sl:+g}*$f2)"
+        e_hi = f"({hi}{sh:+g}*$f2)"
+        p.obj(f"xp{i}", x, y + 150, f"expr {e_lo} + $f1*({e_hi}-{e_lo})")
+        
+        # Override bus
+        p.obj(f"spig{i}", x, y + 175, "spigot 1")
+        p.obj(f"pk{i}", x, y + 200, "pack 0 200")
+        p.obj(f"ln{i}", x, y + 225, "line")
+        p.obj(f"r_sv{i}", x + 70, y + 175, f"r s6_l{i + 1}_spec_val")
+        p.obj(f"sl{i}", x, y + 250, f"s s6_l{i + 1}_lpf")
+        
         p.con(f"os{i}", 0, f"sc{i}", 0)
         p.con(f"sc{i}", 0, f"of{i}", 0)
         p.con(f"of{i}", 0, f"sn{i}", 0)
         p.con("metro_l", 0, f"sn{i}", 0)
-        p.con(f"sn{i}", 0, f"cl{i}", 0)
-        p.con(f"cl{i}", 0, f"sl{i}", 0)
+        p.con(f"sn{i}", 0, f"xp{i}", 0)
+        
+        p.con(f"xp{i}", 0, f"spig{i}", 0)
+        p.con("eq0_spec", 0, f"spig{i}", 1)
+        p.con(f"spig{i}", 0, f"pk{i}", 0)
+        p.con(f"pk{i}", 0, f"ln{i}", 0)
+        p.con(f"r_sv{i}", 0, f"ln{i}", 0)
+        p.con(f"ln{i}", 0, f"sl{i}", 0)
 
+    _gen_cortex_swap(p)
     _w(p, "cortex_ctrl_08.pd")
+
+
+def _gen_cortex_swap(p):
+    """Échange avant / arrière : N fois par passage en Cortex, sur une paire tirée.
+
+    La voix d'arrière-plan passe devant et celle de devant recule. Trois choses
+    bougent ensemble sur `CORTEX_SWAP_MS` : les gains (dans cortex_pair_08, qui
+    reçoit la même rampe) et les deux plages de balayage du LPF, qui
+    s'échangent. La rampe monte, tient, puis redescend — d'où le côté évolutif
+    plutôt qu'un basculement sec.
+    """
+    n_ev = PR.CORTEX_SWAP_COUNT
+    rise = PR.CORTEX_SWAP_RISE
+    hold = PR.CORTEX_SWAP_MS - 2 * rise
+    y0 = 700
+    p.text(20, y0 - 24,
+           f"echange avant/arriere · {n_ev} fois par passage · "
+           f"{PR.CORTEX_SWAP_MS / 1000:g}s dont {rise / 1000:g}s de montee")
+
+    # Une rampe par paire, partagée avec cortex_pair_08 par s6_cx_swap{pr}.
+    for pr in range(6):
+        x = 40 + pr * 150
+        p.msg(f"up{pr}", x, y0, f"1 {rise}")
+        p.msg(f"dn{pr}", x + 70, y0, f"0 {rise}")
+        p.obj(f"ssw{pr}", x, y0 + 24, f"s s6_cx_swap{pr}")
+        p.obj(f"rsw{pr}", x, y0 + 48, f"r s6_cx_swap{pr}")
+        p.obj(f"lsw{pr}", x, y0 + 72, "line")
+        p.con(f"up{pr}", 0, f"ssw{pr}", 0)
+        p.con(f"dn{pr}", 0, f"ssw{pr}", 0)
+        p.con(f"rsw{pr}", 0, f"lsw{pr}", 0)
+        p.con(f"lsw{pr}", 0, f"xp{2 * pr}", 1)
+        p.con(f"lsw{pr}", 0, f"xp{2 * pr + 1}", 1)
+
+    p.obj("selu", 40, y0 + 130, "sel 0 1 2 3 4 5")
+    p.obj("seld", 40, y0 + 154, "sel 0 1 2 3 4 5")
+    for pr in range(6):
+        x = 40 + pr * 150
+        # Une paire déjà en voyage spatial garde son encodeur : on saute le
+        # rendez-vous plutôt que de faire écrire l'azimut par deux gestes.
+        p.obj(f"free{pr}", x, y0 + 178, "spigot 1")
+        p.obj(f"rtr{pr}", x + 80, y0 + 178, f"r s6_cx_trav{pr}")
+        p.obj(f"ntr{pr}", x + 80, y0 + 200, "== 0")
+        p.con("selu", pr, f"free{pr}", 0)
+        p.con(f"rtr{pr}", 0, f"ntr{pr}", 0)
+        p.con(f"ntr{pr}", 0, f"free{pr}", 1)
+        p.con(f"free{pr}", 0, f"up{pr}", 0)
+        p.con("seld", pr, f"dn{pr}", 0)
+
+        # Occupation annoncée au voyage, levée à la fin de la descente.
+        p.msg(f"sb1{pr}", x, y0 + 222, "1")
+        p.msg(f"sb0{pr}", x + 60, y0 + 268, "0")
+        p.obj(f"sbd{pr}", x + 60, y0 + 244, f"delay {rise}")
+        p.obj(f"sbs{pr}", x, y0 + 290, f"s s6_cx_swp{pr}")
+        p.con(f"free{pr}", 0, f"sb1{pr}", 0)
+        p.con(f"sb1{pr}", 0, f"sbs{pr}", 0)
+        p.con("seld", pr, f"sbd{pr}", 0)
+        p.con(f"sbd{pr}", 0, f"sb0{pr}", 0)
+        p.con(f"sb0{pr}", 0, f"sbs{pr}", 0)
+
+    seeded = []
+    for k in range(n_ev):
+        x = 40 + k * 210
+        y = y0 + 190
+        base = PR.CORTEX_SWAP_FIRST + k * PR.CORTEX_SWAP_EVERY
+        p.obj(f"re{k}", x, y, f"random {PR.CORTEX_SWAP_JITTER + 1}")
+        p.obj(f"ae{k}", x, y + 22, f"+ {base}")
+        p.obj(f"te{k}", x, y + 44, "t b f")
+        p.obj(f"de{k}", x, y + 66, f"delay {base}")
+        p.con("tb", 0, f"re{k}", 0)
+        p.con(f"re{k}", 0, f"ae{k}", 0)
+        p.con(f"ae{k}", 0, f"te{k}", 0)
+        p.con(f"te{k}", 1, f"de{k}", 1)
+        p.con(f"te{k}", 0, f"de{k}", 0)
+
+        # b: lance la descente différée · b: monte · b: tire la paire
+        p.obj(f"tv{k}", x, y + 88, "t b b b")
+        p.obj(f"rp{k}", x + 120, y + 88, "random 6")
+        p.obj(f"fu{k}", x, y + 132, "f")
+        p.obj(f"fd{k}", x + 60, y + 132, "f")
+        p.obj(f"du{k}", x + 60, y + 110, f"delay {rise + hold}")
+        p.con(f"de{k}", 0, f"tv{k}", 0)
+        p.con(f"tv{k}", 2, f"rp{k}", 0)
+        p.con(f"rp{k}", 0, f"fu{k}", 1)
+        p.con(f"rp{k}", 0, f"fd{k}", 1)
+        p.con(f"tv{k}", 1, f"fu{k}", 0)
+        p.con(f"fu{k}", 0, "selu", 0)
+        p.con(f"tv{k}", 0, f"du{k}", 0)
+        p.con(f"du{k}", 0, f"fd{k}", 0)
+        p.con(f"fd{k}", 0, "seld", 0)
+        seeded += [f"re{k}", f"rp{k}"]
+
+    # Sortie du Cortex : couper les rendez-vous en cours et remettre les plages
+    # de balayage à leur place, sinon une paire resterait échangée.
+    p.obj("swoff", 40, y0 + 250, "t b b")
+    p.con("sel", 1, "swoff", 0)
+    p.con("sel", 2, "swoff", 0)
+    p.msg("swstop", 40, y0 + 274, "stop")
+    # En rampe courte, pas en saut : un gain qui retombe d'un coup claque.
+    p.msg("swzero", 120, y0 + 274, "0 200")
+    p.con("swoff", 1, "swstop", 0)
+    p.con("swoff", 0, "swzero", 0)
+    for k in range(n_ev):
+        p.con("swstop", 0, f"de{k}", 0)
+        p.con("swstop", 0, f"du{k}", 0)
+    for pr in range(6):
+        p.con("swzero", 0, f"ssw{pr}", 0)
+
+    # Graines : s6_seed vient de l'horloge (voir seed_source_08), $0 écarte les
+    # instances entre elles. noise~ ne conviendrait pas — Pd le sème à valeur
+    # fixe, tous les lancements sortiraient les mêmes paires aux mêmes instants.
+    p.obj("swrs", 700, y0 + 250, "r s6_seed")
+    p.obj("swsn", 700, y0 + 274, "f 0")
+    p.obj("swlb", 820, y0 + 250, "loadbang")
+    p.obj("swid", 820, y0 + 274, "f \\$0")
+    p.obj("swad", 700, y0 + 346, "+")
+    p.con("swrs", 0, "swsn", 1)
+    p.con("swlb", 0, "swid", 0)
+    p.con("tb", 3, "swsn", 0)
+    p.con("swsn", 0, "swad", 0)
+    p.con("swid", 0, "swad", 1)
+    for j, target in enumerate(seeded):
+        sx = 40 + (j % 8) * 140
+        sy = y0 + 390 + (j // 8) * 76
+        p.obj(f"sso{j}", sx, sy, f"+ {j * 89 + 7}")
+        p.obj(f"ssi{j}", sx, sy + 22, "i")
+        p.msg(f"ssd{j}", sx, sy + 44, "seed \\$1")
+        p.con("swad", 0, f"sso{j}", 0)
+        p.con(f"sso{j}", 0, f"ssi{j}", 0)
+        p.con(f"ssi{j}", 0, f"ssd{j}", 0)
+        p.con(f"ssd{j}", 0, target, 0)
 
 
 def gen_presence_08():
@@ -807,18 +1089,14 @@ def gen_player_state_08():
     if os.path.isdir(pl_dir):
         shutil.rmtree(pl_dir)
     os.makedirs(pl_dir)
-    for s, files in slot_specs:
-        with open(os.path.join(pl_dir, f"slot_{s}.txt"), "w", encoding="utf-8") as fh:
-            for rel in files:
-                g = fmt_gain(linear_gain_for_rel(rel, gain_map))
-                fh.write(f"{rel} {os.path.basename(rel)} {g};\n")
-
+    # Lues par [text read -c] : le saut de ligne sépare les lignes. Un ';' final
+    # en plus du '\n' créerait une ligne vide sur deux (index impairs muets).
     for s, files in slot_specs:
         with open(os.path.join(pl_dir, f"slot_{s}.txt"), "w", encoding="utf-8") as fh:
             for rel in files:
                 g = fmt_gain(linear_gain_for_rel(rel, gain_map))
                 intr = _interruptible_for(rel, hippo_int, s)
-                fh.write(f"{rel} {os.path.basename(rel)} {g} {intr};\n")
+                fh.write(f"{rel} {os.path.basename(rel)} {g} {intr}\n")
 
     sel_args = " ".join(str(s) for s, _ in slot_specs)
     nslots = len(slot_specs)
@@ -900,10 +1178,13 @@ def gen_player_state_08():
     p.con("spig_clr", 0, "m_clear", 0)
     p.con("m_clear", 0, "out_name", 0)
 
-    # graine unique par instance + bruit audio: pas la meme sequence a chaque lancement
-    p.obj("nz", 40, 200, "noise~")
-    p.obj("snap", 40, 230, "snapshot~")
-    p.con("nz", 0, "snap", 0)
+    # Graine : s6_seed (horloge) pour écarter les lancements, $0 pour écarter
+    # les instances. noise~ ne servait à rien ici — Pd le sème à valeur fixe,
+    # donc les mêmes fragments sortaient sur les mêmes couches à chaque
+    # démarrage.
+    p.obj("nz", 40, 200, "r s6_seed")
+    p.obj("snap", 40, 230, "f 0")
+    p.con("nz", 0, "snap", 1)
     p.obj("lb_id", 40, 260, "loadbang")
     p.obj("fid", 40, 290, "f \\$0")
     p.con("lb_id", 0, "fid", 0)
@@ -943,8 +1224,6 @@ def gen_player_state_08():
         p.con(f"tn{s}", 0, "out_name", 0)
         if n >= 2:
             p.obj(f"ts{s}", 40, y, "t b b")
-            p.obj(f"ml{s}", 100, y, "* 22000")
-            p.obj(f"ab{s}", 160, y, "abs")
             p.obj(f"adid{s}", 220, y, "+")
             p.obj(f"adi{s}", 280, y, f"+ {s * 97 + 13}")
             p.obj(f"ii{s}", 340, y, "i")
@@ -956,9 +1235,7 @@ def gen_player_state_08():
             p.obj(f"fp{s}", 340, y + 16, "f 0")
             p.con("sel_slot", oi, f"ts{s}", 0)
             p.con(f"ts{s}", 0, "snap", 0)
-            p.con("snap", 0, f"ml{s}", 0)
-            p.con(f"ml{s}", 0, f"ab{s}", 0)
-            p.con(f"ab{s}", 0, f"adid{s}", 0)
+            p.con("snap", 0, f"adid{s}", 0)
             p.con("fid", 0, f"adid{s}", 1)
             p.con(f"adid{s}", 0, f"adi{s}", 0)
             p.con(f"adi{s}", 0, f"ii{s}", 0)
@@ -1024,7 +1301,8 @@ def gen_cortex_amb_behav_08():
         p.con(f"zi{i}", 0, f"lg{i}", 0)
 
     p.obj("r_et", 40, 280, "r s6_etat")
-    p.obj("chg", 40, 308, "change")
+    # -1 : sans ça [change] avale la toute première entrée en Cortex (état 0).
+    p.obj("chg", 40, 308, "change -1")
     p.obj("sel_cx", 40, 336, "sel 0")
     p.obj("cx_t", 120, 336, "t b b b b")
     p.obj("lb0", 120, 280, "loadbang")
@@ -1125,23 +1403,42 @@ def gen_cortex_amb_behav_08():
 
 
 def gen_cortex_pair_08():
-    """6 baffles × 2 voix — gestes EMERGER / RECOUVRIR [Q11]."""
-    p = P(1280, 580)
-    p.text(20, 8, "cortex_pair_08 EMERGER 6-10s · RECOUVRIR 3-6s · décalage aléatoire")
+    """6 baffles × 2 voix — gestes EMERGER / RECOUVRIR [Q11] + voyage phi."""
+    half = PR.CORTEX_TRAVEL_MS // 2
+    xf = PR.CORTEX_TRAVEL_XFADE
+    seeded = []
+    p = P(1760, 1560)
+    p.text(20, 8, "cortex_pair_08 EMERGER 6-10s · RECOUVRIR 3-6s · "
+                  f"voyage phi {PR.CORTEX_TRAVEL_ARC} deg sur {PR.CORTEX_TRAVEL_MS / 1000:g} s "
+                  "· 2 baffles par passage")
 
     for i in range(12):
         p.obj(f"in{i}", 24 + (i % 6) * 200, 28 + (i // 6) * 22, "inlet~")
     for k in range(6):
         p.obj(f"out{k}", 24 + k * 200, 540, "outlet~")
+    # Sorties ambisoniques (W X Y) du voyage — à droite pour rester après out0-5.
+    for c in range(3):
+        p.obj(f"outb{c}", 1240 + c * 90, 540, "outlet~")
 
     p.obj("r_et", 980, 28, "r s6_etat")
-    p.obj("chg", 980, 56, "change")
+    # -1 : sans ça [change] avale la toute première entrée en Cortex (état 0)
+    # et les gestes EMERGER / RECOUVRIR ne démarrent qu'au deuxième passage.
+    p.obj("chg", 980, 56, "change -1")
     p.obj("sel_cx", 980, 84, "sel 0")
-    p.obj("cx_t", 980, 112, "t b b b b b b")
-    p.obj("lb0", 980, 140, "loadbang")
+    # 3 graines · 2 remise à zéro · 1 gestes de paire · 0 choix des voyageurs
+    p.obj("cx_seq", 980, 106, "t b b b b")
+    p.obj("cx_t", 980, 140, "t b b b b b b")
+    p.obj("lb0", 1120, 28, "loadbang")
     p.con("r_et", 0, "chg", 0)
     p.con("chg", 0, "sel_cx", 0)
-    p.con("sel_cx", 0, "cx_t", 0)
+    p.con("sel_cx", 0, "cx_seq", 0)
+    p.con("cx_seq", 1, "cx_t", 0)
+
+    p.obj("out_cx", 1060, 84, "t b")
+    p.obj("rstall", 1060, 112, "t b b b b b b")
+    p.con("sel_cx", 1, "out_cx", 0)
+    p.con("out_cx", 0, "rstall", 0)
+    p.con("cx_seq", 2, "rstall", 0)
 
     for pr in range(6):
         a, b = pr * 2, pr * 2 + 1
@@ -1149,18 +1446,36 @@ def gen_cortex_pair_08():
         y = 80
 
         p.obj(f"gb{pr}", x + 88, y + 96, "line~")
-        p.obj(f"gar{pr}", x + 88, y + 68, "*~ 0.79")
+        p.obj(f"gar{pr}", x + 88, y + 68, "*~")
         p.obj(f"mb{pr}", x + 88, y + 132, "*~")
         p.con(f"in{b}", 0, f"gar{pr}", 0)
         p.con(f"gar{pr}", 0, f"mb{pr}", 0)
         p.con(f"gb{pr}", 0, f"mb{pr}", 1)
 
-        p.obj(f"ma{pr}", x, y + 132, "*~ 1")
+        p.obj(f"ma{pr}", x, y + 132, "*~")
         p.con(f"in{a}", 0, f"ma{pr}", 0)
+
+        # Échange avant / arrière piloté par cortex_ctrl_08 : une seule rampe
+        # 0→1 d'où les deux gains sont déduits, donc ils se croisent exactement.
+        # À 0 on retrouve les plans nominaux, à 1 ils sont inversés.
+        d = PR.CORTEX_SWAP_DELTA
+        p.obj(f"rsw{pr}", x + 150, y + 40, f"r s6_cx_swap{pr}")
+        p.obj(f"swl{pr}", x + 150, y + 62, "line~")
+        p.obj(f"swf{pr}", x + 150, y + 84, f"*~ {-d:g}")
+        p.obj(f"swfa{pr}", x + 150, y + 106, f"+~ {PR.GAIN_PREMIER_PLAN:g}")
+        p.obj(f"swb{pr}", x + 240, y + 84, f"*~ {d:g}")
+        p.obj(f"swba{pr}", x + 240, y + 106, f"+~ {PR.GAIN_ARRIERE_PLAN:g}")
+        p.con(f"rsw{pr}", 0, f"swl{pr}", 0)
+        p.con(f"swl{pr}", 0, f"swf{pr}", 0)
+        p.con(f"swf{pr}", 0, f"swfa{pr}", 0)
+        p.con(f"swfa{pr}", 0, f"ma{pr}", 1)
+        p.con(f"swl{pr}", 0, f"swb{pr}", 0)
+        p.con(f"swb{pr}", 0, f"swba{pr}", 0)
+        p.con(f"swba{pr}", 0, f"gar{pr}", 1)
 
         p.obj(f"sm{pr}", x + 44, y + 168, "+~")
         p.con(f"ma{pr}", 0, f"sm{pr}", 0)
-        p.con(f"mb{pr}", 0, f"sm{pr}", 1)
+        p.con(f"mst{pr}", 0, f"sm{pr}", 1)
 
         hz = 0.045 + pr * 0.012
         p.obj(f"lf{pr}", x, y + 204, f"osc~ {hz:.3f}")
@@ -1200,16 +1515,194 @@ def gen_cortex_pair_08():
         p.con(f"ar{pr}", 0, f"mf{pr}", 0)
 
         p.obj(f"rd{pr}", x + 56, cy + 112, "random 3501")
-        p.obj(f"dt{pr}", x + 140, cy + 112, "t f b")
+        p.obj(f"dt{pr}", x + 140, cy + 112, "t b f")
         p.obj(f"dl{pr}", x + 220, cy + 112, "delay 500")
         p.obj(f"pk{pr}", x + 300, cy + 112, "pack 1 7000")
         p.con(f"tr{pr}", 2, f"rd{pr}", 0)
         p.con(f"rd{pr}", 0, f"dt{pr}", 0)
-        p.con(f"dt{pr}", 0, f"dl{pr}", 1)
-        p.con(f"dt{pr}", 1, f"dl{pr}", 0)
+        p.con(f"dt{pr}", 1, f"dl{pr}", 1)
+        p.con(f"dt{pr}", 0, f"dl{pr}", 0)
         p.con(f"mf{pr}", 0, f"pk{pr}", 1)
         p.con(f"dl{pr}", 0, f"pk{pr}", 0)
         p.con(f"pk{pr}", 0, f"gb{pr}", 0)
+
+        # --- voyage spatial : l'arrière-plan quitte le baffle et y revient
+        # L'angle de départ est celui du baffle dans la salle, pas l'index de
+        # la paire : si un HP est déplacé, le voyage part du bon endroit.
+        base = LAY.fmt(LAY.az_of(pr + 1))
+        far = LAY.fmt(LAY.az_of(pr + 1) + PR.CORTEX_TRAVEL_ARC)
+        ty = 600
+        p.obj(f"tvl{pr}", x, ty, "line~")
+        p.obj(f"tvs{pr}", x + 60, ty, "line~")
+        p.obj(f"mtv{pr}", x, ty + 28, "*~")
+        p.obj(f"mst{pr}", x + 60, ty + 28, "*~")
+        p.con(f"mb{pr}", 0, f"mtv{pr}", 0)
+        p.con(f"tvl{pr}", 0, f"mtv{pr}", 1)
+        p.con(f"mb{pr}", 0, f"mst{pr}", 0)
+        p.con(f"tvs{pr}", 0, f"mst{pr}", 1)
+        p.obj(f"mtb{pr}", x, ty + 56, "*~")
+        p.con(f"mtv{pr}", 0, f"mtb{pr}", 0)
+        p.con(f"la{pr}", 0, f"mtb{pr}", 1)
+        p.obj(f"tgn{pr}", x, ty + 84, f"*~ {PR.CORTEX_TRAVEL_GAIN}")
+        p.con(f"mtb{pr}", 0, f"tgn{pr}", 0)
+        p.obj(f"enc{pr}", x, ty + 112, "encode_2d")
+        p.con(f"tgn{pr}", 0, f"enc{pr}", 1)
+        for c in range(3):
+            p.con(f"enc{pr}", c, f"outb{c}", 0)
+        p.obj(f"phl{pr}", x + 120, ty + 84, "line")
+        p.con(f"phl{pr}", 0, f"enc{pr}", 0)
+
+        gy = ty + 160
+        p.obj(f"rdt{pr}", x, gy, f"random {PR.CORTEX_TRAVEL_DELAY_RAND + 1}")
+        p.obj(f"adt{pr}", x, gy + 24, f"+ {PR.CORTEX_TRAVEL_DELAY_MIN}")
+        p.obj(f"tdt{pr}", x, gy + 48, "t b f")
+        p.obj(f"dgo{pr}", x, gy + 72, f"delay {PR.CORTEX_TRAVEL_DELAY_MIN}")
+        p.con(f"rdt{pr}", 0, f"adt{pr}", 0)
+        p.con(f"adt{pr}", 0, f"tdt{pr}", 0)
+        p.con(f"tdt{pr}", 1, f"dgo{pr}", 1)
+        p.con(f"tdt{pr}", 0, f"dgo{pr}", 0)
+
+        # Le voyage cède le pas si un échange occupe déjà l'encodeur de la paire.
+        p.obj(f"tfree{pr}", x, gy + 84, "spigot 1")
+        p.obj(f"rswp{pr}", x + 80, gy + 60, f"r s6_cx_swp{pr}")
+        p.obj(f"nswp{pr}", x + 80, gy + 84, "== 0")
+        p.con(f"dgo{pr}", 0, f"tfree{pr}", 0)
+        p.con(f"rswp{pr}", 0, f"nswp{pr}", 0)
+        p.con(f"nswp{pr}", 0, f"tfree{pr}", 1)
+
+        # Sortie 3 en premier : annonce l'occupation avant que le geste parte.
+        p.obj(f"tgo{pr}", x, gy + 96, "t b b b b")
+        p.con(f"tfree{pr}", 0, f"tgo{pr}", 0)
+        p.obj(f"strv{pr}", x + 250, gy + 120, f"s s6_cx_trav{pr}")
+        p.msg(f"trv1{pr}", x + 250, gy + 96, "1")
+        p.msg(f"trv0{pr}", x + 310, gy + 96, "0")
+        p.con(f"tgo{pr}", 3, f"trv1{pr}", 0)
+        p.con(f"trv1{pr}", 0, f"strv{pr}", 0)
+        p.con(f"trv0{pr}", 0, f"strv{pr}", 0)
+        p.msg(f"tin{pr}", x + 70, gy + 120, f"1 {xf}")
+        p.msg(f"sou{pr}", x + 130, gy + 120, f"0 {xf}")
+        p.con(f"tgo{pr}", 2, f"tin{pr}", 0)
+        p.con(f"tgo{pr}", 2, f"sou{pr}", 0)
+        p.con(f"tin{pr}", 0, f"tvl{pr}", 0)
+        p.con(f"sou{pr}", 0, f"tvs{pr}", 0)
+        p.msg(f"pfar{pr}", x + 70, gy + 144, f"{far} {half}")
+        p.con(f"tgo{pr}", 1, f"pfar{pr}", 0)
+        p.con(f"pfar{pr}", 0, f"phl{pr}", 0)
+        p.obj(f"dhf{pr}", x, gy + 144, f"delay {half}")
+        p.msg(f"pnr{pr}", x, gy + 168, f"{base} {half}")
+        p.con(f"tgo{pr}", 0, f"dhf{pr}", 0)
+        p.con(f"dhf{pr}", 0, f"pnr{pr}", 0)
+        p.con(f"pnr{pr}", 0, f"phl{pr}", 0)
+        p.obj(f"dnd{pr}", x + 130, gy + 144, f"delay {PR.CORTEX_TRAVEL_MS - xf}")
+        p.msg(f"tout{pr}", x + 130, gy + 168, f"0 {xf}")
+        p.msg(f"sin{pr}", x + 190, gy + 168, f"1 {xf}")
+        p.con(f"tgo{pr}", 0, f"dnd{pr}", 0)
+        p.con(f"dnd{pr}", 0, f"tout{pr}", 0)
+        p.con(f"dnd{pr}", 0, f"sin{pr}", 0)
+        p.con(f"tout{pr}", 0, f"tvl{pr}", 0)
+        p.con(f"sin{pr}", 0, f"tvs{pr}", 0)
+        p.con(f"dnd{pr}", 0, f"trv0{pr}", 0)
+
+        # Volet spatial de l'échange. La voix d'arrière-plan qui remonte devant
+        # part aussi de côté : une part passe par l'encodeur et l'azimut se
+        # décale, puis tout revient. Le message « 0 » de fin d'échange sert de
+        # signal de retour, inutile de recompter le temps ici.
+        sw_far = LAY.fmt(LAY.az_of(pr + 1) + PR.CORTEX_SWAP_ARC)
+        sw_rise = PR.CORTEX_SWAP_RISE
+        sw_out = PR.CORTEX_SWAP_MS - sw_rise
+        p.obj(f"swu{pr}", x + 250, gy + 160, "unpack f f")
+        p.obj(f"swsel{pr}", x + 250, gy + 184, "sel 1 0")
+        p.con(f"rsw{pr}", 0, f"swu{pr}", 0)
+        p.con(f"swu{pr}", 0, f"swsel{pr}", 0)
+        p.msg(f"swon{pr}", x + 250, gy + 208, f"{PR.CORTEX_SWAP_ENC:g} {sw_rise}")
+        p.msg(f"swsd{pr}", x + 320, gy + 208, f"{1 - PR.CORTEX_SWAP_ENC:g} {sw_rise}")
+        p.msg(f"swph{pr}", x + 390, gy + 208, f"{sw_far} {sw_out}")
+        p.con(f"swsel{pr}", 0, f"swon{pr}", 0)
+        p.con(f"swsel{pr}", 0, f"swsd{pr}", 0)
+        p.con(f"swsel{pr}", 0, f"swph{pr}", 0)
+        p.con(f"swon{pr}", 0, f"tvl{pr}", 0)
+        p.con(f"swsd{pr}", 0, f"tvs{pr}", 0)
+        p.con(f"swph{pr}", 0, f"phl{pr}", 0)
+        p.msg(f"swoff{pr}", x + 250, gy + 232, f"0 {sw_rise}")
+        p.msg(f"swsu{pr}", x + 320, gy + 232, f"1 {sw_rise}")
+        p.msg(f"swpb{pr}", x + 390, gy + 232, f"{base} {sw_rise}")
+        p.con(f"swsel{pr}", 1, f"swoff{pr}", 0)
+        p.con(f"swsel{pr}", 1, f"swsu{pr}", 0)
+        p.con(f"swsel{pr}", 1, f"swpb{pr}", 0)
+        p.con(f"swoff{pr}", 0, f"tvl{pr}", 0)
+        p.con(f"swsu{pr}", 0, f"tvs{pr}", 0)
+        p.con(f"swpb{pr}", 0, f"phl{pr}", 0)
+
+        p.obj(f"rs{pr}", x, gy + 200, "t b b b b")
+        p.msg(f"rsp{pr}", x, gy + 224, "stop")
+        p.msg(f"rz{pr}", x + 70, gy + 224, "0 5")
+        p.msg(f"ro{pr}", x + 130, gy + 224, "1 5")
+        p.msg(f"rp{pr}", x + 190, gy + 224, str(base))
+        p.con("rstall", pr, f"rs{pr}", 0)
+        p.con("lb0", 0, f"rs{pr}", 0)
+        p.con(f"rs{pr}", 3, f"rsp{pr}", 0)
+        p.con(f"rsp{pr}", 0, f"dgo{pr}", 0)
+        p.con(f"rsp{pr}", 0, f"dhf{pr}", 0)
+        p.con(f"rsp{pr}", 0, f"dnd{pr}", 0)
+        p.con(f"rs{pr}", 2, f"rz{pr}", 0)
+        p.con(f"rz{pr}", 0, f"tvl{pr}", 0)
+        p.con(f"rs{pr}", 1, f"ro{pr}", 0)
+        p.con(f"ro{pr}", 0, f"tvs{pr}", 0)
+        p.con(f"rs{pr}", 0, f"rp{pr}", 0)
+        p.con(f"rp{pr}", 0, f"phl{pr}", 0)
+
+        seeded += [f"rg{pr}", f"re{pr}", f"rr{pr}", f"rd{pr}", f"rdt{pr}"]
+
+    # Tirage des 2 baffles voyageurs : b décalé si b >= a, pour éviter le doublon.
+    p.obj("tsel", 1200, 140, "t b b")
+    p.obj("ra", 1200, 168, "random 6")
+    p.obj("ta", 1200, 196, "t f f")
+    p.obj("rb", 1360, 168, "random 5")
+    p.obj("tb2", 1360, 196, "t f f")
+    p.obj("gecmp", 1360, 224, ">=")
+    p.obj("padd", 1360, 252, "+")
+    p.obj("sela", 1200, 280, "sel 0 1 2 3 4 5")
+    p.obj("selb", 1360, 280, "sel 0 1 2 3 4 5")
+    p.con("cx_seq", 0, "tsel", 0)
+    p.con("tsel", 1, "ra", 0)
+    p.con("tsel", 0, "rb", 0)
+    p.con("ra", 0, "ta", 0)
+    p.con("ta", 1, "gecmp", 1)
+    p.con("ta", 0, "sela", 0)
+    p.con("rb", 0, "tb2", 0)
+    p.con("tb2", 1, "gecmp", 0)
+    p.con("gecmp", 0, "padd", 1)
+    p.con("tb2", 0, "padd", 0)
+    p.con("padd", 0, "selb", 0)
+    for pr in range(6):
+        p.con("sela", pr, f"rdt{pr}", 0)
+        p.con("selb", pr, f"rdt{pr}", 0)
+    seeded += ["ra", "rb"]
+
+    # Graines : s6_seed (horloge, voir seed_source_08) écarte les lancements,
+    # $0 écarte les instances. C'était noise~ jusqu'au 22 août, mais Pd le sème
+    # à valeur fixe : les gestes retombaient aux mêmes instants à chaque
+    # démarrage.
+    p.obj("nz", 1500, 28, "r s6_seed")
+    p.obj("snp", 1500, 56, "f 0")
+    p.obj("lbid", 1620, 28, "loadbang")
+    p.obj("fid", 1620, 56, "f \\$0")
+    p.obj("sadd", 1500, 140, "+")
+    p.con("nz", 0, "snp", 1)
+    p.con("lbid", 0, "fid", 0)
+    p.con("cx_seq", 3, "snp", 0)
+    p.con("snp", 0, "sadd", 0)
+    p.con("fid", 0, "sadd", 1)
+    for k, target in enumerate(seeded):
+        sx = 24 + (k % 12) * 140
+        sy = 1300 + (k // 12) * 76
+        p.obj(f"so{k}", sx, sy, f"+ {k * 97 + 13}")
+        p.obj(f"si{k}", sx, sy + 22, "i")
+        p.msg(f"sd{k}", sx, sy + 44, "seed \\$1")
+        p.con("sadd", 0, f"so{k}", 0)
+        p.con(f"so{k}", 0, f"si{k}", 0)
+        p.con(f"si{k}", 0, f"sd{k}", 0)
+        p.con(f"sd{k}", 0, target, 0)
 
     _w(p, "cortex_pair_08.pd")
 
@@ -1225,11 +1718,14 @@ def ensure():
     stale = os.path.join(LIBDIR, "recon_pulse_08.pd")
     if os.path.isfile(stale):
         os.remove(stale)
+    gen_decode_8hp_08()
+    gen_seed_source_08()
     gen_fsm_memory_08()
     gen_fsm_presets_08()
     gen_hippo_motion_08()
     gen_amb_route_08()
     gen_cortex_ctrl_08()
+    gen_cortex_motion_08()
     gen_presence_08()
     gen_recon_formes_08()
     gen_hippo_assoc_08()
@@ -1239,3 +1735,271 @@ def ensure():
     gen_cortex_amb_08()
     gen_cortex_amb_behav_08()
     gen_cortex_pair_08()
+
+
+def gen_cortex_motion_08():
+    """Gestes spectraux événementiels pour Cortex (Proto 08)."""
+    p = P(3000, 2000)
+    p.text(20, 10, "cortex_motion_08 — gestes spectraux globaux")
+    
+    p.obj("r_et", 40, 40, "r s6_etat")
+    p.obj("chg_et", 40, 70, "change -1")
+    p.obj("sel_c", 40, 100, "sel 0")
+    p.con("r_et", 0, "chg_et", 0)
+    p.con("chg_et", 0, "sel_c", 0)
+    
+    p.obj("t_start", 40, 130, "t b b b")
+    p.con("sel_c", 0, "t_start", 0)
+    
+    p.obj("rnd_p", 40, 160, "random 100")
+    p.obj("th_p", 40, 190, f"< {int(PR.CORTEX_SPECTRAL_PROBA * 100)}")
+    p.obj("sel_p", 40, 220, "sel 1")
+    p.con("t_start", 0, "rnd_p", 0)
+    p.con("rnd_p", 0, "th_p", 0)
+    p.con("th_p", 0, "sel_p", 0)
+    
+    p.obj("rnd_d", 40, 250, f"random {PR.CORTEX_SPECTRAL_T0_RAND}")
+    p.obj("add_d", 40, 280, f"+ {PR.CORTEX_SPECTRAL_T0_MIN}")
+    p.obj("del_go", 40, 310, "delay")
+    p.con("sel_p", 0, "rnd_d", 0)
+    p.con("rnd_d", 0, "add_d", 0)
+    p.con("add_d", 0, "del_go", 1)
+    p.con("sel_p", 0, "del_go", 0)
+    
+    p.obj("r_dbg", 200, 280, "r s6_spec_recipe")
+    p.obj("t_dbg", 200, 310, "t s b")
+    p.con("r_dbg", 0, "t_dbg", 0)
+    
+    p.obj("sel_not_c", 120, 100, "sel 1 2 3")
+    p.msg("m_stop", 120, 130, "stop")
+    p.con("chg_et", 0, "sel_not_c", 0)
+    p.con("sel_not_c", 0, "m_stop", 0)
+    p.con("sel_not_c", 1, "m_stop", 0)
+    p.con("sel_not_c", 2, "m_stop", 0)
+    p.con("m_stop", 0, "del_go", 0)
+    
+    p.obj("swp_chk", 40, 340, "t b")
+    p.con("del_go", 0, "swp_chk", 0)
+    p.con("t_dbg", 1, "swp_chk", 0)
+    
+    p.obj("swp_sum", 40, 370, "expr $f1+$f2+$f3+$f4+$f5+$f6")
+    for i in range(6):
+        p.obj(f"r_swp{i}", 100+i*80, 340, f"r s6_cx_swp{i}")
+        p.con(f"r_swp{i}", 0, "swp_sum", i)
+    p.obj("swp_eq0", 40, 400, "== 0")
+    p.obj("spig_swp", 40, 430, "spigot")
+    p.con("swp_sum", 0, "swp_eq0", 0)
+    p.con("swp_eq0", 0, "spig_swp", 1)
+    p.con("swp_chk", 0, "spig_swp", 0)
+    
+    p.obj("r_seed", 240, 100, "r s6_seed")
+    p.obj("f_seed", 240, 130, "f 0")
+    p.obj("add_seed", 240, 160, "+ \\$0")
+    p.con("r_seed", 0, "f_seed", 1)
+    p.con("t_start", 2, "f_seed", 0)
+    p.con("f_seed", 0, "add_seed", 0)
+    
+    for i, target in enumerate(["rnd_d", "rnd_r", "rnd_hp_rip", "rnd_hp_dom", "rnd_hp_clu"]):
+        p.msg(f"sd_{i}", 240 + i*70, 190, "seed \\$1")
+        p.con("add_seed", 0, f"sd_{i}", 0)
+        p.con(f"sd_{i}", 0, target, 0)
+        
+    p.obj("rnd_r", 40, 460, f"random {len(PR.CORTEX_SPECTRAL_RECIPES)}")
+    p.obj("sel_r", 40, 520, "sel " + " ".join(str(i) for i in range(len(PR.CORTEX_SPECTRAL_RECIPES))))
+    p.con("spig_swp", 0, "rnd_r", 0)
+    p.con("rnd_r", 0, "sel_r", 0)
+    
+    p.obj("route_dbg", 200, 490, "route " + " ".join(PR.CORTEX_SPECTRAL_RECIPES))
+    p.con("t_dbg", 0, "route_dbg", 0)
+    for i in range(len(PR.CORTEX_SPECTRAL_RECIPES)):
+        p.obj(f"t_dbgr_{i}", 200+i*30, 520, "t b")
+        p.con("route_dbg", i, f"t_dbgr_{i}", 0)
+        
+    def _env(p, name, trigger, trigger_out, layers, v_peak, t_peak, v_end, t_fall, x, y, delay_start=0):
+        p.obj(f"tb_{name}", x, y+30, "t b b")
+        if delay_start > 0:
+            p.obj(f"d_{name}", x, y, f"delay {delay_start}")
+            p.con(trigger, trigger_out, f"d_{name}", 0)
+            p.con(f"d_{name}", 0, f"tb_{name}", 0)
+        else:
+            p.con(trigger, trigger_out, f"tb_{name}", 0)
+            
+        p.msg(f"m1_{name}", x, y+60, f"{v_peak} {t_peak}")
+        p.obj(f"d2_{name}", x+100, y+60, f"delay {t_peak}")
+        p.msg(f"m2_{name}", x+100, y+90, f"{v_end} {t_fall}")
+        p.con(f"tb_{name}", 0, f"m1_{name}", 0)
+        p.con(f"tb_{name}", 1, f"d2_{name}", 0)
+        p.con(f"d2_{name}", 0, f"m2_{name}", 0)
+        for idx_l, L in enumerate(layers):
+            p.obj(f"s_{name}_{L}_{idx_l}", x+idx_l*110, y+120, f"s s6_l{L}_spec_val")
+            p.con(f"m1_{name}", 0, f"s_{name}_{L}_{idx_l}", 0)
+            p.con(f"m2_{name}", 0, f"s_{name}_{L}_{idx_l}", 0)
+            
+    # MUR_TREMBLE
+    x_mur, y_mur = 40, 600
+    p.obj("t_mur", x_mur, y_mur, "t b b")
+    p.con("sel_r", 0, "t_mur", 0)
+    p.con("t_dbgr_0", 0, "t_mur", 0)
+    p.msg("m_mur_start", x_mur, y_mur+30, f"{PR.CORTEX_SPECTRAL_MUR_FACTOR}")
+    p.obj("s_speed0", x_mur, y_mur+60, "s s6_cx_spec_speed")
+    p.obj("d_mur", x_mur+80, y_mur+30, f"delay {PR.CORTEX_SPECTRAL_MUR_MS}")
+    p.msg("m_mur_end", x_mur+80, y_mur+60, "1")
+    p.obj("s_speed1", x_mur+80, y_mur+90, "s s6_cx_spec_speed")
+    p.con("t_mur", 0, "m_mur_start", 0)
+    p.con("t_mur", 1, "d_mur", 0)
+    p.con("m_mur_start", 0, "s_speed0", 0)
+    p.con("d_mur", 0, "m_mur_end", 0)
+    p.con("m_mur_end", 0, "s_speed1", 0)
+    
+    def _spec_block(name, trigger, duration, x, y):
+        p.msg(f"m1_{name}", x, y, "1")
+        p.obj(f"s1_{name}", x, y+30, "s s6_cx_spec")
+        p.obj(f"d_{name}", x+60, y, f"delay {duration}")
+        p.msg(f"m0_{name}", x+60, y+30, "0")
+        p.obj(f"s0_{name}", x+60, y+60, "s s6_cx_spec")
+        p.con(trigger, 0, f"m1_{name}", 0)
+        p.con(f"m1_{name}", 0, f"s1_{name}", 0)
+        p.con(trigger, 1, f"d_{name}", 0)
+        p.con(f"d_{name}", 0, f"m0_{name}", 0)
+        p.con(f"m0_{name}", 0, f"s0_{name}", 0)
+
+    # RIPPLE
+    x_rip, y_rip = 250, 600
+    p.obj("t_rip", x_rip, y_rip, "t b b b")
+    p.con("sel_r", 1, "t_rip", 0)
+    p.con("t_dbgr_1", 0, "t_rip", 0)
+    p.obj("rnd_hp_rip", x_rip+80, y_rip+30, "random 6")
+    p.obj("add_hp_rip", x_rip+80, y_rip+60, "+ 1")
+    p.con("t_rip", 2, "rnd_hp_rip", 0)
+    p.con("rnd_hp_rip", 0, "add_hp_rip", 0)
+    _spec_block("rip", "t_rip", PR.CORTEX_SPECTRAL_RIPPLE_MS, x_rip+160, y_rip)
+    
+    p.obj("sel_rip_hp", x_rip+80, y_rip+90, "sel 1 2 3 4 5 6")
+    p.con("add_hp_rip", 0, "sel_rip_hp", 0)
+    
+    t_peak_rip = PR.CORTEX_SPECTRAL_RIPPLE_MS // 2
+    for hp in range(1, 7):
+        n1, n2 = LAY.neighbours(hp)
+        l_src = PR.layers_for_hp(hp)
+        l_nei = PR.layers_for_hp(n1) + PR.layers_for_hp(n2)
+        
+        y_hp = y_rip + 150 + (hp-1)*200
+        p.obj(f"tb_rip_{hp}", x_rip, y_hp, "t b b")
+        p.con("sel_rip_hp", hp-1, f"tb_rip_{hp}", 0)
+        _env(p, f"r_{hp}_s", f"tb_rip_{hp}", 0, l_src, 1600, t_peak_rip, 800, t_peak_rip, x_rip, y_hp+30, 0)
+        v_nei = 800 + 800 * PR.CORTEX_SPECTRAL_RIPPLE_NEIGH_AMP
+        t_nei = t_peak_rip - PR.CORTEX_SPECTRAL_RIPPLE_NEIGH_DELAY
+        if t_nei < 0: t_nei = 0
+        _env(p, f"r_{hp}_n", f"tb_rip_{hp}", 1, l_nei, v_nei, t_nei, 800, t_peak_rip, x_rip+300, y_hp+30, PR.CORTEX_SPECTRAL_RIPPLE_NEIGH_DELAY)
+
+    # DOMINO
+    x_dom, y_dom = 1000, 600
+    p.obj("t_dom", x_dom, y_dom, "t b b b")
+    p.con("sel_r", 2, "t_dom", 0)
+    p.con("t_dbgr_2", 0, "t_dom", 0)
+    
+    p.obj("rnd_hp_dom", x_dom+80, y_dom+30, "random 6")
+    p.obj("add_hp_dom", x_dom+80, y_dom+60, "+ 1")
+    p.con("t_dom", 2, "rnd_hp_dom", 0)
+    p.con("rnd_hp_dom", 0, "add_hp_dom", 0)
+    _spec_block("dom", "t_dom", PR.CORTEX_SPECTRAL_DOMINO_MS, x_dom+160, y_dom)
+    
+    p.obj("sel_dom_hp", x_dom+80, y_dom+90, "sel 1 2 3 4 5 6")
+    p.con("add_hp_dom", 0, "sel_dom_hp", 0)
+    
+    t_peak_dom = PR.CORTEX_SPECTRAL_DOMINO_MS // 2
+    ring_dom = LAY.ring()
+    for hp in range(1, 7):
+        ring_idx = ring_dom.index(hp)
+        y_hp = y_dom + 150 + (hp - 1) * 200
+        p.obj(f"tb_dom_{hp}", x_dom, y_hp, "t b b b b")
+        p.con("sel_dom_hp", hp - 1, f"tb_dom_{hp}", 0)
+        for step in range(4):
+            target_hp = ring_dom[(ring_idx + step) % len(ring_dom)]
+            if target_hp > 6:
+                continue
+            layers = PR.layers_for_hp(target_hp)
+            if layers:
+                _env(p, f"d_{hp}_{step}", f"tb_dom_{hp}", step, layers,
+                     PR.CORTEX_SPECTRAL_DOMINO_LPF[1], t_peak_dom,
+                     PR.CORTEX_SPECTRAL_DOMINO_LPF[2], t_peak_dom,
+                     x_dom + step * 300, y_hp + 30, step * PR.CORTEX_SPECTRAL_DOMINO_STEP_MS)
+
+    # CLUSTER
+    x_clu, y_clu = 2200, 600
+    p.obj("t_clu", x_clu, y_clu, "t b b b")
+    p.con("sel_r", 3, "t_clu", 0)
+    p.con("t_dbgr_3", 0, "t_clu", 0)
+    
+    p.obj("rnd_hp_clu", x_clu+80, y_clu+30, "random 6")
+    p.obj("add_hp_clu", x_clu+80, y_clu+60, "+ 1")
+    p.con("t_clu", 2, "rnd_hp_clu", 0)
+    p.con("rnd_hp_clu", 0, "add_hp_clu", 0)
+    _spec_block("clu", "t_clu", PR.CORTEX_SPECTRAL_CLUSTER_MS, x_clu+160, y_clu)
+    
+    p.msg("m_go_clu", x_clu+250, y_clu, "bang")
+    p.msg("m_stop_clu", x_clu+300, y_clu, "stop")
+    p.con("t_clu", 0, "m_go_clu", 0)
+    p.obj("d_stop_clu", x_clu+300, y_clu-30, f"delay {PR.CORTEX_SPECTRAL_CLUSTER_MS}")
+    p.con("t_clu", 0, "d_stop_clu", 0)
+    p.con("d_stop_clu", 0, "m_stop_clu", 0)
+    p.obj("met_clu", x_clu+250, y_clu+30, "metro 50")
+    p.con("m_go_clu", 0, "met_clu", 0)
+    p.con("m_stop_clu", 0, "met_clu", 0)
+    
+    p.obj("sel_clu_hp", x_clu+80, y_clu+90, "sel 1 2 3 4 5 6")
+    p.con("add_hp_clu", 0, "sel_clu_hp", 0)
+    
+    for hp in range(1, 7):
+        y_hp = y_clu + 150 + (hp - 1) * 50
+        p.msg(f"m_clu_sp{hp}", x_clu, y_hp, "1")
+        p.con("sel_clu_hp", hp - 1, f"m_clu_sp{hp}", 0)
+        p.obj(f"s_clu_sp{hp}", x_clu+50, y_hp, f"s s6_clu_sp{hp}")
+        p.con(f"m_clu_sp{hp}", 0, f"s_clu_sp{hp}", 0)
+        
+        p.msg(f"m_clu_sp0_{hp}", x_clu+200, y_hp, "0")
+        p.con("d_stop_clu", 0, f"m_clu_sp0_{hp}", 0)
+        p.con(f"m_clu_sp0_{hp}", 0, f"s_clu_sp{hp}", 0)
+        
+    lo, hi = PR.CORTEX_SPECTRAL_CLUSTER_LPF
+    for step in range(3):
+        x = x_clu + step*300
+        y = y_clu + 650
+        p.obj(f"os_c{step}", x, y, f"osc~ {PR.CORTEX_SPECTRAL_CLUSTER_LFO}")
+        # osc~ : phase en radians — 0°, 120°, 240°
+        phase_rad = step * (2 * math.pi / 3)
+        p.msg(f"ph_c{step}", x, y-30, LAY.fmt(phase_rad))
+        p.con("t_clu", 0, f"ph_c{step}", 0)
+        p.con(f"ph_c{step}", 0, f"os_c{step}", 1)
+        
+        p.obj(f"sc_c{step}", x, y+30, "*~ 0.5")
+        p.obj(f"of_c{step}", x, y+60, "+~ 0.5")
+        p.obj(f"sn_c{step}", x, y+90, "snapshot~")
+        p.con(f"os_c{step}", 0, f"sc_c{step}", 0)
+        p.con(f"sc_c{step}", 0, f"of_c{step}", 0)
+        p.con(f"of_c{step}", 0, f"sn_c{step}", 0)
+        p.con("met_clu", 0, f"sn_c{step}", 0)
+        
+        p.obj(f"xp_c{step}", x, y+120, f"expr {lo} + $f1*({hi}-{lo})")
+        p.con(f"sn_c{step}", 0, f"xp_c{step}", 0)
+        
+    ring_clu = LAY.ring()
+    for start_hp in range(1, 7):
+        ring_idx = ring_clu.index(start_hp)
+        for step in range(3):
+            target_hp = ring_clu[(ring_idx + step) % len(ring_clu)]
+            if target_hp > 6:
+                continue
+            layers = PR.layers_for_hp(target_hp)
+            if layers:
+                y = y_clu + 800 + (start_hp - 1) * 100 + step * 30
+                p.obj(f"r_sp_{start_hp}_{step}", x_clu, y, f"r s6_clu_sp{start_hp}")
+                p.obj(f"spig_c_{start_hp}_{step}", x_clu+150, y, "spigot")
+                p.con(f"r_sp_{start_hp}_{step}", 0, f"spig_c_{start_hp}_{step}", 1)
+                p.con(f"xp_c{step}", 0, f"spig_c_{start_hp}_{step}", 0)
+                
+                for idx_l, L in enumerate(layers):
+                    p.obj(f"s_c_{start_hp}_{step}_{L}_{idx_l}", x_clu+250+idx_l*110, y, f"s s6_l{L}_spec_val")
+                    p.con(f"spig_c_{start_hp}_{step}", 0, f"s_c_{start_hp}_{step}_{L}_{idx_l}", 0)
+
+    _w(p, "cortex_motion_08.pd")

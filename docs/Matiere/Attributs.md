@@ -1,6 +1,7 @@
 # Attributs et tags — préparation du terrain
 
-**20 août 2026.** Rien de ce qui suit n'est implémenté. Ce fichier existe pour que la classification puisse commencer sans risque, et pour que le moteur qui lira les attributs soit décidé **avant** d'être écrit.
+**20 août 2026** (spec) · **23 août 2026** (statut code).  
+**Sélecteur C1…C11 : non implémenté.** Ni `gen_paires.py`, ni `gen_ambiance_cortex.py`, ni branchement dormant dans Pd. Ce fichier fige le vocabulaire et l'algorithme **avant** le code. Le Proto 08 tire au hasard dans les playlists — voir [`../Zones/Cortex.md`](../Zones/Cortex.md) §10 B.
 
 Vocabulaire issu de [`../Sources/Simon - Cortex et Cortex-Ambiance.md`](../Sources/Simon%20-%20Cortex%20et%20Cortex-Ambiance.md). Questions ouvertes : [`../Backlog/Q&A.md`](../Backlog/Q&A.md).
 
@@ -240,13 +241,13 @@ C'est la raison pour laquelle **l'audit doit être écrit avant le sélecteur**,
 
 Indépendamment des attributs, et donc dès maintenant :
 
-| Mécanisme | Pourquoi | État |
-|-----------|----------|------|
-| Deux gains distincts sous chaque paire | sans ça, aucun plan de présence n'est possible | absent, `cortex_pair_07` somme à poids égal |
-| Trois presets de plan nommés, forçables à la main | pour les écouter et les figer | **2 plans V1** — [`../Zones/Cortex.md`](../Zones/Cortex.md) §5 bis ; 3ᵉ reporté ([Q25](../Backlog/Q&A.md#q25)) |
-| Un lecteur capable de recevoir un **nom de fichier** plutôt qu'un index de tirage | pour que le sélecteur décide, pas le lecteur | `player_state_07` tire lui-même au hasard |
-| Fondus pilotables pour `EMERGER` et `RECOUVRIR` | les gestes temporels | **spécifiés** — [`../Zones/Cortex.md`](../Zones/Cortex.md) §8 bis ; pulse supprimé ; à implémenter |
-| `s6_tag_hook` | point d'accroche déjà en place, écrit par `hippo_assoc_07`, reçu par personne | prêt |
+| Mécanisme | Pourquoi | État (23 août) |
+|-----------|----------|----------------|
+| Deux gains distincts sous chaque paire | sans ça, aucun plan de présence n'est possible | **PARTIEL** — gains + swap en `cortex_pair_08` ; pas encore 2× `fx_router` distincts par plan |
+| Deux presets de plan nommés, forçables à la main | pour les écouter et les figer | **defaults** §5 bis Cortex — chaînes FX complètes à finaliser |
+| Un lecteur capable de recevoir un **nom de fichier** plutôt qu'un index de tirage | pour que le sélecteur décide, pas le lecteur | **ABSENT** — `player_state_08` tire un index dans `playlists08/` |
+| Fondus pilotables pour `EMERGER` et `RECOUVRIR` | les gestes temporels | **FAIT** — `cortex_pair_08` / `cortex_amb_behav_08` |
+| `s6_tag_hook` | point d'accroche | présent (hippo) ; **non branché** au sélecteur Cortex |
 
 Les deux premières lignes sont dans [`../Backlog/TO DO.md`](../Backlog/TO%20DO.md) §1 : elles ne dépendent d'aucune réponse et se font pendant le gel du Cortex.
 
@@ -260,7 +261,7 @@ Chaque étape est utile même si la suivante n'arrive jamais.
 2. ~~**Trancher la structure des colonnes**~~ — fait le 20 août, [Q20](../Backlog/Q&A.md#q20) et [Q19](../Backlog/Q&A.md#q19). ~~Appliqué dans `gen_catalogue_xlsx.py`~~ — fait le 20 août (16 colonnes, migration des anciennes colonnes Phrase/Attributs/Comportements vers `notes`).
 3. **Remplir `famille_son` et `usage_prefere`** — l'axe §4. Ne dépend de personne, améliore déjà le tirage actuel sans changer une seule règle de zone.
 4. **Remplir `type_ambiance`** sur les 27 nappes. C'est court, et c'est ce qui débloque les deux baffles d'ambiance du Cortex.
-5. **Figer le son du Cortex et de l'Hippocampe** ([`../Zones/`](../Zones/)), en construisant au passage les trois plans de présence. Indépendant de tout ce qui précède, et devenu urgent : [Q1](../Backlog/Q&A.md#q1) = A impose 12 voix simultanées, qui sans plans de présence ne font que du bruit.
+5. **Figer le son du Cortex** ([`../Zones/Cortex.md`](../Zones/Cortex.md)) — structurellement avancé (§10). **Hippocampe** : spec Simon reçue, décisions Q26–Q28, mais **loin du gel** ([`../Zones/Hippocampe.md`](../Zones/Hippocampe.md) §9) — ne pas le traiter au même stade que le Cortex.
 6. **Écrire l'audit** `gen_paires.py` en mode rapport seulement, sur un classeur partiellement rempli, pour mesurer si les règles de Simon tiennent — en particulier s'il y a assez de fragments de chaque contexte. [Q4](../Backlog/Q&A.md#q4) reconnaît que la réponse est inconnue.
 7. **Répondre à [Q7](../Backlog/Q&A.md#q7)** avec le rapport en main.
 8. **Alors seulement** écrire le sélecteur, dans le Proto 08 ([Q24](../Backlog/Q&A.md#q24) = A) : `gen_paires.py` (par baffle) + `gen_ambiance_cortex.py` (global, [Q25](../Backlog/Q&A.md#q25)).

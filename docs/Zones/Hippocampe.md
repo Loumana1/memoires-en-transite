@@ -1,9 +1,11 @@
 # Zone Hippocampe — comportement sonore
 
-**Priorité 2 pour le gel.** Aucun paramètre n'est encore FIGÉ.
-Statuts : voir [`README.md`](./README.md). Questions ouvertes : [`../Backlog/Q&A.md`](../Backlog/Q&A.md).
+**Priorité 2.** **Aucun paramètre FIGÉ** · **zone loin d’être clôturée** (23 août 2026).  
+Statuts : [`README.md`](./README.md). Questions : [`../Backlog/Q&A.md`](../Backlog/Q&A.md) §I (Q26–Q28).
 
-**Simon n'a pas encore livré de spec pour cette zone.** Le document reçu ne couvre que le Cortex et Cortex-Ambiance. Tout ce qui suit vient donc de l'implémentation et des séances d'écoute. C'est un avantage : il n'y a pas de contradiction à résoudre, on peut figer plus vite. → [Q19](../Backlog/Q&A.md#q19).
+**Spec Simon reçue le 21 août** — [`../Sources/Specifications_Pure_Data_Hippocampe.md`](../Sources/Specifications_Pure_Data_Hippocampe.md). Décisions projet : Q26–Q28 · TO DO §1 Hippocampe. **Ce n’est pas** la zone « sans contradiction » : la spec Simon (associatif, 6 comportements, sous-zone ambiance) diverge fortement de l’implémentation actuelle et de ce qui est **validé à l’oreille**.
+
+> **Attention §4–§8.** Rédigés surtout avant le Proto 08 et la spec Simon. Références `*_07` = historique. **État actuel : §9.**
 
 ---
 
@@ -139,15 +141,60 @@ Les déclenchements différés de L3 et L4 sont la version minimale de l'envie �
 
 ---
 
-## 8. Ce qu'il faut faire pour figer cette zone
+## 8. Ce qu'il reste — pas près de figer
 
-Plus court que pour le Cortex, parce qu'il n'y a pas de contradiction de spec à résoudre.
+La spec Simon (21 août) et les décisions Q26–Q28 **élargissent** le chantier. Ne pas confondre « du code existe » et « la zone est gelée ».
 
-1. **Écouter et figer le mouvement** : les bornes de `step` (800–2200 ms), le `xfade` de 35 ms, la répartition 60 / 40 entre local et saut, et l'horloge de réécriture. C'est ça, le son de la zone.
-2. **Décider si le `sens` est retiré au hasard** comme le mode et le step.
-3. **Figer le contraste avec le Cortex** : LPF 9 kHz contre 500–2000 Hz, wet 0,06 contre 0,10 plus réverbération. Il faut vérifier à l'oreille que le passage de Cortex à Hippocampe s'entend comme une ouverture.
-4. **Figer la nappe** : LPF 5 kHz, gain 0,35, mode 4 / step 1500 ms.
-5. ~~**Décider du sort de `HIPPOCAMPE/AMBIANCE`**~~ — tranché le 20 août par [Q2](../Backlog/Q&A.md#q2) : il faut **un master d'ambiance propre à l'Hippocampe**, totalement différent de celui du Cortex. À demander à Simon. Le repli actuel sur les nappes du Cortex reste en place en attendant, mais comme provisoire, pas comme solution.
-6. Écrire `FIGÉ` ici et une strophe dans [`../log.md`](../log.md).
+**Son / mouvement** (sans attendre le classeur, mais pas clos) :
 
-Rien dans cette liste ne dépend du tableau de classification. L'Hippocampe peut être figé **avant** que la classification n'arrive, et c'est ce qu'il faut faire.
+1. Valider à l'oreille les **5 recettes** Q26 (`hippo_motion_08`) — code présent, gel non fait.
+2. Figer mouvement legacy si recettes retenues : `step`, `xfade`, horloge — voir §5 (valeurs 07).
+3. Contraste Cortex ↔ Hippocampe sur transition AUTO.
+4. Nappe : **master Hippo dédié** ([Q2](../Backlog/Q&A.md#q2)) — aujourd'hui repli pool partagé, pas une ambiance propre.
+
+**Architecture & associatif** (bloquant pour la cible Simon) :
+
+5. Passer de **4 voyageurs** à **5 voies** (2 longs + 2 courts + ambiance) — **non fait**.
+6. `gen_assoc_hippo.py` + table manuelle — **scaffold** (events mock), pas catalogue rempli.
+7. Comportements MVP Q28 (APPELER, RELIER, REPONDRE, DISPARAITRE) — **partiel**, à valider.
+8. `INTERRUPTIBLE`, duck HA8, colonnes classeur Hippo — **partiel / absent**.
+
+Snapshot détaillé : **§9**. Liste tâches : [`../Backlog/TO DO.md`](../Backlog/TO%20DO.md) §1 Hippocampe.
+
+`FIGÉ` ici + strophe [`../log.md`](../log.md) : **seulement** quand l'oreille et la spec tranchée le permettent — **pas aujourd'hui**.
+
+---
+
+## 9. Proto 08 — état d'avancement (23 août 2026)
+
+**Verdict : chantier ouvert.** Beaucoup de briques Proto 08 existent ; **rien n'est FIGÉ** · **pas près de clôture**.
+
+### A. Son / spatial (patch `prototype_08_fsm_8hp.pd`)
+
+| Bloc | État |
+|------|------|
+| 4 voyageurs L1–L4 + nappe L13 | **FAIT** (héritage 07, pas la cible **5 voies** TO DO) |
+| Spat `spatial_router_06` → `decode_8hp_08` | **FAIT** |
+| `hippo_motion_08` — 5 recettes Q26 | **CODE** — pas validé à l'oreille ; remplace le 60/40 §5 en théorie |
+| Gel `step` / `xfade` / contraste Cortex | **PAS ENCORE** |
+| Nappe ambiance **dédiée** Hippo ([Q2](../Backlog/Q&A.md#q2)) | **ABSENT** — repli `SONS_V3/AMBIANCE/` (souvent pool A45–A69), pas master Simon |
+| `hippo_duck_08` (HA8) | **SCAFFOLD** — duck ~−7 dB, pas calibré |
+
+### B. Associatif & samples (dépend du classeur)
+
+| Élément | État |
+|---------|------|
+| `gen_assoc_hippo.py` → `hippo_assoc/events.txt` | **PARTIEL** — tourne avec attributs **mock** si classeur vide |
+| `hippo_assoc_08` (play / cut / motion planifiés) | **FAIT** câblage — contenu events **provisoire** |
+| Architecture 5 voies (2 longs + 2 courts + amb) | **NON** — FSM encore 4 voyageurs |
+| Comportements MVP Q28 | **PARTIEL** dans le générateur — pas fiable sans catalogue |
+| `INTERRUPTIBLE` dans `player_state_08` | **PARTIEL** — flag playlist + inlet cut ; peu testé |
+| Colonnes Hippocampe classeur + table associations | **ABSENT** / vides |
+| Hippocampe–Ambiance (sous-zone Simon) | **REJETÉ** V1 ([Q28](../Backlog/Q&A.md#q28)) |
+
+### C. Doc vs code
+
+- §4–§7 : baseline **Proto 07** + écoute 18 août — **ne pas** lire comme « prêt à figer ».
+- §5 (`hippo_motion_07`, 60/40) : **obsolète** côté code si les recettes Q26 sont actives — à réconcilier à l'oreille.
+
+Debug utile : `; s6_hippo_motion 0` … `4` (forcer une recette) · regen assoc : `python3 scripts/gen_assoc_hippo.py`.

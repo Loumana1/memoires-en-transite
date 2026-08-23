@@ -6,7 +6,7 @@ Rien ici ne décrit ce qui sonne aujourd'hui. Point d'entrée : [`../etatactuel.
 
 | Groupe | Fichiers | Ce que c'était |
 |--------|----------|----------------|
-| Recherche initiale (avril 2026) | `01_premiere_recherche.md`, `Document_de_travail_evolutif.md` | 12 HP, Pd vs SuperCollider, ambisonics |
+| Recherche initiale (avril 2026) | `01_premiere_recherche.md`, `Document_de_travail_evolutif.md` | 8 HP (cible actuelle), Pd vs SuperCollider, ambisonics |
 | Prototypes 01 → 05 | `02` … `06`, `08_grille_contenu_sons.md`, `09_qa_prototype_05.md` | Anciennes arborescences `SONS/COURT|MOYEN|LONG`, FSM d'origine |
 | Roadmap | `07_roadmap_prototypes_finale.md` | Calendrier de prototypes périmé |
 | Proto 06 (figé) | `10` … `13` | Handoff, calibrage, règles, plan d'écoute 8 HP |

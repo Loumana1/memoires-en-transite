@@ -29,11 +29,13 @@ Huit questions répondues : [Q1](./Q&A.md#q1) = A, [Q2](./Q&A.md#q2), [Q3](./Q&A
 
 **Le Proto 08 est décidé** ([Q24](./Q&A.md#q24) = A). Il existe parce que [Q1](./Q&A.md#q1) = A change la structure du Cortex : **6 baffles de parole × 2 fragments = 12 voix simultanées**, plus **2 baffles d'ambiance fixes**. Le 07 devient figé comme le 06, et reste écoutable pour comparer.
 
-- [ ] **Créer le Proto 08** : `scripts/proto08/`, `proto08_lib/`, `presets08.py`, générateur, launcher. Copie du 07 puis modification, avec `pdbuild` désormais dans [`scripts/shared/`](../../scripts/shared/).
-- [ ] **12 couches de parole sur 6 baffles.** `FSM_N_8HP[0]`, les ancrages, le nombre de lecteurs, et `cortex_pair_07` → 6 paires en décalage modulo 6.
-- [ ] **Étendre le balayage de LPF à 12 oscillateurs** dans `cortex_ctrl`. Ne pas prolonger mécaniquement la suite 0,070 → 0,170 : vérifier à l'oreille qu'aucune paire d'oscillateurs n'est dans un rapport simple, sinon deux couches respirent ensemble et la masse pulse.
-- [ ] **2 nappes au lieu de 5**, sur deux baffles fixes et **non adjacents**, l'un *musical* l'autre *texture*. C'est la partie de la décision qui vide le plus l'espace autour des paroles : à écouter avant de figer quoi que ce soit d'autre.
-- [ ] **Les plans de présence deviennent bloquants, pas optionnels.** Douze voix filtrées au même niveau ne produisent pas une superposition mais du bruit. → §1 ; [Q10](./Q&A.md#q10) **fermée** (defaults §5 bis `Cortex.md`).
+> **8 HP ≠ 12 voix.** L'installation est à **8 baffles physiques**. **12 voix** = 12 couches de parole superposées (6 baffles × 2 fragments), pas des haut-parleurs supplémentaires.
+
+- [x] ~~**Créer le Proto 08**~~ — fait (22 août). `scripts/proto08/`, `proto08_lib/`, `presets08.py`, `gen_prototype_08_8hp.py`, `launch_prototype_08_8hp.sh`. Patch : `pd/prototype_08_fsm_8hp.pd`.
+- [x] ~~**12 couches de parole sur 6 baffles.**~~ — fait. `FSM_N_8HP[0]`, `LAYER_HP_8HP`, `cortex_pair_08` (6 paires, décalage modulo 6).
+- [x] ~~**Étendre le balayage de LPF à 12 oscillateurs**~~ — fait dans `cortex_ctrl_08`. À **figer à l'oreille** (non-harmonicité des 12 LFO).
+- [x] ~~**2 nappes au lieu de 5**~~ — fait. HP7 = musicale, HP5 = texture (non adjacents). Pool mélodique A45–A69 (22 août). Gain nappes +3 dB, mutex anti-doublon.
+- [ ] **Les plans de présence deviennent bloquants, pas optionnels.** Gains alternés et presets partiels en place ; **deux chaînes FX distinctes par plan** pas encore complètes. → §1 ; [Q10](./Q&A.md#q10) **fermée** (defaults §5 bis `Cortex.md`).
 
 Ce qui **n'est pas** dans le Proto 08 au départ : la règle C1 Belgique / Congo. [Q4](./Q&A.md#q4) confirme que l'information n'existe pas encore et viendra du tableau ; le 08 se construit donc avec un tirage au hasard, le sélecteur se branchant ensuite. C'est la séparation voulue depuis le début — le son de la zone d'abord, le choix des samples ensuite.
 
@@ -47,11 +49,12 @@ Objectif : les zones sonnent de façon décidée et stable **avant** que la logi
 
 ### Cortex
 
-- [ ] **Ajouter une vraie réverbération « pièce voisine »** sur les couches de parole. Aujourd'hui il n'y a qu'un delay de 180 ms à 6 % de feedback, ce qui ne fabrique pas de pièce. C'est demandé explicitement par Simon (§1.3 et §2.6) et c'est le levier le plus efficace contre l'intelligibilité résiduelle. Réglage à l'oreille, cible à préciser en [Q18](./Q&A.md#q18).
-- [ ] **Implémenter les plans de présence dans le Proto 08** — spec [`../Zones/Cortex.md`](../Zones/Cortex.md) §5 bis ([Q10](./Q&A.md#q10) **fermée** : deux plans, defaults réverb/LFO). Pas de `INTERMEDIAIRE`.
-- [ ] **Deux nappes globales, pas cinq** — [Q25](./Q&A.md#q25) : une musicale + une texture **communes** ; AM lente OK ([Q15](./Q&A.md#q15)) ; texture **fixe**, pas de `SE_DEPLACER` ([Q16](./Q&A.md#q16)) ; **mutex** recouvrement musicale/texture ([Q17](./Q&A.md#q17)).
-- [ ] **Implémenter les gestes temporels dans le Proto 08** — spec [`../Zones/Cortex.md`](../Zones/Cortex.md) §8 bis, [Q11](./Q&A.md#q11) tranché. `EMERGER` 6–10 s, `RECOUVRIR` 3–6 s, plafond = niveau du plan assigné, 50/50, décalage aléatoire par paire (pas toutes en même temps), `cortex_pulse_07` **supprimé**. Autres mouvements : extension future.
-- [ ] **Deux gains distincts sous chaque paire** + deux chaînes FX (preset de plan par fragment). [Q9](./Q&A.md#q9) tranché : le moteur attribue le plan, pas le classeur.
+- [ ] ~~**Ajouter une vraie réverbération « pièce voisine »**~~ — **laissée en delay V1** (23 août). Pas prioritaire ; Q18 reste ouverte si on y revient.
+- [ ] **Implémenter les plans de présence dans le Proto 08** — spec [`spec_cortex_plans_presence_08.md`](./spec_cortex_plans_presence_08.md) · prompt IA [`prompt_cortex_plans_presence_08.md`](./prompt_cortex_plans_presence_08.md) · valeurs [`../Zones/Cortex.md`](../Zones/Cortex.md) §5 bis ([Q10](./Q&A.md#q10)). Pas de `INTERMEDIAIRE`. Pas de freeverb.
+- [x] ~~**Deux nappes globales, pas cinq**~~ — fait (Proto 08). [Q25](./Q&A.md#q25) : musicale HP7 + texture HP5 ; AM lente ; texture fixe ; mutex RECOUVRIR [Q17] dans `cortex_amb_behav_08`.
+- [x] ~~**Banque de gestes spectraux événementiels (Proto 08)**~~ — fait (22 août). Spec [`spec_cortex_motion_spectral_08.md`](./spec_cortex_motion_spectral_08.md). `cortex_motion_08` : RIPPLE, CLUSTER, DOMINO, MUR_TREMBLE · override LPF · mutex swap. Debug : `; s6_spec_recipe RIPPLE`.
+- [x] ~~**Implémenter les gestes temporels dans le Proto 08**~~ — fait dans `cortex_pair_08` + `cortex_amb_behav_08`. [Q11](./Q&A.md#q11) : `EMERGER` / `RECOUVRIR`, pulse supprimé. **Spatialisation événementielle** ajoutée (22 août) : voyage phi 180° (15 s), échange avant/arrière 4×/passage (7 s) — voir [`../Zones/Cortex.md`](../Zones/Cortex.md) §10 et [`../log.md`](../log.md).
+- [ ] **Deux gains distincts sous chaque paire** + chaînes FX cohérentes — partiel (gains dans `cortex_pair` + 12× `fx_router`) ; suite dans le prompt plans (corriger double gain, aligner presets). [Q9](./Q&A.md#q9).
 - [ ] Figer les bornes et la vitesse du balayage de LPF (500–2000 Hz, six LFO de 0,070 à 0,170 Hz dans `cortex_ctrl_07`).
 - [ ] Figer la rotation par paires : `metro 2600 ms`, 62 % de probabilité, `xfade` 12 ms.
 - [ ] Figer les nappes : gain 0,25, AM de 0,030 à 0,074 Hz.
@@ -74,22 +77,17 @@ Objectif : les zones sonnent de façon décidée et stable **avant** que la logi
 
 #### Logique associative (21 août — spec Simon)
 
-- [ ] **Architecture des couches Hippocampe : 5 voies.** Ambiance (1) + 2 longs permanents + 2 courts (interférences aléatoires). Simon demandait max 2 simultanés (H45) — **rejeté** : la zone a besoin de plus de densité. Le contraste avec le Cortex vient du mouvement et de la clarté, pas de la raréfaction.
-- [ ] **Écrire `gen_assoc_hippo.py`** — même principe que `gen_paires.py` pour le Cortex. Précalcule les associations en Python, Pd tire une ligne. Utilise la **table manuelle d'associations** du classeur (pas des métadonnées relationnelles automatiques). **Bloqué par** : remplissage du catalogue Hippocampe par Simon.
+- [ ] **Architecture des couches Hippocampe : 5 voies.** Ambiance (1) + 2 longs permanents + 2 courts (interférences aléatoires). Simon demandait max 2 simultanés (H45) — **rejeté** : la zone a besoin de plus de densité. Le contraste avec le Cortex vient du mouvement et de la clarté, pas de la raréfaction. **Non implémenté** (FSM = 4 voyageurs).
+- [ ] **`gen_assoc_hippo.py` + `hippo_assoc_08`** — script et câblage **existent** ; events **mock** tant que le classeur Hippocampe est vide. Comportements MVP Q28 : partiel. Catalogue réel **bloquant**.
 - [ ] **Ajouter les colonnes d'attributs Hippocampe au classeur** via `gen_catalogue_xlsx.py`. Colonnes vides OK — prêtes pour quand Simon remplit. Colonnes Simon (§13.1) : `type_fonctionnel`, `force_associative`, `type_association`, `famille_associative`, `familles_cibles`, `ouverture`, `mode_lecture`, `delai_reponse`.
 - [ ] **Silences et délais : max 2 s.** Les plages de Simon (1–6 s pour `OUVERTURE`, 0,5–15 s pour `DELAI_REPONSE`) sont **réduites** à un maximum de **2 s**. Caler dans les presets : `FERME` = 1–2 s de silence, `PARTIELLEMENT_SUSPENDU` = 0,5–1,5 s, `TRES_OUVERT` = 0–1 s.
-- [ ] **Implémenter les 5 recettes de mouvements spatiaux.** (Remplace le tirage 60/40 actuel de `hippo_motion_07`). À intégrer dans le patch Hippocampe :
-  1. Contre-rotation panoramique (mode 1, rot 0.04/0.07, sens 0/1)
-  2. Contre-rotation saut (mode 3, step 1400/750, xfade 35, sens 0/1)
-  3. Local + saut (mode 4 / mode 2 / mode 4) sur 3 voyageurs
-  4. Opposition (mode 3, step 2000, sens 0 et 1)
-  5. Fixe + orbite (mode 0 + mode 1 rot 0.03)
-- [ ] **Implémenter `MODE_LECTURE = INTERRUPTIBLE`** dans le player. Ce mode coupe un fragment avant sa fin via un trigger externe (piézo/changement d'état), avec un fondu court (35-100ms), et peut intervenir immédiatement (0s minimum). Ne s'applique qu'aux fragments marqués "interruptible" dans le classeur.
+- [ ] **5 recettes spatiales Q26** — **code** dans `hippo_motion_08` ; **pas validé à l'oreille** · doc §5 Hippocampe encore sur l'ancien 60/40.
+- [ ] **`MODE_LECTURE = INTERRUPTIBLE`** — **partiel** dans `player_state_08` (flag + inlet cut) ; peu testé.
+- [ ] **Diminution ambiance sous parole (HA8)** — **scaffold** `hippo_duck_08` (~−7 dB) ; pas calibré · **bloqué** matière ambiance Hippo dédiée.
 - [ ] **Pas de sous-zone Hippocampe–Ambiance.** Simon décrit une sous-zone complète (§11, 400+ lignes, 26 colonnes). **Rejeté** : pas assez de matière, trop complexe. Les ambiances du pool partagé `SONS_V3/AMBIANCE/` servent l'Hippocampe via `usage_prefere` et les attributs — même logique que le Cortex, pas de système dédié.
 - [ ] **Pas de `REVENIR`.** Simon veut un historique + rappel après 30 s à plusieurs minutes (H30–H33). **Rejeté** : l'état dure 50 s, le temps ne suffit pas. Rotation continue de samples.
 - [ ] **Documenter les traitements permis/interdits** (§11.6, §11.8). Permis : filtrage modéré, réverb légère, fondu 1–4 s, répétition 1–3×, ralenti ~10–15 %, modification hauteur ≤ 1 ton. Interdit : granularisation, inversion, boucles régulières, delays abondants. Cohérent avec le principe « effets secs ».
-- [ ] **Diminution automatique de l'ambiance sous une parole** (HA8) : −4 à −10 dB quand un fragment de parole est actif. Side-chain ou gate piloté. **Bloqué par** : ambiance Hippocampe (matière).
-- [ ] **Scope des comportements V1** — [Q28](./Q%26A.md#q28). Intégrer dans `gen_assoc_hippo.py` un sous-ensemble (MVP) du vocabulaire de Simon :
+- [ ] **Scope des comportements V1** — [Q28](./Q%26A.md#q28). Sous-ensemble MVP dans `gen_assoc_hippo.py` (partiel) :
   - `APPELER` : **direct** (H15) ou **sans réponse** (H19).
   - `RELIER` : **succession** (H20) uniquement.
   - `REPONDRE` : **immédiate** (H25) ou **spatiale** (H27).
@@ -207,6 +205,5 @@ Conservé pour mémoire. Rien ici n'est nécessaire pour la V1.
 - Table pondérée mot / timbre / souffle / contraste pour « le fragment A déclenche le fragment B ».
 - Segmentation des longs wav **en direct** dans Pure Data, au lieu d'une découpe préalable.
 - Phaser, granulaire, ring modulation.
-- Passage à **12 HP**, prévu dans le cahier des charges d'origine. L'installation est à 8 HP aujourd'hui, et la carte de Simon (6 paroles + 2 ambiances) tient exactement dans 8.
 - Fiche éthique par région (contexte, cadre, marque de pouvoir), à remplir au fil de l'eau dans la colonne `notes`.
 

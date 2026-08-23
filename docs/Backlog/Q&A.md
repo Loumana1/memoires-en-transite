@@ -216,7 +216,7 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 
 **Périmètre : et les trois autres zones ?**
 
-**Constat.** Le document de Simon ne couvre que le Cortex et Cortex-Ambiance. L'Hippocampe, la Reconstruction et la Boucle n'ont **aucune spec** de sa part.
+**Constat (20 août).** À l'époque, seul le Cortex avait une spec Simon. **Complément (21 août) :** spec **Hippocampe** reçue · spec **Reconstruction** reçue. La Boucle n'a toujours **aucun** document source dédié.
 
 **Questions.**
 
@@ -224,7 +224,7 @@ Ce fichier ne contient **que** ce qui est ambigu, incomplet, ou en contradiction
 - Le vocabulaire d'attributs (`CONTEXTE`, `TYPE_DISCOURS`, `FONCTION_SOCIALE`, `DENSITE_PAROLE`) s'applique-t-il aussi à leurs fragments, ou seulement à ceux du Cortex ? Le classeur a une feuille par zone, donc la question se pose concrètement au moment de remplir.
 - Faut-il demander à Simon un document du même format pour l'Hippocampe avant de continuer, ou figer l'Hippocampe à l'oreille d'abord et lui présenter le résultat ?
 
-**Recommandation.** Figer l'Hippocampe à l'oreille maintenant, sans attendre : c'est la zone la plus propre parce qu'elle n'a pas de contradiction à résoudre.
+**Recommandation (20 août, Cortex seul).** Figer l'Hippocampe à l'oreille sans attendre — **caduc depuis la spec Hippo (21 août)** : la zone a maintenant une cible Simon + écarts majeurs avec le patch ; voir [`../Zones/Hippocampe.md`](../Zones/Hippocampe.md) §9 — **pas près de clôture**.
 
 **Réponse :** *on y va pas a pas, pour le moment seule le cortex a ete donné, il travaille sur l'hippocamp.  oui . oui s'applique a tout les fragments. oui, il tratravaille desssus , ca arrive.*
 

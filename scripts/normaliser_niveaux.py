@@ -69,6 +69,7 @@ SEUIL_ACTIF_DB = 30.0      # un bloc compte s'il est à moins de 30 dB du plus f
 CIBLE_PAROLE = -23.0
 CIBLE_AMBIANCE = -45.0
 PLAFOND_GAIN = 12.0
+PLANCHER_GAIN = -12.0
 SEUIL_SUSPECT = -45.0      # sous ça, ce n'est probablement pas de la matière
 
 
@@ -110,6 +111,8 @@ def main() -> int:
                     metavar="dBFS", help=f"défaut {CIBLE_AMBIANCE:g}")
     ap.add_argument("--plafond", type=float, default=PLAFOND_GAIN, metavar="dB",
                     help=f"gain positif maximal, défaut +{PLAFOND_GAIN:g}")
+    ap.add_argument("--plancher", type=float, default=PLANCHER_GAIN, metavar="dB",
+                    help=f"gain négatif minimal, défaut {PLANCHER_GAIN:g}")
     ap.add_argument("--rapport", action="store_true",
                     help="mesurer et afficher sans rien écrire")
     args = ap.parse_args()
@@ -133,13 +136,14 @@ def main() -> int:
             continue
         niveau, pic, plancher = m
         cible = args.cible_ambiance if e["role"] == "AMBIANCE" else args.cible_parole
-        gain = min(cible - niveau, args.plafond)
+        gain = max(min(cible - niveau, args.plafond), args.plancher)
         e["niveau_db"] = f"{niveau:.1f}"
         e["gain_db"] = f"{gain:.1f}"
         mesures.append((e, niveau, pic, plancher, gain, cible))
 
     print(f"Cibles : paroles {args.cible_parole:+.0f} dBFS · "
-          f"ambiances {args.cible_ambiance:+.0f} dBFS · plafond +{args.plafond:.0f} dB")
+          f"ambiances {args.cible_ambiance:+.0f} dBFS · plafond +{args.plafond:.0f} dB · "
+          f"plancher {args.plancher:+.0f} dB")
     print(f"Mesurés : {len(mesures)} fragments"
           + (f" · {len(absents)} illisibles ou absents" if absents else ""))
 
@@ -173,6 +177,15 @@ def main() -> int:
                   f"{niveau - plancher:5.1f} dB  il manquerait {manque:+.0f} dB")
         if len(plafonnes) > 15:
             print(f"    … et {len(plafonnes) - 15} autres")
+
+    baisses = [m for m in mesures if m[4] <= args.plancher + 0.05]
+    if baisses:
+        print(f"\n⚠ {len(baisses)} fragments **baissés** (gain ≤ {args.plancher:+.0f} dB) : "
+              f"fichiers très forts ramenés vers la cible.")
+        for e, niveau, pic, plancher, gain, cible in sorted(baisses, key=lambda m: -m[1])[:15]:
+            print(f"    {e['id']:30s} niveau {niveau:6.1f}  gain {gain:+.1f} dB")
+        if len(baisses) > 15:
+            print(f"    … et {len(baisses) - 15} autres")
 
     suspects = [m for m in mesures if m[1] < SEUIL_SUSPECT]
     if suspects:

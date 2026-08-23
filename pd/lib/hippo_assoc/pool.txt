@@ -1,6 +1,6 @@
 # source | comportement | variante | cible | layer
 H011_v3_hippocampe | RELIER | succession | H011_v3_hippocampe | 2
-H073_v3_hippocampe | APPELER | direct | H030_v3_hippocampe | 3
+H073_v3_hippocampe | APPELER | direct | H044_v3_hippocampe | 3
 H003_v3_hippocampe | REPONDRE | immediate | H003_v3_hippocampe | 3
 H033_v3_hippocampe | REPONDRE | spatiale | H033_v3_hippocampe | 4
 H003_v3_hippocampe | DISPARAITRE | nette | - | 3

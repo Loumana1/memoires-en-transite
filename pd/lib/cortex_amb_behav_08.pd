@@ -11,7 +11,7 @@
 #X obj 520 220 *~;
 #X msg 420 80 1 10;
 #X obj 40 280 r s6_etat;
-#X obj 40 308 change;
+#X obj 40 308 change -1;
 #X obj 40 336 sel 0;
 #X obj 120 336 t b b b b;
 #X obj 120 280 loadbang;

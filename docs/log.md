@@ -9,19 +9,200 @@ Le prompt du chat = la décision. Le backlog n’est pas un contrat.
 
 ---
 
----
+## 2026-08-23 — Hippocampe : doc alignée sur l'avancement réel (loin du gel)
+
+**Prompt :** Corriger les incohérences doc vs état Hippocampe — pas près d'être clôturé.
+
+**Changement :** [`Zones/Hippocampe.md`](./Zones/Hippocampe.md) — spec Simon (21 août), §8–§9 (verdict ouvert, scaffold vs fait). [`etatactuel.md`](./etatactuel.md), [`Zones/README.md`](./Zones/README.md), [`Attributs.md`](./Matiere/Attributs.md) §7, [`Q&A.md`](./Backlog/Q&A.md) Q19, TO DO §1 Hippocampe : plus de « sans spec / figer vite / nappe propre ».
 
 ---
 
----
+## 2026-08-23 — Prompt + spec : finir plans de présence Cortex
+
+**Prompt :** Créer un prompt d'implémentation détaillé (comme pour les gestes spectraux) pour les plans de présence.
+
+**Changement :** [`Backlog/spec_cortex_plans_presence_08.md`](./Backlog/spec_cortex_plans_presence_08.md) · [`Backlog/prompt_cortex_plans_presence_08.md`](./Backlog/prompt_cortex_plans_presence_08.md). Constat : 12× `fx_router` déjà là ; reste double gain, alignement §5 bis, LFO #7, forçage manuel. Liens dans Cortex §9 et TO DO §1.
 
 ---
 
----
+## 2026-08-23 — Cortex §9 : étapes restantes alignées (réverb reportée)
+
+**Prompt :** Cortex bien documenté ? Ce qui reste a des étapes claires ? Réverb laissée tel quel.
+
+**Changement :** [`Zones/Cortex.md`](./Zones/Cortex.md) §9 réécrit (fait vs restes). Réverb pièce voisine marquée **laissée en delay V1** ici et dans TO DO. Prochain code son = **2× fx_router par plan** ; sélection = Attributs §6–7.
 
 ---
 
+## 2026-08-23 — Cortex : avancement figé (son vs sélection samples)
+
+**Prompt :** Déterminer et figer le niveau d'avancement Cortex ; la logique de sélection est-elle partiellement implémentée ?
+
+**Verdict :** **Non** — zéro code sélecteur (`gen_paires.py` / `gen_ambiance_cortex.py` absents). Spec technique dans [`Matiere/Attributs.md`](./Matiere/Attributs.md) §6 (algorithme + architecture). Tirage actuel = hasard playlists. Snapshot figé : [`Zones/Cortex.md`](./Zones/Cortex.md) §10 A/B.
+
 ---
+
+## 2026-08-23 — Cahier des charges : installation figée à 8 HP
+
+**Prompt :** Ne plus mentionner 12 HP ; uniquement 8 HP ; mettre à jour le cahier des charges.
+
+**Changement :** [`Document_Technique_Definitif.md`](../Document_Technique_Definitif.md) — diffusion **8 baffles** (6 parole + 2 ambiance), carte son 8 canaux. TO DO §6 : ligne « passage à 12 HP » **supprimée**. Encarts actifs reformulés **8 baffles / 12 voix** sans cible 12 HP. `Document_de_travail_evolutif.md` : diffusion 8 HP.
+
+---
+
+## 2026-08-23 — Doc : Proto 08, spatialisation Cortex, clarification 8 baffles / 12 voix
+
+**Prompt :** La doc est-elle à jour sur spatialisation et nouveaux effets Cortex ? Clarifier baffles vs voix dans TO DO.
+
+**Changement :** [`etatactuel.md`](./etatactuel.md) réécrit pour Proto 08. [`Zones/Cortex.md`](./Zones/Cortex.md) §10 (layout, phi, swap, spectraux). [`Backlog/TO DO.md`](./Backlog/TO%20DO.md) §0 bis cochés + encart 8 baffles / 12 voix.
+
+---
+
+## 2026-08-22 — Gestes spectraux : correctifs review (seed, phases, origine HP)
+
+Review du travail Claude : `seed` était un `[obj]` inexistant (5× « couldn't create ») — corrigé en `[msg]`. CLUSTER : phases 0 / 0,33 / 0,67 corrigées en radians (0, 2π/3, 4π/3). DOMINO et CLUSTER : origine limitée à HP 1–6 via `random 6` et index dans `layout08.ring()`. Chargement Pd headless sans erreur après regen.
+
+---
+
+## 2026-08-22 — Banque de gestes spectraux Cortex (Proto 08)
+
+**Prompt :** Implémenter la banque de 4 gestes spectraux événementiels pour la zone Cortex du Proto 08, sans casser l'existant.
+
+**Pourquoi :** Donner un mouvement de groupe et des ondes directionnelles (filtres couplés entre baffles voisins) à la masse de 12 voix du Cortex, tout en gardant la parole floutée, dissipée et peu intelligible. Les nappes d'ambiance ne participent pas à ces gestes.
+
+**Changement — `presets08.py` :** Ajout des paramètres par défaut (`CORTEX_SPECTRAL_*`) pour la banque de gestes, des probabilités (65 % par passage), et du helper `layers_for_hp()` qui associe les HP à leurs couches L1–L12.
+
+**Changement — `gen_libs08.py` :** 
+- Modification de `cortex_ctrl_08` : Ajout d'un système d'override via `spigot` pour suspendre temporairement les balayages LPF continus (L1-L12). Le retour vers la valeur de fond est lissé par un `line` de 200 ms pour éviter tout saut audible. Les `osc~` de fond prennent désormais un facteur de vitesse dynamique (`s6_cx_spec_speed`).
+- Création de `cortex_motion_08` : Moteur déclenché à l'entrée du Cortex (`r s6_etat` + `change -1`), choisit au hasard (ou via inlet `s6_spec_recipe`) une des 4 recettes (`MUR_TREMBLE`, `RIPPLE`, `DOMINO_OUVERTURE`, `CLUSTER_BREATHE`). Il respecte le mutex LPF : le geste est annulé si les paires visées sont actives dans un échange avant/arrière (`s6_cx_swp{0..5}`).
+
+**Changement — `gen_patch08.py` :** L'abstraction `cortex_motion_08` est instanciée à côté de `cortex_ctrl_08`. Regen. Relancé Pd. Pas de modification des signaux audio, uniquement des données de contrôle.
+
+---
+
+## 2026-08-22 — Ambiances mélodiques A45–A69, nappe en Reconstruction, échange avant/arrière
+
+Loumana : « pour toutes les couches n'utiliser que les ambiances de A45 à A69,
+même reconstruction, peut-être pas boucle […] il n'y a pas une grande rotation
+d'ambiance et je retombe toujours sur les mêmes […] pour cortex les ambiances
+A59, 53, 54, 64, 65, 66, 67, 68 sont parfaites ».
+
+**Pourquoi la rotation semblait bloquée.** Les deux nappes ne tiraient pas dans
+les 69 ambiances mais dans une liste blanche de 15 stems écrite en dur, coupée
+en « musicale » (13 fichiers) et « texture » (5 fichiers : A38, A41, A43, A44,
+A45). La nappe texture tournait donc sur cinq fichiers dont quatre sous A45, et
+les deux pools se recouvraient. Surtout : **cinq des huit préférées — A54, A65,
+A66, A67, A68 — n'appartenaient à aucun pool** et ne pouvaient jamais sortir. Le
+tirage lui-même n'était pas en cause ; il prend un décalage de 1 à n−1 depuis
+l'index précédent, ce qui interdit déjà la répétition immédiate.
+
+**Un seul pool mélodique.** `ambiance_catalog.py` ne contient plus de liste
+blanche : il prend A45 à A69 au-dessus de `MIN_DUR_S`, soit 19 fichiers. Le
+seuil est à 25 s et non 30 s comme le voulait [Q3](Backlog/Q&A.md#q3) : à 30 s
+strict on perdrait A53 (29,5 s), qui est une des préférées, ainsi que A55
+(28,7 s) et A46 (25,9 s). Sont écartées A45, A47, A57, A58, A60, A69 — A47 ne
+dure que 3,9 s. Un garde-fou fait échouer la génération si une des huit
+préférées quitte le pool. La séparation musicale / texture de
+[Q25](Backlog/Q&A.md#q25) tombe : toute cette matière est mélodique.
+
+**Le Cortex est plus étroit que le reste.** Sur ses 40 secondes il n'a que deux
+nappes, et Loumana a désigné celles qui marchent : ses deux slots tirent
+uniquement dans les huit préférées (A53, A54, A59, A64, A65, A66, A67, A68).
+L'Hippocampe et la Reconstruction gardent les 19, où ces huit figurent aussi.
+
+**Anti-doublon.** Les deux nappes partageant la matière, elles pouvaient tomber
+sur le même fichier (1 chance sur 19). Le patch compare les deux noms à l'entrée
+en Cortex et retire une carte à la première nappe en cas d'égalité. `[select]`
+sans argument refuse les symboles — vérifié, il faut le créer avec un argument
+symbole pour que son entrée droite accepte un nom.
+
+**Hippocampe et Reconstruction.** La nappe de l'Hippocampe tirait dans les 69
+ambiances : elle passe sur le même pool. La Reconstruction n'avait aucune
+ambiance, conformément à [Q2](Backlog/Q&A.md#q2) ; Loumana revient sur cette
+décision. La couche 13 est pilotée par l'état et non par le compteur de couches,
+il a donc suffi d'ouvrir sa porte en état 2. Il fallait aussi corriger son slot :
+sans cela elle tirait dans le slot 6, c'est-à-dire les paroles Reconstruction
+COURT, pas une ambiance. La Boucle n'est pas touchée.
+
+**Échange avant / arrière.** Nouveau geste dans le Cortex : la voix d'arrière-plan
+passe devant et celle de devant recule, quatre fois par passage, sur une paire
+tirée à chaque fois, en 7 s (2,5 s de montée, 2 s tenues, 2,5 s de retour). Une
+seule rampe par paire, diffusée par `s6_cx_swap{pr}`, pilote les deux versants :
+les gains dans `cortex_pair_08` et les plages du balayage LPF dans
+`cortex_ctrl_08`. L'oscillateur du balayage ne produit plus des hertz mais une
+position 0–1 dans une plage, ce qui permet à la plage de glisser — avant
+800–2000 Hz vers arrière 500–1000 Hz, et l'inverse. Mesuré sur banc : pendant le
+geste la voix de devant descend à 554–683 Hz, sous son plancher nominal de
+800 Hz, donc les plages permutent bien.
+
+**Les nappes étaient inaudibles, et ce n'était pas la sélection.** Loumana les
+trouve peu perceptibles dans le Cortex. Mesure des niveaux :
+`normaliser_niveaux.py` vise `CIBLE_AMBIANCE = -45 dB` RMS contre -23 pour les
+paroles, en pariant que le mixage du patch rendrait les 22 dB d'écart. Il n'en
+rendait que 6,5 (`CORTEX_AMB_GAIN` 0,42 contre `CORTEX_LAYER_GAIN` 0,20), et
+avec douze fragments contre deux nappes celles-ci jouaient **23 dB sous la masse
+du Cortex**. Gain porté à 2,0 : l'écart tombe à 10 dB, un lit sous les voix et
+non une concurrence. Crête la plus haute après toute la chaîne : 0,19, soit cinq
+fois de marge avant saturation. Le gain devient réglable en salle par
+`s6_amb_gain`, en dB relatifs — 0 laisse la valeur du preset.
+
+Au passage, réponse à l'autre question de Loumana : **aucun filtre sur les
+nappes**. Passe-bas à 18 000 et 16 000 Hz, donc grand ouvert, et `wet` à 0 donc
+pas de réverbération ; le seul mouvement est le trémolo lent de
+`cortex_amb_08`. Les douze voix, elles, sont filtrées entre 500 et 2000 Hz.
+
+**Le volet spatial et l'exclusion mutuelle.** Loumana demandait « du phi et
+filtre ». La difficulté : chaque paire n'a qu'un encodeur ambisonique, déjà pris
+par le voyage à 180° ajouté plus tôt dans la journée, et deux gestes ne peuvent
+pas écrire le même azimut. Loumana a tranché pour l'exclusion. Une paire annonce
+son occupation sur `s6_cx_trav{pr}` pendant un voyage et sur `s6_cx_swp{pr}`
+pendant un échange ; chaque geste saute son rendez-vous si l'autre tient déjà la
+paire. L'échange peut donc utiliser l'encodeur : 40 % de la voix y passe et
+l'azimut se décale de 60°, bien moins que l'arc du voyage — un déhanchement, pas
+un déplacement. Vérifié sur un passage complet : aucune paire n'a porté les deux
+gestes en même temps.
+
+**Trouvaille : le hasard ne varie pas d'un lancement à l'autre.** En vérifiant
+que les quatre rendez-vous changeaient d'un démarrage au suivant, ils se sont
+révélés identiques. Banc isolé : `noise~` rend `0.536548` et `random 1000000`
+rend `743639` à tous les lancements. **Pd sème ses générateurs à valeur fixe.**
+Tout le projet est concerné, pas seulement ce geste : les tirages de fragments,
+d'ambiances et de gestes suivent la même suite à chaque démarrage. C'est la
+plainte initiale de Loumana — « après 5 démarrages HP1 et HP2 sont toujours C26
+et C61 ». La graine tirée de `noise~` mise en place plus tôt ne pouvait pas
+corriger ça.
+
+**Corrigé par `seed_source_08`.** Pd vanilla n'a pas d'horloge, mais
+`[file stat]` donne la date de modification d'un fichier : l'abstraction en
+écrit un au démarrage, lit sa `mtime` et diffuse la seconde du jour sur
+`s6_seed`. Deux pièges rencontrés. D'abord `open … w` sur un fichier existant ne
+rafraîchit pas sa date — la graine restait figée à l'heure de la toute première
+exécution, il faut effacer avant de recréer. Ensuite le facteur d'échelle : à
+193 le produit reste sous 2^24, donc exact en flottant 32 bits, et deux secondes
+voisines donnent des graines assez écartées pour décorréler les tirages, alors
+qu'à graine +1 le premier tirage bouge à peine. Les trois sources `noise~` du
+projet — lecteur de playlists, gestes du Cortex, échange — lisent maintenant
+`s6_seed`. Vérifié : deux lancements successifs échangent des paires
+différentes, là où la suite était figée.
+
+---
+
+## 2026-08-22 — Layout des baffles formalisé : numéro, sortie et position séparés
+
+**Prompt :** le programme ne connaît que le numéro du baffle, pas son emplacement dans l'espace — formaliser ça. Question posée avant de coder : la distance entre les baffles compte-t-elle, ou seulement la forme octogonale ?
+
+**Réponse.** Pour le calcul, **seule la forme compte** : la matrice de décodage ordre 1 / 2D vaut `[1, cos(az), sin(az)]` par ligne, ni la distance ni le rayon n'y entrent. La distance agit ailleurs, et c'est là que rien n'était prévu : des baffles à distances inégales déséquilibrent l'anneau (6 dB par doublement de distance, 2,9 ms par mètre), et **le mode dominant du patch n'utilise même pas la matrice** — en Cortex les voix sortent en routage direct, donc l'azimut n'y joue aucun rôle et la distance joue tout. Hiérarchie retenue : ordre cyclique des baffles > égalisation des niveaux > angles réels > rayon absolu (négligeable en ordre 1).
+
+**Décisions (réponses de Loumana).** Octogone **régulier**, distances comparables · layout **complet** · **centre d'écoute défini** (les gens s'arrêtent au milieu, pas seulement de passage).
+
+**Code — `scripts/proto08/proto08_lib/layout08.py`** (nouveau). Un `Speaker` par baffle avec cinq champs séparés : `hp` (index logique), `dac` (sortie carte son), `az` (azimut mesuré), `dist_m`, `trim_db`. Convention d'azimut verrouillée dans le module : 0° devant, croissant vers la **droite** — l'inverse du standard ambisonique, mais cohérent de bout en bout puisque `encode_2d` et le décodeur partagent la formule. Helpers : `ring()` / `neighbours()` (voisinage calculé depuis les angles, plus depuis `hp ± 1`), `anchors()`, `decode_matrix_msg()`, `delays_ms()`, `validate()` au chargement.
+
+**Câblage — trois découplages.** `dac~` prend ses canaux du layout, donc recâbler ne demande plus de toucher au code. Nouvel étage `trm{n}` par baffle après le master, réglable en direct par `s6_trim{n}` sans régénérer — c'est le réglage d'égalisation à faire en salle. Les vu-mètres sont déplacés **après** le trim pour afficher ce qui sort vraiment. La compensation de retard n'est générée que si les distances diffèrent d'au moins 0,5 ms ; elle ne l'est donc pas aujourd'hui.
+
+**Nouveau — `pd/lib/decode_8hp_08.pd`.** La matrice n'est plus écrite en dur : elle est recalculée depuis les azimuts déclarés. `decode_8hp_06` n'est pas touché (06 figé, partagé avec le 07). `ANCHORS_8HP` et `DECODE_8HP_AZ` découlent du layout, et l'angle de départ du voyage phi en Cortex vient de l'azimut réel du baffle au lieu de `pr * 45`. Garde-fou ajouté : les deux baffles d'ambiance ne peuvent plus être voisins dans l'anneau sans erreur explicite ([Q25](./Backlog/Q&A.md#q25)).
+
+**Vérifié.** Matrice générée **identique au bit près** à celle du 06, angles de voyage inchangés, Pd charge sans erreur — le refactor est neutre à l'oreille. La branche de compensation de distance a été testée à part en déséquilibrant deux baffles : le plus proche reçoit bien le retard, le plus éloigné sert de référence.
+
+**Reste.** [`etatactuel.md`](./etatactuel.md) décrit toujours le Proto 07 (3 paires HP1–3, 5 nappes) — antérieur à ce changement, à reprendre séparément.
 
 ---
 

@@ -5,7 +5,7 @@ Un fichier par zone. Chacun décrit **comment la zone sonne**, pas quels samples
 | Zone | Fichier | Statut |
 |------|---------|--------|
 | Cortex | [`Cortex.md`](./Cortex.md) | en cours de gel — priorité 1 |
-| Hippocampe | [`Hippocampe.md`](./Hippocampe.md) | en cours de gel — priorité 2 |
+| Hippocampe | [`Hippocampe.md`](./Hippocampe.md) | **en cours** — spec Simon (21 août) · **loin du gel** (§9) |
 | Reconstruction | [`Reconstruction.md`](./Reconstruction.md) | pas encore travaillée |
 | Boucle | [`Boucle.md`](./Boucle.md) | pas encore travaillée |
 
@@ -33,12 +33,10 @@ Chaque paramètre dans ces fichiers porte un statut :
 | **OREILLE** | Valeur actuelle plausible, pas encore validée. | Se règle librement pendant les séances d'écoute |
 | **OUVERT** | Pas de valeur décidée, ou contredit la spec Simon. | Renvoie vers une question dans [`../Backlog/Q&A.md`](../Backlog/Q&A.md) |
 
-Rien n'est encore **FIGÉ** au 20 août 2026. C'est justement le travail à faire : passer les paramètres de OREILLE à FIGÉ, zone par zone, en commençant par le Cortex.
+Rien n'est encore **FIGÉ** au 20 août 2026. Cortex avance structurellement (§10) ; **Hippocampe reste ouvert** (§9) — ne pas traiter les deux zones au même stade.
 
 ---
 
 ## Où vivent réellement les valeurs
 
-Les chiffres cités ici sont **recopiés** de `scripts/proto07/proto07_lib/presets07.py` et des abstractions `pd/lib/*_07.pd`. Le code fait foi. Si une valeur bouge dans le code, ces fichiers doivent être corrigés dans le même prompt — sinon le gel ne vaut rien.
-
-Les `.pd` de Proto 07 sont **générés** : on modifie `presets07.py` puis `python3 scripts/gen_prototype_07_8hp.py`. Jamais le `.pd` à la main.
+Les chiffres cités ici sont **recopiés** de `scripts/proto08/proto08_lib/presets08.py` et des abstractions `pd/lib/*_08.pd` (Proto 08 courant). Les § historiques Proto 07 restent en trace dans le texte. Le code fait foi. Regénération : `python3 scripts/gen_prototype_08_8hp.py`. Jamais le `.pd` à la main.

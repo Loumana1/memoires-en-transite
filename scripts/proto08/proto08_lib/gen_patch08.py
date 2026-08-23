@@ -9,6 +9,7 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 _REPO = os.path.abspath(os.path.join(_HERE, "..", "..", ".."))
 sys.path.insert(0, os.path.join(_REPO, "scripts"))
 from shared.pdbuild import P
+from . import layout08 as LAY
 from . import presets08 as PR
 
 PDDIR = os.path.join(_REPO, "pd")
@@ -19,10 +20,11 @@ DECLARE = ("#X declare -path .. -path . -path lib -path externals/iem_ambi-maste
 CFG = dict(
     fname="prototype_08_fsm_8hp.pd",
     title="MET_PROTOTYPE_08_8HP",
-    decode="lib/decode_8hp_06",
-    dac="dac~ 1 2 3 4 5 6 7 8",
-    nch=8,
-    nhp=8,
+    decode="lib/decode_8hp_08",
+    # La n-ième entrée de dac~ part vers HP n : le câblage vit dans layout08.
+    dac=f"dac~ {LAY.dac_args()}",
+    nch=LAY.NHP,
+    nhp=LAY.NHP,
     n_layers=PR.MAX_LAYERS_8HP,
     layer_gain=PR.CORTEX_LAYER_GAIN,
     amb_gain=PR.CORTEX_AMB_GAIN,
@@ -59,10 +61,14 @@ def build_engine(cfg):
     e.con("fsm", 1, "prs", 0)
     e.con("prs", 0, "s_var", 0)
 
+    # Doit exister avant tout ce qui tire au hasard : diffuse s6_seed au boot.
+    e.obj("seedsrc", 20, 20, "lib/seed_source_08")
+
     e.obj("visu", 480, 160, "lib/visu_cerveau_06")
     e.con("fsm", 0, "visu", 0)
 
     e.obj("cxctrl", 640, 60, "lib/cortex_ctrl_08")
+    e.obj("cxmot", 640, 100, "lib/cortex_motion_08")
     e.obj("pres", 780, 60, "lib/presence_08")
     e.obj("rform", 920, 60, "lib/recon_formes_08")
     e.obj("hasoc", 1060, 60, "lib/hippo_assoc_08")
@@ -71,21 +77,30 @@ def build_engine(cfg):
     e.obj("cxpair", 1480, 60, "lib/cortex_pair_08")
     e.obj("cxamb", 1480, 100, "lib/cortex_amb_08")
 
-    e.obj("f_n", 480, 110, "f 12")
+    # Gates couches 2–12 : ouverture selon o_n (Cortex=12, Hippo=4…) · fermeture m_cxoff
+    # Ne pas lier del{n} → gate : o_bply déclenche del1–13 dans toutes les zones.
+    e.obj("f_n", 480, 110, "f 0")
     e.con("fsm", 2, "f_n", 0)
     e.obj("r_cn", 600, 110, "r s6_cortex_n")
     e.con("r_cn", 0, "f_n", 0)
     for k in range(2, nl):
         e.obj(f"ge{k}", 480 + (k - 2) * 70, 140, f">= {k}")
+        e.obj(f"sg{k}", 480 + (k - 2) * 70, 160, "sel 1")
+        e.msg(f"gon{k}", 480 + (k - 2) * 70, 180, "1")
+        e.msg(f"goff{k}", 480 + (k - 2) * 70, 200, "0")
         e.con("f_n", 0, f"ge{k}", 0)
+        e.con(f"ge{k}", 0, f"sg{k}", 0)
+        e.con(f"sg{k}", 0, f"gon{k}", 0)
 
-    # L13 nappe mobile: Hippo seulement (Cortex = 2 nappes HP5/HP7)
-    e.obj("sel_amb", 1100, 110, "sel 1")
+    # L13 nappe : Hippo (mobile) et Recon (fixe) depuis le 22 août. Le Cortex a
+    # ses deux nappes dédiées, la Boucle n'en veut pas.
+    e.obj("sel_amb", 1100, 110, "sel 1 2")
     e.msg("amb1", 1100, 140, "1")
     e.msg("amb0", 1180, 140, "0")
     e.con("fsm", 0, "sel_amb", 0)
     e.con("sel_amb", 0, "amb1", 0)
-    e.con("sel_amb", 1, "amb0", 0)
+    e.con("sel_amb", 1, "amb1", 0)
+    e.con("sel_amb", 2, "amb0", 0)
 
     e.obj("selcxsp", 1280, 110, "sel 0")
     e.msg("m_cxon", 1280, 140, "1")
@@ -107,24 +122,28 @@ def build_engine(cfg):
     e.con("m_otoff", 0, "pk_ot", 0)
     e.con("pk_cx", 0, "ln_cx", 0)
     e.con("pk_ot", 0, "ln_ot", 0)
-    e.obj("lb_sp", 1520, 140, "loadbang")
-    e.con("lb_sp", 0, "m_cxoff", 0)
-    e.con("lb_sp", 0, "m_oton", 0)
+    for k in range(2, nl):
+        e.con("m_cxoff", 0, f"goff{k}", 0)
+        e.con("m_cxon", 0, f"gon{k}", 0)
 
     for i in range(nl):
         y = 240 + i * 40
         e.obj(f"stt_{i}", 20, y - 18, "t f f")
         if i == 12:
-            e.obj(f"selcx_{i}", 20, y, "sel 0 1")
+            # Sans l'état 2 la nappe de Recon tirerait dans le slot 6, c'est-à-dire
+            # les paroles Reconstruction COURT — pas une ambiance.
+            e.obj(f"selcx_{i}", 20, y, "sel 0 1 2")
             e.msg(f"mcx_{i}", 100, y, "40")
             e.msg(f"mhp_{i}", 100, y + 18, "41")
+            e.msg(f"mrc_{i}", 100, y + 36, "41")
             e.obj(f"m3_{i}", 200, y, "* 3")
             e.obj(f"sa_{i}", 280, y, "+")
             e.con("fsm", 0, f"stt_{i}", 0)
             e.con(f"stt_{i}", 0, f"selcx_{i}", 0)
             e.con(f"selcx_{i}", 0, f"mcx_{i}", 0)
             e.con(f"selcx_{i}", 1, f"mhp_{i}", 0)
-            e.con(f"selcx_{i}", 2, f"m3_{i}", 0)
+            e.con(f"selcx_{i}", 2, f"mrc_{i}", 0)
+            e.con(f"selcx_{i}", 3, f"m3_{i}", 0)
             e.con("fsm", 3 + i, f"sa_{i}", 1)
             e.con(f"m3_{i}", 0, f"sa_{i}", 0)
         else:
@@ -144,12 +163,17 @@ def build_engine(cfg):
             e.con("fsm", 3 + i, f"sa_{i}", 1)
 
     e.obj("r_ovl", 780, 140, "r s6_cortex_ovl")
+    e.obj("d_bply", 600, 125, "delay 120")
     for i in range(nl):
         n = i + 1
-        e.obj(f"del{n}", 640, 140 + i * 28, "delay 5")
-    e.con("fsm", bang_out, "del1", 0)
-    for i in range(1, nl):
-        e.con("fsm", bang_out, f"del{i + 1}", 0)
+        e.obj(f"del{n}", 640, 140 + i * 28, "delay 80")
+    e.con("fsm", bang_out, "d_bply", 0)
+    e.con("d_bply", 0, "del1", 0)
+    if nl >= 2:
+        e.con("del1", 0, "del2", 0)
+        e.con("r_ovl", 0, "del2", 1)
+    for i in range(2, nl):
+        e.con(f"del{i}", 0, f"del{i + 1}", 0)
 
     amb_gain = cfg["amb_gain"]
     e.obj("duck", 300, 720, "lib/hippo_duck_08")
@@ -168,12 +192,8 @@ def build_engine(cfg):
         e.obj(f"p{n}", 40, y, f"lib/player_state_08 {loop}")
         e.obj(f"g{n}", 220, y, f"*~ {lg}")
         if i < 12:
-            e.obj(f"trp{n}", 40, y - 22, "t b b")
-            e.con(f"del{n}", 0, f"trp{n}", 0)
-            e.con(f"trp{n}", 0, f"mcx_{i}", 0)
-            e.con(f"trp{n}", 1, f"p{n}", 0)
-        else:
-            e.con(f"del{n}", 0, f"p{n}", 0)
+            e.con(f"mcx_{i}", 0, f"p{n}", 1)
+        e.con(f"del{n}", 0, f"p{n}", 0)
         if i == 12:
             e.con(f"mhp_{i}", 0, f"p{n}", 1)
         e.con(f"sa_{i}", 0, f"p{n}", 1)
@@ -194,13 +214,11 @@ def build_engine(cfg):
             e.con("mul_dk", 0, "mul13", 0)
             src = "mul13"
         elif i > 0 and i < 12:
-            pass
-        elif i > 0:
-            ge = f"ge{i + 1}"
             e.obj(f"pk{n}", 320, y - 25, "pack 0 3")
             e.obj(f"ln{n}", 320, y, "line~")
             e.obj(f"mul{n}", 400, y, "*~")
-            e.con(ge, 0, f"pk{n}", 0)
+            e.con(f"gon{i + 1}", 0, f"pk{n}", 0)
+            e.con(f"goff{i + 1}", 0, f"pk{n}", 0)
             e.con(f"pk{n}", 0, f"ln{n}", 0)
             e.con(f"ln{n}", 0, f"mul{n}", 1)
             e.con(f"g{n}", 0, f"mul{n}", 0)
@@ -298,22 +316,36 @@ def build_engine(cfg):
 
     yamb = yinj + 80
     e.obj("r_et_amb", 40, yamb - 48, "r s6_etat")
-    e.obj("chg_amb", 40, yamb - 24, "change")
+    e.obj("chg_amb", 40, yamb - 24, "change -1")
     e.obj("sel_ambcx", 120, yamb - 24, "sel 0")
     e.obj("t_ambgo", 120, yamb - 48, "t b b")
-    e.obj("lb_ambs", 200, yamb - 48, "loadbang")
+    e.obj("eq_cx_amb", 200, yamb - 48, "== 0")
+    e.obj("sp_cx_amb", 200, yamb - 24, "spigot")
+    e.obj("d_amb", 260, yamb - 24, "delay 1")
+    e.con("fsm", bang_out, "d_amb", 0)
+    e.con("d_amb", 0, "sp_cx_amb", 0)
+    e.con("fsm", 0, "eq_cx_amb", 0)
+    e.con("eq_cx_amb", 0, "sp_cx_amb", 1)
+    e.con("sp_cx_amb", 0, "t_ambgo", 0)
     e.obj("ambbeh", 320, yamb + 20, "lib/cortex_amb_behav_08")
     for i in range(2):
         ya = yamb + i * 42
         e.obj(f"pamb{i}", 40, ya, "lib/player_state_08 1")
         e.msg(f"msamb{i}", 200, ya - 18, str(32 + i))
         e.msg(f"bang_amb{i}", 200, ya + 18, "bang")
-        e.con("lb_ambs", 0, f"msamb{i}", 0)
-        e.con("lb_ambs", 0, f"bang_amb{i}", 0)
-        e.con("t_ambgo", i, f"bang_amb{i}", 0)
+        e.obj(f"goa{i}", 160, ya - 48, "t b b")
+        e.con("t_ambgo", i, f"goa{i}", 0)
+        e.con(f"goa{i}", 0, f"msamb{i}", 0)
+        e.con(f"goa{i}", 1, f"bang_amb{i}", 0)
         e.con(f"msamb{i}", 0, f"pamb{i}", 1)
         e.con(f"bang_amb{i}", 0, f"pamb{i}", 0)
         e.obj(f"gamb{i}", 220, ya, f"*~ {amb_gain}")
+        # Réglage à l'oreille en salle, en dB : s6_amb_gain 0 laisse la valeur
+        # ci-dessus, +6 double, -6 divise par deux.
+        e.obj(f"r_ag{i}", 280, ya - 40, "r s6_amb_gain")
+        e.obj(f"db_ag{i}", 280, ya - 20, f"expr {amb_gain:g}*pow(10\\, $f1/20)")
+        e.con(f"r_ag{i}", 0, f"db_ag{i}", 0)
+        e.con(f"db_ag{i}", 0, f"gamb{i}", 1)
         e.obj(f"fxamb{i}", 360, ya, f"lib/fx_router_06 {15 + i}")
         e.obj(f"cxag{i}", 480, ya, "*~")
         e.con(f"pamb{i}", 0, f"gamb{i}", 0)
@@ -328,6 +360,36 @@ def build_engine(cfg):
     e.con("chg_amb", 0, "sel_ambcx", 0)
     e.con("sel_ambcx", 0, "t_ambgo", 0)
 
+    # Anti-doublon des deux nappes. Elles tirent dans le même pool mélodique
+    # depuis le 22 août, donc elles peuvent tomber sur le même fichier (1 sur
+    # 19). t_ambgo sort de droite à gauche : la nappe 2 choisit d'abord et son
+    # nom arme la comparaison, la nappe 1 choisit ensuite. En cas d'égalité on
+    # retire une carte à la nappe 1. Le spigot n'autorise qu'un seul nouveau
+    # tirage par entrée en Cortex — le lecteur ne reprend jamais son fichier
+    # précédent, donc une reprise suffit en pratique.
+    ydup = yamb + 2 * 42 + 10
+    e.obj("dup_cmp", 660, ydup, "select zzz")
+    e.obj("dup_sp", 660, ydup + 22, "spigot")
+    e.obj("dup_t", 660, ydup + 44, "t b b")
+    e.msg("dup_off", 760, ydup + 44, "0")
+    e.msg("dup_on", 860, ydup, "1")
+    e.obj("dup_d", 660, ydup + 66, "delay 2")
+    e.con("pamb1", 1, "dup_cmp", 1)
+    e.con("pamb0", 1, "dup_cmp", 0)
+    e.con("dup_cmp", 0, "dup_sp", 0)
+    e.con("dup_sp", 0, "dup_t", 0)
+    e.con("dup_t", 1, "dup_off", 0)
+    e.con("dup_off", 0, "dup_sp", 1)
+    e.con("dup_t", 0, "dup_d", 0)
+    e.con("dup_d", 0, "pamb0", 0)
+    e.con("t_ambgo", 1, "dup_on", 0)
+    e.con("dup_on", 0, "dup_sp", 1)
+    # Le mécanisme ne vit que le temps du choix : refermé 300 ms après l'entrée
+    # pour qu'aucun message de nom émis plus tard ne relance un tirage.
+    e.obj("dup_shut", 860, ydup + 22, "delay 300")
+    e.con("t_ambgo", 1, "dup_shut", 0)
+    e.con("dup_shut", 0, "dup_off", 0)
+
     dac_y = yamb + 2 * 42 + 70
     e.obj("dec", 640, dac_y, cfg["decode"])
     for n in range(1, nl):
@@ -337,19 +399,43 @@ def build_engine(cfg):
         e.con("srinj", c, "dec", c)
         e.con("sr13", c, "dec", c)
     e.obj("r_mas", 40, dac_y + 40, "r s6_master")
-    e.obj("dac", 640, dac_y + 140, cfg["dac"])
-    e.obj("lb_lvl", 40, dac_y + 155, "loadbang")
-    e.obj("mlvl", 120, dac_y + 155, "metro 100")
+    e.obj("dac", 640, dac_y + 215, cfg["dac"])
+    e.obj("lb_lvl", 200, dac_y + 20, "loadbang")
+    e.obj("mlvl", 300, dac_y + 20, "metro 100")
     e.con("lb_lvl", 0, "mlvl", 0)
+    # Étage de sortie par baffle : master commun, puis trim propre au HP, puis
+    # compensation de distance si le layout la réclame. Les vu-mètres sont pris
+    # après le trim pour afficher ce qui sort vraiment.
+    delays = LAY.delays_ms()
+    use_delay = LAY.needs_delay_compensation()
+    if use_delay:
+        maxms = max(4, int(max(delays.values()) + 2))
+        e.text(40, dac_y + 5, "compensation de distance active (layout08)")
     for k in range(cfg["nch"]):
-        e.obj(f"vol{k}", 40 + k * 100, dac_y + 70, "*~ 1")
+        hp = k + 1
+        x = 40 + k * 100
+        e.obj(f"vol{k}", x, dac_y + 60, "*~ 1")
         e.con("dec", k, f"vol{k}", 0)
         e.con("r_mas", 0, f"vol{k}", 1)
-        e.con(f"vol{k}", 0, "dac", k)
-        e.obj(f"lvl{k}", 40 + k * 100, dac_y + 105, "env~ 16384")
-        e.obj(f"snap{k}", 40 + k * 100, dac_y + 125, "snapshot~")
-        e.obj(f"slvl{k}", 40 + k * 100, dac_y + 145, f"s s6_lvl{k + 1}")
-        e.con(f"vol{k}", 0, f"lvl{k}", 0)
+        e.obj(f"trm{k}", x, dac_y + 120, f"*~ {LAY.fmt(LAY.trim_linear(hp))}")
+        # s6_trim{hp} se pilote en dB comme le layout : sans conversion, un -3
+        # envoyé à la main inverserait la polarité au lieu d'atténuer.
+        e.obj(f"r_trm{k}", x + 58, dac_y + 78, f"r s6_trim{hp}")
+        e.obj(f"db_trm{k}", x + 58, dac_y + 98, "expr pow(10\\, $f1/20)")
+        e.con(f"r_trm{k}", 0, f"db_trm{k}", 0)
+        e.con(f"db_trm{k}", 0, f"trm{k}", 1)
+        if use_delay:
+            e.obj(f"dlw{k}", x, dac_y + 80, f"delwrite~ \\$0-hp{hp} {maxms}")
+            e.obj(f"dlr{k}", x, dac_y + 100, f"delread~ \\$0-hp{hp} {delays[hp]:.2f}")
+            e.con(f"vol{k}", 0, f"dlw{k}", 0)
+            e.con(f"dlr{k}", 0, f"trm{k}", 0)
+        else:
+            e.con(f"vol{k}", 0, f"trm{k}", 0)
+        e.con(f"trm{k}", 0, "dac", k)
+        e.obj(f"lvl{k}", x, dac_y + 145, "env~ 16384")
+        e.obj(f"snap{k}", x, dac_y + 165, "snapshot~")
+        e.obj(f"slvl{k}", x, dac_y + 185, f"s s6_lvl{hp}")
+        e.con(f"trm{k}", 0, f"lvl{k}", 0)
         e.con(f"lvl{k}", 0, f"snap{k}", 0)
         e.con("mlvl", 0, f"snap{k}", 0)
         e.con(f"snap{k}", 0, f"slvl{k}", 0)
@@ -362,9 +448,12 @@ def build_engine(cfg):
         e.con("sr13", 3 + k, f"vol{vk}", 0)
     for k in range(6):
         e.con("cxpair", k, f"vol{k}", 0)
+    # W X Y du voyage spatial Cortex → décodeur 8 HP
+    for c in range(3):
+        e.con("cxpair", 6 + c, "dec", c)
     for k in range(cfg["nch"]):
         e.con("cxamb", k, f"vol{k}", 0)
-    e.text(40, dac_y + 180, cfg["note"])
+    e.text(40, dac_y + 250, cfg["note"])
     return e
 
 

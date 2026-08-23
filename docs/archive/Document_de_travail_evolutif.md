@@ -46,7 +46,7 @@ L’œuvre produit une écoute instable, hybride et transnationale.
 
 ## 4. Dispositif spatial
 * **Salle :** Black Box (~14 m²)
-* **Diffusion :** 12 haut-parleurs
+* **Diffusion :** **8 haut-parleurs** (6 parole + 2 ambiance)
 
 Organisation inspirée du cerveau (sans dimension didactique) :
 * cortex (réception)

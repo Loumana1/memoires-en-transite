@@ -3,7 +3,7 @@
 **Priorité 1 pour le gel.** Aucun paramètre n'est encore FIGÉ, mais la **structure** l'est depuis le 20 août : voir §3.
 Statuts : voir [`README.md`](./README.md). Questions ouvertes : [`../Backlog/Q&A.md`](../Backlog/Q&A.md).
 
-> **Attention en lisant les §4 à §8.** Ils décrivent le Proto **07** tel qu'il sonne aujourd'hui : 6 couches de parole sur 3 baffles, 5 nappes. La cible décidée est 12 couches sur 6 baffles et 2 nappes (§3). Les valeurs restent valables comme point de départ, pas comme description de la cible.
+> **Attention en lisant les §4 à §8.** Ils décrivent le Proto **07** ou la cible **avant** implémentation. **Ce qui sonne aujourd'hui (Proto 08)** : §10. La cible structurelle (12 voix / 6 baffles / 2 nappes) est atteinte ; **8 HP** = baffles physiques, **12 voix** = couches de parole.
 
 ---
 
@@ -35,10 +35,10 @@ Ce sont les affirmations qui doivent rester vraies même si on remplace toute la
 
 [Q1](../Backlog/Q&A.md#q1) = **option A**, [Q2](../Backlog/Q&A.md#q2) répondu. La cible est la spec de Simon.
 
-| | Cible décidée | Implémentation actuelle (18 août) |
+| | Cible décidée | Implémentation Proto 08 (août 2026) |
 |--|--|--|
-| Paroles | **6 baffles**, 2 fragments superposés chacun → **12 fragments simultanés** | HP1–3, 3 paires, 6 fragments |
-| Ambiances | **2 baffles**, une musicale et une texture, **fixes** pendant le Cortex | HP4–8, 5 nappes du même pool |
+| Paroles | **6 baffles**, 2 fragments superposés chacun → **12 fragments simultanés** | HP1–6, 6 paires, 12 voix — fait |
+| Ambiances | **2 baffles**, une musicale et une texture, **fixes** pendant le Cortex | HP7 musicale, HP5 texture — fait |
 
 Deux précisions issues de [Q2](../Backlog/Q&A.md#q2), qui ne sont pas dans la spec :
 
@@ -324,19 +324,118 @@ Le choix du mode dépend probablement de la durée du sample et du geste tiré �
 
 ---
 
-## 9. Ce qu'il faut faire pour figer cette zone
+## 9. Ce qu'il reste pour figer cette zone
 
-Dans cet ordre, parce que chaque étape rend la suivante possible :
+Ordre utile. Snapshot détaillé : §10 A/B (23 août). Réverb « pièce voisine » : **laissée en delay V1** (décision 23 août) — hors liste ci-dessous.
 
-1. ~~**Trancher la carte des 8 HP**~~ — fait le 20 août, [Q1](../Backlog/Q&A.md#q1) = A. §3.
-2. **Monter le Proto 08** avec la carte à 12 voix + 2 nappes, en gardant le tirage au hasard. C'est du câblage, pas du réglage : à ce stade on ne cherche pas encore le bon son, on cherche la bonne structure.
-3. **Implémenter les plans de présence** dans le Proto 08 — spec §5 bis ([Q10](../Backlog/Q&A.md#q10) fermée). Forçables à la main pour écouter sur la même paire.
-4. **Ajouter une vraie réverbération « pièce voisine »** sur les paroles, et régler la distance à l'oreille avec le LPF. C'est ce qui répond au reproche d'intelligibilité de Simon. → [Q18](../Backlog/Q&A.md#q18).
-5. ~~**Trancher le conflit pulse / `EMERGER`-`RECOUVRIR`**~~ — fait le 20 août, [Q11](../Backlog/Q&A.md#q11). §8 bis. Pulse supprimé.
-6. **Implémenter les gestes** (`EMERGER` 6–10 s, `RECOUVRIR` 3–6 s, décalage par paire, 50/50) dans `cortex_pair_08`.
-7. **Figer le balayage de LPF** sur 12 couches : bornes, vitesse, et non-harmonicité des douze oscillateurs.
-8. **Figer la rotation par paires** sur 6 baffles : horloge, probabilité, fondu.
-9. **Figer les deux nappes** : gain, AM, lecture longue (≥ 30 s), séparation musicale / texture.
-10. Écrire `FIGÉ` dans ce fichier et une strophe dans [`../log.md`](../log.md). À partir de là, plus de modification sans prompt explicite.
+### Son (indépendant du tableau)
 
-Les étapes 2 à 8 se font **sans toucher au choix des samples**. C'est exactement le but : quand les tags arriveront, le son de la zone sera déjà un acquis.
+1. ~~Carte 8 HP · Proto 08 · gestes EMERGER/RECOUVRIR · phi/swap · spectraux · 2 nappes~~ — **fait** (§10 A).
+2. **Finir les plans de présence** — seuls gros restes **code** côté son :
+   - Spec + prompt IA : [`../Backlog/spec_cortex_plans_presence_08.md`](../Backlog/spec_cortex_plans_presence_08.md) · [`../Backlog/prompt_cortex_plans_presence_08.md`](../Backlog/prompt_cortex_plans_presence_08.md).
+   - Valeurs : §5 bis ([Q10](../Backlog/Q&A.md#q10)).
+   - Déjà en place : 12× `fx_router` + gains dans `cortex_pair` ; à corriger : double gain, alignement wet/delay/hpf, LFO #7, forçage manuel.
+   - TO DO : [`../Backlog/TO DO.md`](../Backlog/TO%20DO.md) §1 Cortex.
+3. **Figer à l'oreille** (pas de nouveau câblage, marquer `FIGÉ` ici + [`../log.md`](../log.md)) :
+   - bornes / vitesses LPF des 12 osc. ;
+   - rotation 6 paires (horloge, proba, xfade) ;
+   - niveaux / AM des deux nappes.
+4. Optionnel matière (améliore le tirage sans sélecteur) : `type_ambiance` + `usage_prefere` dans le classeur — [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §7 étapes 3–4.
+
+### Sélection samples (après tableau)
+
+Étapes déjà ordonnées dans [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §6–§7 :
+
+1. Remplir le classeur (au moins partiel : `CONTEXTE`, `TYPE_DISCOURS`, …).
+2. Audit `gen_paires.py` (mode rapport) → tables C2/C3 en données Python.
+3. Lecteur Pd : accepter un **chemin forcé** (aujourd'hui index playlist seulement).
+4. Sélecteur live : `gen_paires.py` + `gen_ambiance_cortex.py` → fichiers lus par Pd.
+
+Tant que le tableau est vide : **ne pas coder** le sélecteur (§8 Attributs).
+
+Les étapes son ci-dessus se font **sans** logique C1…C11.
+
+---
+
+## 10. Proto 08 — implémenté (août 2026)
+
+> Les §4–§8 décrivent surtout le **Proto 07** ou la **cible** avant implémentation. Cette section dit ce qui **sonne aujourd'hui** dans `prototype_08_fsm_8hp.pd`. Journal : [`../log.md`](../log.md) (22 août).
+
+### Carte 8 HP (physique)
+
+| Rôle | Baffles | Détail |
+|------|---------|--------|
+| Parole | HP1–6 | 6 paires L1–L12, 2 fragments superposés par baffle |
+| Ambiance texture | **HP5** | fixe, pool mélodique A45–A69 |
+| Ambiance musicale | **HP7** | fixe, non adjacent à HP5 ([Q25](../Backlog/Q&A.md#q25)) |
+
+**12 voix sur 8 baffles.** Douze couches de signal, huit haut-parleurs. HP5 porte à la fois la paire de parole L9/L10 **et** la nappe texture (couches différentes, même sortie).
+
+### Spatialisation — choix retenus
+
+1. **Parole Cortex : pas d'ambisonics permanent.** Les fragments sortent **directement** sur leur HP d'ancrage (`cortex_pair_08` → `dac~`). C'est une décision d'oreille : chaque baffle tient son propre son ([Q16](../Backlog/Q&A.md#q16), invariant §2.6).
+
+2. **Layout découplé** — `scripts/proto08/proto08_lib/layout08.py` : index logique `hp`, canal `dac`, azimut `az`, distance, `trim_db`. Matrice `decode_8hp_08.pd` recalculée depuis les azimuts. Trim live : `s6_trim{n}`.
+
+3. **Gestes spatiaux momentanés** (encodeur 2D local par paire, pas le bus ambisonique Hippo/Recon) :
+   - **Voyage phi** : arc **180°** en **15 s** sur ~2 baffles/paire, gain `CORTEX_TRAVEL_GAIN`, mutex avec swap par paire (`s6_cx_trav{pr}` / `s6_cx_swp{pr}`).
+   - **Échange avant/arrière** (`CORTEX_SWAP`) : **4×** par passage Cortex, **7 s**, bascule gains plans + LPF + phi **60°**. Mutex exclusif avec le voyage phi sur la même paire.
+
+4. **Hippo / Recon / Boucle** : `spatial_router_06` → **`decode_8hp_08`** (pas `decode_8hp_06`).
+
+### Effets et gestes (Cortex)
+
+| Couche | Mécanisme | Fichier |
+|--------|-----------|---------|
+| LPF continu 12 voix | 12 osc. non harmoniques, 500–2000 Hz | `cortex_ctrl_08` |
+| Temporels | `EMERGER` 6–10 s, `RECOUVRIR` 3–6 s, pulse supprimé | `cortex_pair_08`, `cortex_amb_behav_08` |
+| Spectraux événementiels | RIPPLE, DOMINO, CLUSTER, MUR_TREMBLE · 65 % / passage · override LPF 200 ms | `cortex_motion_08` |
+| Nappes | gain ~2,825 (+3 dB), AM lente, mutex RECOUVRIR musicale/texture | `cortex_amb_08` |
+
+Debug gestes spectraux : `; s6_spec_recipe RIPPLE` (ou DOMINO_OUVERTURE, CLUSTER_BREATHE, MUR_TREMBLE).
+
+### État d'avancement — FIGÉ le 23 août 2026
+
+Deux chantiers distincts. Ne pas les mélanger.
+
+#### A. Son / câblage / gestes (indépendant du tableau)
+
+| Bloc | État |
+|------|------|
+| Carte 8 HP : 12 voix + 2 nappes | **FAIT** |
+| LPF 12 osc., rotation 6 paires | **FAIT** (à figer à l'oreille) |
+| Gestes temporels EMERGER / RECOUVRIR | **FAIT** |
+| Voyage phi + échange avant/arrière | **FAIT** |
+| Gestes spectraux (4 recettes) | **FAIT** |
+| Nappes A45–A69, gain, mutex | **FAIT** |
+| Plans de présence (2 chaînes FX complètes) | **PARTIEL** — gains alternés ; presets FX par plan incomplets |
+| Réverb « pièce voisine » | **ABSENT** |
+| Bornes LPF / rotation / nappes marquées FIGÉ | **PAS ENCORE** (oreille) |
+
+#### B. Logique de sélection des samples (dépend du tableau)
+
+| Élément | État |
+|---------|------|
+| Tirage actuel en Proto 08 | **Hasard** dans `playlists08/slot_*.txt` (`player_state_08`) — évite le dernier fichier **de la couche** ; nappes = pool mélodique codé en dur |
+| `gen_paires.py` / `gen_ambiance_cortex.py` | **ABSENTS** — aucun fichier, aucune stub, aucun branchement « dormant » |
+| Règles C1…C11 dans Pd ou Python | **NON implémentées** (même partiellement) |
+| Classeur | Colonnes prêtes, **vides** (pas de `CONTEXTE` Belgique/Congo renseigné) |
+| Spec technique du sélecteur | [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §6 — algorithme en 6 étapes, architecture Python → `.txt` → Pd, décisions Q5–Q9 / Q13 / Q25 |
+
+**Verdict sélection.** Ce n'est **pas** « partiellement codé mais inutilisé ». C'est **spécifié techniquement** (assez pour écrire `gen_paires.py` dès que le tableau a des lignes), **pas encore écrit**. Le Proto 08 a été construit exprès sans C1 : le son d'abord, le sélecteur ensuite ([Q4](../Backlog/Q&A.md#q4), TO DO §0 bis).
+
+**Encore manquant pour coder le sélecteur (pas bloquant pour figer le son) :**
+
+1. Tableau rempli au moins partiellement (`CONTEXTE`, `TYPE_DISCOURS`, …).
+2. Transcrire les tables C2/C3 Simon en données Python (aujourd'hui : source Simon + corrections §2 bis Attributs — pas de module).
+3. Lecteur Pd acceptant un **chemin forcé** (aujourd'hui : index de liste seulement).
+4. Optionnel mais prévu : mode **audit** de `gen_paires.py` avant le mode écriture live.
+
+### Encore ouvert (oreille / TO DO)
+
+- **Réverb « pièce voisine »** — laissée en delay V1 (23 août).
+- **Plans de présence** §5 bis : **prompt prêt** — [`../Backlog/prompt_cortex_plans_presence_08.md`](../Backlog/prompt_cortex_plans_presence_08.md) (§9 étape 2).
+- **Figer** bornes LPF, rotation 6 paires, niveaux nappes à l'oreille (§9 étape 3).
+- Sélecteur par tags — **hors chantier son** ; voir §B et [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §7.
+
+Spec gestes spectraux : [`../Backlog/spec_cortex_motion_spectral_08.md`](../Backlog/spec_cortex_motion_spectral_08.md).
