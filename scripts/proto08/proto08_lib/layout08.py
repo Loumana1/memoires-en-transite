@@ -62,7 +62,7 @@ SPEAKERS = [
     Speaker(4, 4, 135.0, 3.0, 0.0, "arriere droit"),
     Speaker(5, 5, 180.0, 3.0, 0.0, "arriere"),
     Speaker(6, 6, 225.0, 3.0, 0.0, "arriere gauche"),
-    Speaker(7, 7, 270.0, 3.0, 0.0, "gauche"),
+    Speaker(7, 7, 270.0, 3.0, -3.0, "gauche"),    # trim provisoire −3 dB (23 août) — live : ; s6_trim7 -6
     Speaker(8, 8, 315.0, 3.0, 0.0, "avant gauche"),
 ]
 

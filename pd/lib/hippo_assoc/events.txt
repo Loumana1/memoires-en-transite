@@ -1,20 +1,23 @@
-# delay_ms action layer [fade_ms|recipe|source]
-0 play 1 0
-0 play 2 0
-744 play 2 0
-2845 play 3 0
-3617 play 3 0
-5571 play 4 0
-6275 cut 3 46
-7879 motion 0 3
-11509 play 3 0
-12925 cut 3 41
-19357 play 4 0
-23996 play 4 0
-24928 motion 0 2
-29566 play 3 0
-30755 cut 3 46
-35663 play 4 0
-40713 play 3 0
-45694 play 4 0
-46727 cut 4 89
+# delay_ms action layer [fade_ms|recipe|slot index path]
+# play : slot+index = ligne playlist (anti-doublon, résolu en Python)
+0 play 1 0 0 SONS_V3/HIPPOCAMPE/FRAGMENTS/H073_v3_hippocampe.wav
+0 play 2 3 0 SONS_V3/HIPPOCAMPE/FRAGMENTS/H048_v3_hippocampe.wav
+1027 play 2 3 0 SONS_V3/HIPPOCAMPE/LONG_MOYEN/H077_v3_hippocampe.wav
+1878 silence 0 -
+3200 play 3 6 0 SONS_V3/HIPPOCAMPE/FRAGMENTS/H049_v3_hippocampe.wav
+4650 play 4 9 15 SONS_V3/HIPPOCAMPE/FRAGMENTS/H016_v3_hippocampe.wav
+5478 cut 3 52
+7232 motion 0 0
+13503 play 4 9 53 SONS_V3/HIPPOCAMPE/FRAGMENTS/H058_v3_hippocampe.wav
+17133 play 3 6 0 SONS_V3/HIPPOCAMPE/FRAGMENTS/H060_v3_hippocampe.wav
+18450 cut 3 78
+19153 motion 0 4
+24371 play 3 6 0 SONS_V3/HIPPOCAMPE/FRAGMENTS/H015_v3_hippocampe.wav
+27897 play 4 9 9 SONS_V3/HIPPOCAMPE/FRAGMENTS/H010_v3_hippocampe.wav
+29129 cut 4 61
+33510 play 4 9 4 SONS_V3/HIPPOCAMPE/FRAGMENTS/H005_v3_hippocampe.wav
+34404 cut 4 64
+35256 motion 0 4
+39839 play 4 9 28 SONS_V3/HIPPOCAMPE/FRAGMENTS/H029_v3_hippocampe.wav
+44889 play 3 6 0 SONS_V3/HIPPOCAMPE/FRAGMENTS/H032_v3_hippocampe.wav
+46332 cut 3 79

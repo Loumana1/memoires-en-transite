@@ -1,7 +1,8 @@
-"""Presets Proto 07 8HP — Q&A 16 août 2026.
+"""Presets Proto 07 8HP — référence figée (comparaison A/B avec Proto 08).
 
 Cycle AUTO: Cortex 40 s → Hippo 50 s → Recon 2 min.
-9 couches: 8 fragments (HP1–8) + 1 ambiance (HP variable).
+6 fragments (L1–L6, 3 paires) + 1 ambiance (L9) + inject Boucle one-shot (L10, BOUCLE_INJECT).
+5 nappes Cortex HP4–8 (architecture 07 ; remplacée par 2 nappes globales en 08).
 """
 ETAT_NOMS = ["CORTEX", "HIPPOCAMPE", "RECONSTRUCTION", "BOUCLE"]
 
@@ -60,8 +61,12 @@ def _HP(**kw):
     return L(**d)
 
 
-# Ambiance Cortex: sèche, ouverte, pas de reverb. Hippo: LPF 1000 Hz via ctrl.
+# Ambiance Cortex: sèche, ouverte, pas de reverb.
 _AM = L(mode=0, on=0, sat=0, hpf=30, lpf=18000, wet=0, delay=40, fb=0, flfo=0)
+
+# Inject Boucle one-shot (couche 10, hors FSM) — distinct des presets état 3.
+BOUCLE_INJECT = L(mode=2, step=1800, xfade=40, wet=0.18, delay=260, fb=0.22, on=1,
+                  sat=0.12, lpf=5500, hpf=40)
 
 _RC0 = L(mode=1, rot=0.012, sens=0, sat=0, hpf=20, lpf=20000,
          wet=0.08, delay=100, fb=0.1, lfo=0.04, on=1)
@@ -184,6 +189,18 @@ PRESETS_V0 = [
 
 def fmt(v):
     return f"{v:g}"
+
+
+def layer_inject_msg(layer_n, lay):
+    """Messages FX loadbang pour une couche inject (ex. Boucle L10)."""
+    n = layer_n
+    fields = (
+        ("mode", "mode"), ("step", "step"), ("xfade", "xfade"),
+        ("wet", "wet"), ("delay", "del"), ("fb", "fb"), ("on", "on"),
+        ("sat", "sat"), ("lpf", "lpf"), ("hpf", "hpf"),
+    )
+    parts = [f"s6_l{n}_{send} {fmt(lay[field])}" for field, send in fields]
+    return "\\; " + " \\; ".join(parts)
 
 
 def bank_msg_body(bank, fields=None):

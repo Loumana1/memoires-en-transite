@@ -192,9 +192,99 @@ Snapshot détaillé : **§9**. Liste tâches : [`../Backlog/TO DO.md`](../Backlo
 | Colonnes Hippocampe classeur + table associations | **ABSENT** / vides |
 | Hippocampe–Ambiance (sous-zone Simon) | **REJETÉ** V1 ([Q28](../Backlog/Q&A.md#q28)) |
 
+
 ### C. Doc vs code
 
 - §4–§7 : baseline **Proto 07** + écoute 18 août — **ne pas** lire comme « prêt à figer ».
 - §5 (`hippo_motion_07`, 60/40) : **obsolète** côté code si les recettes Q26 sont actives — à réconcilier à l'oreille.
 
 Debug utile : `; s6_hippo_motion 0` … `4` (forcer une recette) · regen assoc : `python3 scripts/gen_assoc_hippo.py`.
+
+---
+
+## 10. Chantier oreille — priorités Loumana (23 août 2026)
+
+Quatre sujets à travailler **un par un**. Pas de clôture de zone tant que ça n'est pas entendu.
+
+
+### 1. Calibrage spatial — recettes Q26 une par une
+
+**État (23 août, implémenté).** Constantes `ROT_PAN_SLOW / ROT_PAN_FAST / ROT_ORBIT` ajoutées dans `hippo_recipes.py`. Tirage biaisé : recettes 0 et 4 (mode 1 / fluide) plus fréquentes (table 10 slots).
+
+| Recette | Modes | Valeur codée | À valider à l'oreille |
+|---------|-------|-------------|-----------------------|
+| 0 Contre-rotation pan | mode **1** · rot 0,18 / 0,32 Hz | **✅ codé** | 1 tour ≈ 3–5 s — à confirmer en salle |
+| 1 Contre-rotation saut | mode **3** · step 1400/750 | inchangé | rythme + xfade |
+| 2 Local + saut | 4 / 2 / 4 | inchangé | hop vs téléport |
+| 3 Opposition | mode **3** | inchangé | face à face |
+| 4 Fixé + orbite | 0 + mode **1** rot 0,22 Hz | **✅ codé** | orbite ~4,5 s/tour — à confirmer |
+
+Debug : `; s6_hippo_motion 0` … `4` pour forcer une seule recette. Constantes : [`hippo_recipes.py`](../../scripts/proto08/proto08_lib/hippo_recipes.py).
+
+**Reste à l'oreille de Loumana :** ajuster `ROT_PAN_SLOW`, `ROT_PAN_FAST`, `ROT_ORBIT` à l'écoute en salle, puis regen.
+
+### 2. Nappes d'ambiance **spécifiques** Hippo
+
+**État (23 août, wiring prêt — liste à venir).** `FAVORIS_HIPPO = ()` ajouté dans `ambiance_catalog.py`. `usable_ambiance(HIPPOCAMPE)` branche dessus dès que le tuple est non vide. Tant que vide → comportement actuel (pool A45–A69 complet).
+
+**À faire :** Loumana désigne les stems (ex. A48, A52…) → remplir `FAVORIS_HIPPO` → regen.
+
+Bloque aussi le « master dédié » [Q2](../Backlog/Q&A.md#q2) côté matière.
+
+### Piège — ne pas câbler l'anti-doublon dans `player_state_08`
+
+**Leçon du 23 août 2026** (silence total, zéro erreur console). À relire avant tout chantier « forcer un fichier / index dans le lecteur ».
+
+#### Contexte
+
+`player_state_08` est **une seule abstraction** instanciée **14×** (Cortex L1–L12, Hippo L1–L4, nappe, inject, nappes amb.). Toute logique ajoutée dedans s'exécute dans **chaque** instance et touche **toutes** les branches slot (~28 `select` en parallèle).
+
+#### Ce qui a été tenté (et a tout cassé)
+
+| Tentative | Symptôme |
+|-----------|----------|
+| Chemin forcé `s6_hippo_path` + `symbol` + `t b s` | `(symbol->trigger) connection failed` — inlet incompatible |
+| Index forcé `[i idx]` → `tfi{slot}` sur **chaque** branche slot | Fan-out : un index Hippo ferme **tous** les random + déclenche **tous** les `text get` → **pas de son**, UI vide, **pas d'erreur** |
+| Spigots `f_frc` bloquant le flux normal | Même effet si l'open forcé ne part pas |
+
+#### Règles (binding)
+
+1. **`player_state_08` = lecteur générique** : bang → slot → random → `text get` → open. **Ne pas** y ajouter de receives Hippo (`s6_hippo_path*`, `s6_hippo_idx*`, arg2 layer, etc.).
+2. **Anti-doublon Python** : OK dans `gen_assoc_hippo.py` (`active_sources`, slot+index dans `events.txt`). Ça ne suffit pas à l'oreille tant que le Pd tire encore au hasard — mais **ne pas** compenser en modifiant le lecteur partagé.
+3. **Wiring Pd futur** : petite abstraction **par couche** (`hippo_play_08` ou routeur dans `gen_patch08` entre `r_h*` et `p*`) — **une** instance par L1–L4, **hors** `player_state_08`. Voir aussi [`Attributs.md`](../Matiere/Attributs.md) §6–7 (sélecteur vs lecteur).
+4. **Objets Pd à éviter** dans le générateur sans test sur la cible iem : `list index`, `text define` + `add`, `t b s` (inlet unique), câblage d'**une** sortie vers N branches slot.
+5. **Tables de poids** : fichier + `read -c` (comme `playlists08/` et `hippo_motion_weights.txt`), pas `add` ni `list index`.
+
+#### État actuel
+
+- **Son** : lecteur restauré (proto d'origine).
+- **Python** : séquence sans doublon + index précalculé dans `events.txt`.
+- **Pd** : `hippo_assoc_08` ne fait que `s6_hippo_b{N}` — index **non** appliqué au lecteur (TODO propre).
+
+Réfs : [`log.md`](../log.md) 23 août · [`spec_hippo_oreille_v1_08.md`](../Backlog/spec_hippo_oreille_v1_08.md) · [`prompt_hippo_oreille_v1_08.md`](../Backlog/prompt_hippo_oreille_v1_08.md) § anti-doublon.
+
+### 3. Apparition / disparition — anti-doublon + HP7 trop fort
+
+**État (23 août, codé) :**
+
+- **⚠️ Anti-doublon Pd** : séquence Python OK (`active_sources`, slot+index dans `events.txt`). Tentatives wiring dans `player_state_08` **annulées** — bug fan-out (voir log 23 août). Son d'abord ; Pd à refaire proprement.
+- **✅ HP7 trim −3 dB** : `layout08.py` — `trim_db=-3.0` sur HP7. Réglage live sans regen : `; s6_trim7 -6` (ou autre valeur).
+
+**Reste à l'oreille :** vérifier en salle que HP7 est bien moins dominant ; ajuster si besoin.
+
+### 4. Fluide vs saut — occurrence et perceptibilité
+
+**État (23 août, codé + wiring lecteur).** Tirage biaisé via `hippo_motion_weights.txt` + `read -c` (même API que `playlists08`).
+
+**Reste à l'oreille :** forcer recette 0 (`; s6_hippo_motion 0`) — doit entendre une masse qui tourne en < 8 s. Puis recette 4 (orbite). Puis les sauts un à un.
+
+### Ordre de travail — état
+
+1. **⚠️ Anti-doublon Pd** — Python OK ; wiring lecteur **interdit** (voir piège ci-dessus). Prochaine étape : abstraction par couche.
+2. **✅ Recettes 0 et 4** — rot montés (codé). À l'oreille : forcer 0 puis 4, valider perceptibilité.
+3. **Recettes saut** — inchangées, à calibrer à l'oreille un par un.
+4. **✅ Trim HP7** (codé) — à l'oreille : `; s6_trim7 -3` (-6 si encore trop fort).
+5. **Nappes** — wiring prêt, liste à venir de Loumana.
+
+**Prompt IA (implémentation) :** [`../Backlog/prompt_hippo_oreille_v1_08.md`](../Backlog/prompt_hippo_oreille_v1_08.md) · spec [`../Backlog/spec_hippo_oreille_v1_08.md`](../Backlog/spec_hippo_oreille_v1_08.md).
+

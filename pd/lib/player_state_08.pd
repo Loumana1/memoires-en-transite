@@ -698,10 +698,10 @@
 #X obj 220 1332 +;
 #X obj 280 1332 + 3214;
 #X obj 340 1332 i;
-#X obj 40 1348 random 7;
+#X obj 40 1348 random 12;
 #X obj 100 1348 + 1;
 #X obj 160 1348 +;
-#X obj 220 1348 % 8;
+#X obj 220 1348 % 13;
 #X obj 280 1348 t f f;
 #X obj 340 1348 f 0;
 #X msg 400 1348 seed \$1;

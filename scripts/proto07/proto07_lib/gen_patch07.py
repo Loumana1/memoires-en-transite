@@ -265,10 +265,7 @@ def build_engine(cfg):
     e.obj("srinj", 640, yinj, f"lib/spatial_router_06 10 0 1 {cfg['nhp']} {cfg['nhp'] - 1}")
     e.con("ginj", 0, "fxinj", 0)
     e.con("fxinj", 0, "srinj", 0)
-    e.msg("injfx", 780, yinj,
-          "\\; s6_l10_mode 2 \\; s6_l10_step 1800 \\; s6_l10_xfade 40 \\; "
-          "s6_l10_wet 0.18 \\; s6_l10_del 260 \\; s6_l10_fb 0.22 \\; s6_l10_on 1 \\; "
-          "s6_l10_sat 0.12 \\; s6_l10_lpf 5500 \\; s6_l10_hpf 40")
+    e.msg("injfx", 780, yinj, PR.layer_inject_msg(10, PR.BOUCLE_INJECT))
     e.con("lb_inj", 0, "injfx", 0)
     e.obj("s_samp10", 40, yinj + 28, "s s6_sample_inj")
     e.con("pinj", 1, "s_samp10", 0)

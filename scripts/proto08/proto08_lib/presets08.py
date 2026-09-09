@@ -32,16 +32,10 @@ LAYER_HP_8HP = [1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 4]
 ANCHORS_8HP = LAY.anchors(LAYER_HP_8HP)
 DECODE_8HP_AZ = LAY.azimuths()
 
-# Baffles ambiance Cortex fixés — non adjacents ([Q25]).
-AMBI_MUSICAL_HP = 7   # 1-indexed HP7
-AMBI_TEXTURE_HP = 5   # HP5 (écart avec HP7)
-
-if AMBI_TEXTURE_HP in LAY.neighbours(AMBI_MUSICAL_HP):
-    raise SystemExit(
-        f"presets08: les deux baffles d'ambiance HP{AMBI_MUSICAL_HP} et "
-        f"HP{AMBI_TEXTURE_HP} sont voisins dans la salle — [Q25] les veut "
-        f"ecartes pour elargir l'espace"
-    )
+# Baffles ambiance Cortex — musicale HP7, texture HP8 (oreille Loumana 24 août).
+# [Q25] préférait non-adjacent ; HP7/HP8 voisins — choix assumé pour libérer HP5.
+AMBI_MUSICAL_HP = 7
+AMBI_TEXTURE_HP = 8
 
 LAYER_DEFAULT = dict(mode=0, rot=0.02, sens=0, step=800, xfade=30,
                      wet=0, delay=200, fb=0, lfo=0, on=0,
@@ -53,8 +47,22 @@ LAYER_DEFAULT = dict(mode=0, rot=0.02, sens=0, step=800, xfade=30,
 # c'était le pari de CIBLE_AMBIANCE. À 0.42 il n'en rendait que 6,5, et avec
 # 12 fragments contre 2 nappes celles-ci jouaient ~23 dB sous la masse du
 # Cortex — inaudibles. À 2.0 elles passent ~10 dB dessous ; +3 dB à l'écoute
-# Loumana (22 août) → 2.825, soit ~7 dB sous la masse des voix.
-CORTEX_AMB_GAIN = 2.825
+# Loumana (22 août) → 2.825 ; +2 dB (24 août) → 3.556. Puis écart musicale/texture :
+CORTEX_AMB_GAIN = 3.556  # référence (couche 13 Hippo/Recon si utilisée)
+CORTEX_AMB_GAIN_MUSICAL = 3.556 * (10 ** (4 / 20))   # HP7 · +4 dB vs 3.556 → ~5.638
+CORTEX_AMB_GAIN_TEXTURE = 3.556 * (10 ** (-2 / 20))  # HP8 · −2 dB vs 3.556 → ~2.826
+# Bleed musicale → HP1–6 (couches voix) : présence dans le champ ; HP7 un peu baissé.
+CORTEX_AMB_MUSICAL_BLEED = 0.14       # ~−17 dB par baffle voix
+CORTEX_AMB_MUSICAL_HP7_SCALE = 0.794  # ~−2 dB sur la source dédiée HP7
+
+# HPF momentané voix HP1–6 (paroles seulement — pas bleed / nappes).
+CORTEX_VOIX_HPF_HZ = 400
+CORTEX_VOIX_HPF_ATTACK_MS = 600
+CORTEX_VOIX_HPF_HOLD_MS = 2800
+CORTEX_VOIX_HPF_RELEASE_MS = 2000
+# 1× auto par passage Cortex (sans piezo), tiré entre 8 et 33 s après l'entrée.
+CORTEX_VOIX_HPF_CYCLE_DELAY_MIN = 8000
+CORTEX_VOIX_HPF_CYCLE_DELAY_RAND = 25000
 CORTEX_LAYER_GAIN = 0.20
 # Gains plans présence §5 bis (linéaire)
 GAIN_PREMIER_PLAN = 1.0

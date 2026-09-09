@@ -196,38 +196,95 @@ def _pick_other(pool: list[dict], avoid: str) -> dict | None:
     return random.choice(cand) if cand else None
 
 
+def _hippo_slot(layer: int) -> int:
+    """Slot playlist FSM Hippo : couche N → slot (N-1)*3 (m3 dans gen_patch08)."""
+    return (layer - 1) * 3
+
+
+def _slot_files(slot: int, u: dict) -> list[str]:
+    si, di = slot // 3, slot % 3
+    return u.get((si, di), []) or []
+
+
+def _path_index(path: str, slot: int, u: dict) -> int:
+    files = _slot_files(slot, u)
+    if not files:
+        return 0
+    for i, rel in enumerate(files):
+        if rel == path:
+            return i
+    base = os.path.basename(path)
+    for i, rel in enumerate(files):
+        if os.path.basename(rel) == base:
+            return i
+    return 0
+
+
+def _pick_other_multi(pool: list[dict], avoid_ids) -> dict | None:
+    """Tire dans pool en évitant tous les IDs actifs (anti-doublon multi-couche)."""
+    avoid = set(avoid_ids)
+    cand = [r for r in pool if r["id"] not in avoid]
+    return random.choice(cand) if cand else None
+
+
 def build_sequence(longs: list[dict], shorts: list[dict], rng: random.Random) -> list[dict]:
-    """Construit une séquence d'événements Pd pour ~50 s."""
+    """Construit une séquence d'événements Pd pour ~50 s.
+
+    Invariant anti-doublon : à tout instant, les sources jouées sur L1–L4
+    sont deux à deux distinctes. active_sources[layer] = id en cours.
+
+    Chaque play embarque slot + index playlist (résolu en Python) pour que
+    player_state_08 ouvre la bonne ligne sans tirage aléatoire.
+    """
+    u = audit.usable_files(str(ROOT), verbose=False)
     events: list[dict] = []
     t = 0
+
+    # --- Démarrage : L1 != L2 garanti ---
     long_a = rng.choice(longs)
-    long_b = rng.choice(longs)
+    long_b = _pick_other_multi(longs, [long_a["id"]]) or long_a
     short_a = rng.choice(shorts)
-    short_b = rng.choice(shorts)
+    short_b = _pick_other_multi(shorts, [short_a["id"]]) or short_a
+
+    # Suivi des sources actives par couche (anti-doublon continu)
+    active_sources: dict[int, str] = {}
+
+    def _play_ev(layer: int, row: dict, **extra) -> dict:
+        """Construit un event play et met à jour active_sources."""
+        active_sources[layer] = row["id"]
+        path = row.get("_path") or "0"
+        slot = _hippo_slot(layer)
+        idx = _path_index(path, slot, u) if path != "0" else -1
+        return {
+            "t": t, "action": "play", "layer": layer,
+            "source": row["id"], "slot": slot, "index": idx,
+            "_path": path, **extra,
+        }
+
+    def _safe_pick(pool: list[dict]) -> dict:
+        """Tire dans pool en évitant tous les actifs courants."""
+        r = _pick_other_multi(pool, active_sources.values())
+        return r if r is not None else rng.choice(pool)
 
     # L1/L2 permanents — démarrage immédiat (FSM)
-    events.append({"t": t, "action": "play", "layer": 1, "source": long_a["id"]})
-    events.append({"t": t, "action": "play", "layer": 2, "source": long_b["id"]})
+    events.append(_play_ev(1, long_a))
+    events.append(_play_ev(2, long_b))
 
     # RELIER succession : L2 après silence post L1 (simulé par délai)
     t += _silence_ms(long_a)
-    events.append({
-        "t": t, "action": "play", "layer": 2,
-        "comportement": "RELIER", "variante": "succession",
-        "source": long_b["id"], "cible": long_b["id"],
-    })
+    long_b2 = _pick_other_multi(longs, active_sources.values()) or long_b
+    events.append(_play_ev(2, long_b2,
+                           comportement="RELIER", variante="succession",
+                           cible=long_b2["id"]))
 
     # APPELER direct ou sans réponse depuis L1
     t += rng.randint(800, 2000)
     if _force_roll(long_a):
-        cible = _pick_other(shorts, short_a["id"])
-        if cible and rng.random() < 0.7:
-            events.append({
-                "t": t + _delai_ms(long_a),
-                "action": "play", "layer": 3,
-                "comportement": "APPELER", "variante": "direct",
-                "source": long_a["id"], "cible": cible["id"],
-            })
+        cible = _safe_pick(shorts)
+        if rng.random() < 0.7:
+            events.append(_play_ev(3, cible,
+                                   comportement="APPELER", variante="direct",
+                                   source=long_a["id"], cible=cible["id"]))
             t += _delai_ms(long_a) + _silence_ms(cible)
         else:
             events.append({
@@ -240,28 +297,25 @@ def build_sequence(longs: list[dict], shorts: list[dict], rng: random.Random) ->
 
     # Courts — interférences L3/L4
     t = max(t, 1800)
-    events.append({
-        "t": t, "action": "play", "layer": 3,
-        "comportement": "REPONDRE", "variante": "immediate",
-        "source": short_a["id"], "cible": short_a["id"],
-        "spatial": "voisin",
-    })
+    src3 = _safe_pick(shorts)
+    events.append(_play_ev(3, src3,
+                           comportement="REPONDRE", variante="immediate",
+                           cible=src3["id"], spatial="voisin"))
 
     t += rng.randint(1200, 2000)
-    events.append({
-        "t": t, "action": "play", "layer": 4,
-        "comportement": "REPONDRE", "variante": "spatiale",
-        "source": short_b["id"], "cible": short_b["id"],
-        "spatial": "oppose",
-    })
+    src4 = _safe_pick(shorts)
+    events.append(_play_ev(4, src4,
+                           comportement="REPONDRE", variante="spatiale",
+                           cible=src4["id"], spatial="oppose"))
 
-    # DISPARAITRE nette sur L3 si interruptible (sinon naturelle implicite)
+    # DISPARAITRE nette sur L3
     t += rng.randint(600, 1500)
     fade = rng.randint(35, 100)
+    active_sources.pop(3, None)
     events.append({
         "t": t, "action": "cut", "layer": 3, "fade_ms": fade,
         "comportement": "DISPARAITRE", "variante": "nette",
-        "source": short_a["id"],
+        "source": src3["id"],
     })
 
     # Motion spatiale mid-passage
@@ -274,15 +328,14 @@ def build_sequence(longs: list[dict], shorts: list[dict], rng: random.Random) ->
         if t >= STATE_MS - 1500:
             break
         layer = 3 if rng.random() < 0.55 else 4
-        src = rng.choice(shorts)
-        events.append({
-            "t": t, "action": "play", "layer": layer,
-            "comportement": "REPONDRE",
-            "variante": "spatiale" if layer == 4 else "immediate",
-            "source": src["id"], "cible": src["id"],
-        })
+        src = _safe_pick(shorts)
+        events.append(_play_ev(layer, src,
+                               comportement="REPONDRE",
+                               variante="spatiale" if layer == 4 else "immediate",
+                               cible=src["id"]))
         if rng.random() < 0.35:
             t += rng.randint(800, 1800)
+            active_sources.pop(layer, None)
             events.append({
                 "t": t, "action": "cut", "layer": layer,
                 "fade_ms": rng.randint(40, 90),
@@ -303,7 +356,8 @@ def write_outputs(events: list[dict], pool_lines: list[str]) -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     ev_path = OUT_DIR / "events.txt"
     with ev_path.open("w", encoding="utf-8") as fh:
-        fh.write("# delay_ms action layer [fade_ms|recipe|source]\n")
+        fh.write("# delay_ms action layer [fade_ms|recipe|slot index path]\n")
+        fh.write("# play : slot+index = ligne playlist (anti-doublon, résolu en Python)\n")
         for e in events:
             act = e["action"]
             if act == "silence" or act == "noop":
@@ -313,7 +367,10 @@ def write_outputs(events: list[dict], pool_lines: list[str]) -> None:
             elif act == "cut":
                 fh.write(f"{e['t']} cut {e['layer']} {e.get('fade_ms', 50)}\n")
             else:
-                fh.write(f"{e['t']} play {e['layer']} 0\n")
+                slot = e.get("slot", _hippo_slot(int(e["layer"])))
+                idx = e.get("index", -1)
+                path = e.get("_path") or "0"
+                fh.write(f"{e['t']} play {e['layer']} {slot} {idx} {path}\n")
     pool_path = OUT_DIR / "pool.txt"
     with pool_path.open("w", encoding="utf-8") as fh:
         fh.write("# source | comportement | variante | cible | layer\n")

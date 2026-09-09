@@ -22,6 +22,8 @@ Le travail de classification à l'oreille est donc conservé.
 Usage:
   python3 scripts/slice_opacite_v3.py --dry-run
   python3 scripts/slice_opacite_v3.py
+  python3 scripts/slice_opacite_v3.py --source "SONS batch 4" --precise --dry-run
+  python3 scripts/slice_batch4.py --dry-run               # raccourci batch 4 précis
   python3 scripts/slice_opacite_v3.py --only hippocampe   # un seul master
   python3 scripts/slice_opacite_v3.py --reset --yes       # tout refaire (perd les ID)
 """
@@ -60,6 +62,13 @@ AMBI_MIN_SIL = 1.0
 HIPPO_MERGE_GAP = 1.8
 HIPPO_MERGE_MAX = 12.0
 
+# Mode --precise : silences plus courts, pas de collage Hippo (évite plusieurs samples / wav).
+PRECISE_NOISE_DB = -45.0
+PRECISE_MIN_SIL = {"CORTEX": 0.45, "HIPPOCAMPE": 0.35, "RECONSTRUCTION": 0.35}
+PRECISE_AMBI_MIN_SIL = 0.5
+PRECISE_HIPPO_MERGE_GAP = 0.0
+PRECISE_PAD = 0.015
+
 # Tolérance d'appariement avec le registre. Un segment dont le début a bougé de
 # moins que ça est considéré comme le même segment, et garde son ID.
 MATCH_TOL = 0.30
@@ -96,13 +105,16 @@ def find_src_dir() -> Path:
 
 
 def classify_master(name: str) -> tuple[str, str] | None:
-    """(etat, role) role = AMBIANCE | TRACK. Le préfixe 'ambiance' des V6 n'est pas un rôle."""
+    """(etat, role). TRACK → paroles zone · AMBIANCE → pool partagé SONS_V3/AMBIANCE/.
+
+    Ordre : Hippo · Recon · ambiance (V6 « Cortex ambiance », batch « Ambiance général »…) · Cortex parole.
+    """
     low = name.lower()
     if "hippocamp" in low or "hipo" in low:
         return "HIPPOCAMPE", "TRACK"
     if "recons" in low:
         return "RECONSTRUCTION", "TRACK"
-    if "cortex" in low and "cortex ambiance" in low:
+    if "ambiance" in low:
         return "CORTEX", "AMBIANCE"
     if "cortex" in low:
         return "CORTEX", "TRACK"
@@ -243,35 +255,44 @@ def find_on_disk_for(etat: str, stem: str) -> Path | None:
 # ---------------------------------------------------------------- découpe
 
 def segments_for(
-    path: Path, etat: str, role: str, duration: float
+    path: Path, etat: str, role: str, duration: float, *, precise: bool = False
 ) -> list[tuple[float, float]]:
+    noise = PRECISE_NOISE_DB if precise else NOISE_DB
+    pad = PRECISE_PAD if precise else PAD
     if role == "AMBIANCE":
-        silences = detect_silences(path, NOISE_DB, AMBI_MIN_SIL)
+        amb_min_sil = PRECISE_AMBI_MIN_SIL if precise else AMBI_MIN_SIL
+        silences = detect_silences(path, noise, amb_min_sil)
         segs = silences_to_segments(duration, silences, MIN_SEG)
         kept = [(a, b) for a, b in segs if (b - a) >= AMBI_MIN_SEG]
-        print(f"  silences≥{AMBI_MIN_SIL:g}s: {len(silences)}  atomes: {len(segs)}  "
+        print(f"  silences≥{amb_min_sil:g}s: {len(silences)}  atomes: {len(segs)}  "
               f"gardés≥{AMBI_MIN_SEG:g}s: {len(kept)}")
         segs = kept
     else:
-        min_sil = {"CORTEX": 1.0, "HIPPOCAMPE": 0.5, "RECONSTRUCTION": 0.45}[etat]
-        silences = detect_silences(path, NOISE_DB, min_sil)
+        if precise:
+            min_sil = PRECISE_MIN_SIL[etat]
+            merge_gap = PRECISE_HIPPO_MERGE_GAP
+        else:
+            min_sil = {"CORTEX": 1.0, "HIPPOCAMPE": 0.5, "RECONSTRUCTION": 0.45}[etat]
+            merge_gap = HIPPO_MERGE_GAP
+        silences = detect_silences(path, noise, min_sil)
         segs = silences_to_segments(duration, silences, MIN_SEG)
-        if etat == "HIPPOCAMPE":
+        if etat == "HIPPOCAMPE" and merge_gap > 0:
             before = len(segs)
-            segs = merge_adjacent(segs, HIPPO_MERGE_GAP, HIPPO_MERGE_MAX)
-            print(f"  merge gap≤{HIPPO_MERGE_GAP}s → {before} atomes → {len(segs)} chaînes")
-        print(f"  silences={len(silences)}  fragments={len(segs)}")
+            segs = merge_adjacent(segs, merge_gap, HIPPO_MERGE_MAX)
+            print(f"  merge gap≤{merge_gap:g}s → {before} atomes → {len(segs)} chaînes")
+        print(f"  silences≥{min_sil:g}s (noise {noise:g} dB): {len(silences)}  fragments={len(segs)}")
     return [
-        (max(0.0, a - PAD), min(duration, b + PAD)) for a, b in segs
+        (max(0.0, a - pad), min(duration, b + pad)) for a, b in segs
     ]
 
 
 def process_master(
     path: Path, etat: str, role: str, duration: float,
     entries: list[dict], dry: bool, stats: Counter, reclass: bool = False,
+    *, precise: bool = False,
 ) -> None:
     print(f"\n=== {path.name} → {etat}/{role} ({duration:.1f}s) ===")
-    segs = segments_for(path, etat, role, duration)
+    segs = segments_for(path, etat, role, duration, precise=precise)
     prefix = PREFIX[(etat, role)]
     width = 2 if role == "AMBIANCE" else 3
     suffix = "_ambiance" if role == "AMBIANCE" else ""
@@ -427,6 +448,10 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dry-run", action="store_true",
                     help="ne rien écrire, montrer ce qui serait fait")
+    ap.add_argument("--source", type=Path, metavar="DOSSIER",
+                    help="masters .wav (défaut: SONS_V3/WIP/Opacité V6)")
+    ap.add_argument("--precise", action="store_true",
+                    help="silences plus courts, pas de collage Hippo — 1 sample / wav")
     ap.add_argument("--only", metavar="MOTIF",
                     help="ne traiter que les masters dont le nom contient MOTIF")
     ap.add_argument("--reclasser", action="store_true",
@@ -443,7 +468,13 @@ def main() -> int:
               "Relancer avec --reset --yes si c'est bien voulu.", file=sys.stderr)
         return 2
 
-    src_dir = find_src_dir()
+    if args.source:
+        src_dir = args.source.expanduser().resolve()
+        if not src_dir.is_dir():
+            print(f"Dossier introuvable: {src_dir}", file=sys.stderr)
+            return 1
+    else:
+        src_dir = find_src_dir()
     wavs = sorted(p for p in src_dir.glob("*.wav") if not p.name.startswith("."))
     if args.only:
         motif = args.only.lower()
@@ -453,8 +484,9 @@ def main() -> int:
         return 1
 
     print(f"Source: {src_dir}")
-    print(f"Sortie: {OUT_DIR}  dry={args.dry_run}  incrémental={not args.reset}")
-    print(f"Masters ({MASTERS_PARENT.name}/) : jamais modifiés")
+    print(f"Sortie: {OUT_DIR}  dry={args.dry_run}  incrémental={not args.reset}  "
+          f"precise={args.precise}")
+    print("Masters source : jamais modifiés")
 
     if args.reset and not args.dry_run:
         for etat in ETATS:
@@ -475,7 +507,7 @@ def main() -> int:
             continue
         etat, role = kind
         process_master(w, etat, role, ffprobe_duration(w), entries,
-                       args.dry_run, stats, args.reclasser)
+                       args.dry_run, stats, args.reclasser, precise=args.precise)
 
     print("\n--- Résumé ---")
     c = Counter((e["etat"], e["bucket"]) for e in entries)

@@ -70,6 +70,7 @@ def build_engine(cfg):
     e.obj("cxctrl", 640, 60, "lib/cortex_ctrl_08")
     e.obj("cxmot", 640, 100, "lib/cortex_motion_08")
     e.obj("pres", 780, 60, "lib/presence_08")
+    e.obj("vhpft", 780, 100, "lib/cortex_voix_hpf_trig_08")
     e.obj("rform", 920, 60, "lib/recon_formes_08")
     e.obj("hasoc", 1060, 60, "lib/hippo_assoc_08")
     e.obj("binj", 1200, 60, "lib/boucle_inject_08")
@@ -328,6 +329,7 @@ def build_engine(cfg):
     e.con("eq_cx_amb", 0, "sp_cx_amb", 1)
     e.con("sp_cx_amb", 0, "t_ambgo", 0)
     e.obj("ambbeh", 320, yamb + 20, "lib/cortex_amb_behav_08")
+    amb_gains = (PR.CORTEX_AMB_GAIN_MUSICAL, PR.CORTEX_AMB_GAIN_TEXTURE)
     for i in range(2):
         ya = yamb + i * 42
         e.obj(f"pamb{i}", 40, ya, "lib/player_state_08 1")
@@ -339,11 +341,12 @@ def build_engine(cfg):
         e.con(f"goa{i}", 1, f"bang_amb{i}", 0)
         e.con(f"msamb{i}", 0, f"pamb{i}", 1)
         e.con(f"bang_amb{i}", 0, f"pamb{i}", 0)
-        e.obj(f"gamb{i}", 220, ya, f"*~ {amb_gain}")
+        ag = amb_gains[i]
+        e.obj(f"gamb{i}", 220, ya, f"*~ {ag:g}")
         # Réglage à l'oreille en salle, en dB : s6_amb_gain 0 laisse la valeur
         # ci-dessus, +6 double, -6 divise par deux.
         e.obj(f"r_ag{i}", 280, ya - 40, "r s6_amb_gain")
-        e.obj(f"db_ag{i}", 280, ya - 20, f"expr {amb_gain:g}*pow(10\\, $f1/20)")
+        e.obj(f"db_ag{i}", 280, ya - 20, f"expr {ag:g}*pow(10\\, $f1/20)")
         e.con(f"r_ag{i}", 0, f"db_ag{i}", 0)
         e.con(f"db_ag{i}", 0, f"gamb{i}", 1)
         e.obj(f"fxamb{i}", 360, ya, f"lib/fx_router_06 {15 + i}")
@@ -360,13 +363,8 @@ def build_engine(cfg):
     e.con("chg_amb", 0, "sel_ambcx", 0)
     e.con("sel_ambcx", 0, "t_ambgo", 0)
 
-    # Anti-doublon des deux nappes. Elles tirent dans le même pool mélodique
-    # depuis le 22 août, donc elles peuvent tomber sur le même fichier (1 sur
-    # 19). t_ambgo sort de droite à gauche : la nappe 2 choisit d'abord et son
-    # nom arme la comparaison, la nappe 1 choisit ensuite. En cas d'égalité on
-    # retire une carte à la nappe 1. Le spigot n'autorise qu'un seul nouveau
-    # tirage par entrée en Cortex — le lecteur ne reprend jamais son fichier
-    # précédent, donc une reprise suffit en pratique.
+    # Anti-doublon si les deux nappes tirent le même fichier (même pool).
+    # Pools disjoints depuis le 24 août (musicale A53–A68 / texture A04…A50).
     ydup = yamb + 2 * 42 + 10
     e.obj("dup_cmp", 660, ydup, "select zzz")
     e.obj("dup_sp", 660, ydup + 22, "spigot")
@@ -418,6 +416,8 @@ def build_engine(cfg):
         e.con("dec", k, f"vol{k}", 0)
         e.con("r_mas", 0, f"vol{k}", 1)
         e.obj(f"trm{k}", x, dac_y + 120, f"*~ {LAY.fmt(LAY.trim_linear(hp))}")
+        if k < 6:
+            e.obj(f"vhpf{k}", x - 60, dac_y + 45, "lib/cortex_voix_hpf_08")
         # s6_trim{hp} se pilote en dB comme le layout : sans conversion, un -3
         # envoyé à la main inverserait la polarité au lieu d'atténuer.
         e.obj(f"r_trm{k}", x + 58, dac_y + 78, f"r s6_trim{hp}")
@@ -447,7 +447,8 @@ def build_engine(cfg):
         e.con("amb", k, f"vol{vk}", 0)
         e.con("sr13", 3 + k, f"vol{vk}", 0)
     for k in range(6):
-        e.con("cxpair", k, f"vol{k}", 0)
+        e.con("cxpair", k, f"vhpf{k}", 0)
+        e.con(f"vhpf{k}", 0, f"vol{k}", 0)
     # W X Y du voyage spatial Cortex → décodeur 8 HP
     for c in range(3):
         e.con("cxpair", 6 + c, "dec", c)
@@ -600,7 +601,10 @@ def build():
         p.obj(f"r_sam{i+1}", 560, y + 16, f"r s6_sample{i + 1}")
         p.add(f"sam{i+1}", f"#X symbolatom 700 {y + 16} 28 0 0 0 - - - 0;")
         p.con(f"r_sam{i+1}", 0, f"sam{i+1}", 0)
-    for i, label in enumerate(("musicale HP7", "texture HP5")):
+    for i, label in enumerate((
+        f"musicale HP{PR.AMBI_MUSICAL_HP}",
+        f"texture HP{PR.AMBI_TEXTURE_HP}",
+    )):
         y = 400 + (nl + i) * 36
         p.text(560, y, f"nappe {label}")
         p.obj(f"r_amba{i}", 560, y + 16, f"r s6_sample_amb{i + 1}")

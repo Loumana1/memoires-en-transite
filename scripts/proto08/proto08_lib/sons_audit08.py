@@ -22,7 +22,12 @@ def _rel(root, path):
 def _wavs(folder):
     if not os.path.isdir(folder):
         return []
-    return sorted(glob.glob(os.path.join(folder, "*.wav")))
+    paths = sorted(glob.glob(os.path.join(folder, "*.wav")))
+    bad = [p for p in paths if os.path.basename(p) != os.path.basename(p).strip()]
+    if bad:
+        names = ", ".join(repr(os.path.basename(p)) for p in bad)
+        print(f"  WARN: .wav avec espaces dans le nom — renommer : {names}")
+    return paths
 
 
 def _dur(path):
@@ -108,15 +113,22 @@ def _ambiance_pool(root):
 
 
 def usable_ambiance(root, etat="CORTEX"):
-    """Pool mélodique partagé — etat ignoré (Cortex, Hippocampe, Reconstruction).
+    """Pool mélodique partagé — pool complet par défaut.
 
-    Tirait dans les 69 ambiances jusqu'au 22 août : la nappe de l'Hippocampe
-    pouvait donc sortir n'importe quoi, y compris la matière écartée à
-    l'oreille. Elle passe sur la même sélection A45–A69 que les nappes du
-    Cortex. La Boucle n'est pas concernée : sa couche tire dans les paroles.
+    Si etat=="HIPPOCAMPE" et que FAVORIS_HIPPO est non vide, restreint
+    au sous-ensemble désigné par Loumana (même logique que FAVORIS_CORTEX).
+    Tant que FAVORIS_HIPPO = (), comportement actuel : pool A45–A69 complet.
     """
-    del etat
-    return _catalog().melodic_pool(root, verbose=False)
+    cat = _catalog()
+    if etat == "HIPPOCAMPE" and cat.FAVORIS_HIPPO:
+        full = cat.melodic_pool(root, verbose=False)
+        by_stem = {os.path.basename(p).split("_")[0].upper(): p for p in full}
+        pool = [by_stem[f] for f in cat.FAVORIS_HIPPO if f in by_stem]
+        if pool:
+            return pool
+        # fallback si stems absents (matère manquante) — ne pas couper le son
+        print(f"WARN: FAVORIS_HIPPO : stems absents du pool — fallback pool complet")
+    return cat.melodic_pool(root, verbose=False)
 
 
 def _catalog():
@@ -130,7 +142,7 @@ def _catalog():
 
 
 def usable_cortex_amb_pools(root, n=2, verbose=True):
-    """Deux nappes Cortex (slots 32 / 33) — même pool mélodique partagé."""
+    """Deux nappes Cortex — slot 32 musicale, slot 33 texture (pools disjoints)."""
     del n
     a, b = _catalog().ambiance_paths_by_type(root, verbose=verbose)
     return [a, b]

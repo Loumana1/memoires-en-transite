@@ -48,9 +48,20 @@ SONS_V3/WIP/Opacité V6/  — 4 masters (silences entre les samples)
 ```bash
 python3 scripts/slice_opacite_v3.py --dry-run   # voir sans écrire
 python3 scripts/slice_opacite_v3.py             # découpe incrémentale
+python3 scripts/slice_batch4.py --dry-run       # batch 4 · mode précis · SONS batch 4/
 python3 scripts/gen_prototype_07_8hp.py         # patch + playlists
 python3 scripts/gen_catalogue_xlsx.py           # classeur (conserve les colonnes remplies)
 ```
+
+**Batch 4 (sep. 2026).** Masters dans `SONS batch 4/`. Ambiance reconnue par `ambiance` dans le nom (pool partagé `AMBIANCE/`, pas seulement « Cortex ambiance »). Mode `--precise` : silences plus courts, pas de collage Hippo — vise **1 sample par wav exporté**.
+
+```bash
+python3 scripts/slice_batch4.py --dry-run
+python3 scripts/slice_batch4.py                    # 3 masters OK (pas Recon — master silencieux)
+python3 scripts/gen_catalogue_batch4.py            # catalogue_batch4.xlsx neuf (132 lignes)
+```
+
+Classeur batch 4 : [`catalogue_batch4.xlsx`](./catalogue_batch4.xlsx) — indépendant de `catalogue_fragments.xlsx` (V6 en cours chez le collègue).
 
 Attention, le mot « ambiance » dans un nom de fichier master ne détermine pas le rôle d'ambiance dans le moteur.
 

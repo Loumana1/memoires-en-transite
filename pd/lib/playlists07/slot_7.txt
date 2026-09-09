@@ -1,1 +1,3 @@
 SONS_V3/RECONSTRUCTION/LONG_MOYEN/R155_v3_reconstruction.wav R155_v3_reconstruction.wav 0.5623;
+SONS_V3/RECONSTRUCTION/LONG_MOYEN/R349_v3_reconstruction.wav R349_v3_reconstruction.wav 3.9811;
+SONS_V3/RECONSTRUCTION/LONG_MOYEN/R354_v3_reconstruction.wav R354_v3_reconstruction.wav 3.9811;

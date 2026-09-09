@@ -245,7 +245,7 @@ Indépendamment des attributs, et donc dès maintenant :
 |-----------|----------|----------------|
 | Deux gains distincts sous chaque paire | sans ça, aucun plan de présence n'est possible | **PARTIEL** — gains + swap en `cortex_pair_08` ; pas encore 2× `fx_router` distincts par plan |
 | Deux presets de plan nommés, forçables à la main | pour les écouter et les figer | **defaults** §5 bis Cortex — chaînes FX complètes à finaliser |
-| Un lecteur capable de recevoir un **nom de fichier** plutôt qu'un index de tirage | pour que le sélecteur décide, pas le lecteur | **ABSENT** — `player_state_08` tire un index dans `playlists08/` |
+| Un lecteur capable de recevoir un **nom de fichier** plutôt qu'un index de tirage | pour que le sélecteur décide, pas le lecteur | **ABSENT** — `player_state_08` tire un index dans `playlists08/`. **Ne pas** patcher l'anti-doublon dedans : [`../Zones/Hippocampe.md`](../Zones/Hippocampe.md) §10 « Piège » |
 | Fondus pilotables pour `EMERGER` et `RECOUVRIR` | les gestes temporels | **FAIT** — `cortex_pair_08` / `cortex_amb_behav_08` |
 | `s6_tag_hook` | point d'accroche | présent (hippo) ; **non branché** au sélecteur Cortex |
 

@@ -1,4 +1,46 @@
 etat,bucket,file,dur,start,end,src
+CORTEX,AMBIANCE,A01_v3_cortex_ambiance.wav,19.954,0.0,19.954,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A02_v3_cortex_ambiance.wav,17.67,24.193,41.862,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A03_v3_cortex_ambiance.wav,3.023,43.375,46.398,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A04_v3_cortex_ambiance.wav,37.218,49.993,87.211,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A05_v3_cortex_ambiance.wav,4.182,95.602,99.784,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A06_v3_cortex_ambiance.wav,16.465,180.072,196.538,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A07_v3_cortex_ambiance.wav,5.312,200.098,205.41,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A08_v3_cortex_ambiance.wav,5.946,221.454,227.4,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A09_v3_cortex_ambiance.wav,3.961,231.716,235.676,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A10_v3_cortex_ambiance.wav,2.188,242.852,245.04,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A11_v3_cortex_ambiance.wav,2.808,264.316,267.124,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A12_v3_cortex_ambiance.wav,14.536,269.079,283.615,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A13_v3_cortex_ambiance.wav,2.454,284.719,287.173,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A14_v3_cortex_ambiance.wav,4.836,296.072,300.908,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A15_v3_cortex_ambiance.wav,2.749,358.086,360.835,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A16_v3_cortex_ambiance.wav,5.092,431.057,436.149,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A17_v3_cortex_ambiance.wav,5.931,446.678,452.609,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A18_v3_cortex_ambiance.wav,2.271,495.417,497.689,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A19_v3_cortex_ambiance.wav,3.551,501.381,504.932,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A20_v3_cortex_ambiance.wav,5.092,551.057,556.149,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A21_v3_cortex_ambiance.wav,2.867,566.678,569.546,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A22_v3_cortex_ambiance.wav,3.41,573.965,577.375,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A23_v3_cortex_ambiance.wav,11.506,579.169,590.675,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A24_v3_cortex_ambiance.wav,17.389,591.913,609.302,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A25_v3_cortex_ambiance.wav,9.867,621.758,631.625,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A26_v3_cortex_ambiance.wav,4.604,640.228,644.832,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A27_v3_cortex_ambiance.wav,3.429,689.807,693.236,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A28_v3_cortex_ambiance.wav,5.919,708.195,714.115,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A29_v3_cortex_ambiance.wav,2.454,715.219,717.673,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A30_v3_cortex_ambiance.wav,2.76,728.037,730.797,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A31_v3_cortex_ambiance.wav,2.287,733.894,736.181,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A32_v3_cortex_ambiance.wav,4.218,747.073,751.292,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A33_v3_cortex_ambiance.wav,13.987,969.663,983.65,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A34_v3_cortex_ambiance.wav,4.448,988.183,992.631,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A35_v3_cortex_ambiance.wav,3.433,997.822,1001.255,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A36_v3_cortex_ambiance.wav,5.276,1016.044,1021.32,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A37_v3_cortex_ambiance.wav,2.562,1091.695,1094.257,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A38_v3_cortex_ambiance.wav,23.634,1104.187,1127.821,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A39_v3_cortex_ambiance.wav,13.436,1131.985,1145.421,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A40_v3_cortex_ambiance.wav,15.801,1152.136,1167.937,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A41_v3_cortex_ambiance.wav,12.685,1170.433,1183.118,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A42_v3_cortex_ambiance.wav,2.297,1186.012,1188.309,ambiance opacité fin V6 Cortex ambiance.wav
 CORTEX,AMBIANCE,A43_v3_cortex_ambiance.wav,19.691,1440.076,1459.767,ambiance opacité fin V6 Cortex ambiance.wav
 CORTEX,AMBIANCE,A44_v3_cortex_ambiance.wav,16.786,1460.731,1477.518,ambiance opacité fin V6 Cortex ambiance.wav
 CORTEX,AMBIANCE,A45_v3_cortex_ambiance.wav,14.641,1488.078,1502.72,ambiance opacité fin V6 Cortex ambiance.wav
@@ -26,48 +68,41 @@ CORTEX,AMBIANCE,A66_v3_cortex_ambiance.wav,59.838,2639.981,2699.819,ambiance opa
 CORTEX,AMBIANCE,A67_v3_cortex_ambiance.wav,59.829,2715.981,2775.81,ambiance opacité fin V6 Cortex ambiance.wav
 CORTEX,AMBIANCE,A68_v3_cortex_ambiance.wav,59.641,2780.35,2839.991,ambiance opacité fin V6 Cortex ambiance.wav
 CORTEX,AMBIANCE,A69_v3_cortex_ambiance.wav,14.909,2879.985,2894.894,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A01_v3_cortex_ambiance.wav,19.954,0.0,19.954,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A02_v3_cortex_ambiance.wav,17.67,24.193,41.862,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A03_v3_cortex_ambiance.wav,3.023,43.375,46.398,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A04_v3_cortex_ambiance.wav,37.218,49.993,87.211,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A05_v3_cortex_ambiance.wav,4.182,95.602,99.784,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A06_v3_cortex_ambiance.wav,16.465,180.072,196.538,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A07_v3_cortex_ambiance.wav,5.312,200.098,205.41,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A08_v3_cortex_ambiance.wav,5.946,221.454,227.4,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A09_v3_cortex_ambiance.wav,3.961,231.716,235.676,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A10_v3_cortex_ambiance.wav,2.188,242.852,245.04,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A11_v3_cortex_ambiance.wav,2.808,264.316,267.124,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A12_v3_cortex_ambiance.wav,14.536,269.079,283.615,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A13_v3_cortex_ambiance.wav,2.454,284.719,287.173,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A14_v3_cortex_ambiance.wav,4.836,296.072,300.908,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A15_v3_cortex_ambiance.wav,2.749,358.086,360.835,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A16_v3_cortex_ambiance.wav,5.092,431.057,436.149,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A17_v3_cortex_ambiance.wav,5.931,446.678,452.609,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A18_v3_cortex_ambiance.wav,2.271,495.417,497.689,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A19_v3_cortex_ambiance.wav,3.551,501.381,504.932,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A20_v3_cortex_ambiance.wav,5.092,551.057,556.149,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A21_v3_cortex_ambiance.wav,2.867,566.678,569.546,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A22_v3_cortex_ambiance.wav,3.41,573.965,577.375,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A23_v3_cortex_ambiance.wav,11.506,579.169,590.675,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A24_v3_cortex_ambiance.wav,17.389,591.913,609.302,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A25_v3_cortex_ambiance.wav,9.867,621.758,631.625,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A26_v3_cortex_ambiance.wav,4.604,640.228,644.832,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A27_v3_cortex_ambiance.wav,3.429,689.807,693.236,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A28_v3_cortex_ambiance.wav,5.919,708.195,714.115,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A29_v3_cortex_ambiance.wav,2.454,715.219,717.673,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A30_v3_cortex_ambiance.wav,2.76,728.037,730.797,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A31_v3_cortex_ambiance.wav,2.287,733.894,736.181,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A32_v3_cortex_ambiance.wav,4.218,747.073,751.292,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A33_v3_cortex_ambiance.wav,13.987,969.663,983.65,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A34_v3_cortex_ambiance.wav,4.448,988.183,992.631,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A35_v3_cortex_ambiance.wav,3.433,997.822,1001.255,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A36_v3_cortex_ambiance.wav,5.276,1016.044,1021.32,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A37_v3_cortex_ambiance.wav,2.562,1091.695,1094.257,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A38_v3_cortex_ambiance.wav,23.634,1104.187,1127.821,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A39_v3_cortex_ambiance.wav,13.436,1131.985,1145.421,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A40_v3_cortex_ambiance.wav,15.801,1152.136,1167.937,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A41_v3_cortex_ambiance.wav,12.685,1170.433,1183.118,ambiance opacité fin V6 Cortex ambiance.wav
-CORTEX,FRAGMENTS,A42_v3_cortex_ambiance.wav,2.297,1186.012,1188.309,ambiance opacité fin V6 Cortex ambiance.wav
+CORTEX,AMBIANCE,A70_v3_cortex_ambiance.wav,163.568,0.0,163.568,new Ambiance général last.wav
+CORTEX,AMBIANCE,A71_v3_cortex_ambiance.wav,311.024,167.985,479.009,new Ambiance général last.wav
+CORTEX,AMBIANCE,A72_v3_cortex_ambiance.wav,176.319,487.997,664.316,new Ambiance général last.wav
+CORTEX,AMBIANCE,A73_v3_cortex_ambiance.wav,216.236,671.989,888.225,new Ambiance général last.wav
+CORTEX,AMBIANCE,A74_v3_cortex_ambiance.wav,266.261,899.02,1165.28,new Ambiance général last.wav
+CORTEX,AMBIANCE,A75_v3_cortex_ambiance.wav,35.081,1172.087,1207.168,new Ambiance général last.wav
+CORTEX,AMBIANCE,A76_v3_cortex_ambiance.wav,181.094,1216.307,1397.401,new Ambiance général last.wav
+CORTEX,AMBIANCE,A77_v3_cortex_ambiance.wav,226.842,1400.007,1626.849,new Ambiance général last.wav
+CORTEX,AMBIANCE,A78_v3_cortex_ambiance.wav,27.73,1632.016,1659.746,new Ambiance général last.wav
+CORTEX,AMBIANCE,A79_v3_cortex_ambiance.wav,183.832,1671.988,1855.82,new Ambiance général last.wav
+CORTEX,AMBIANCE,A80_v3_cortex_ambiance.wav,169.187,1867.188,2036.374,new Ambiance général last.wav
+CORTEX,AMBIANCE,A81_v3_cortex_ambiance.wav,170.626,2048.421,2219.047,new Ambiance général last.wav
+CORTEX,AMBIANCE,A82_v3_cortex_ambiance.wav,52.026,2223.988,2276.014,new Ambiance général last.wav
+CORTEX,AMBIANCE,A83_v3_cortex_ambiance.wav,46.833,2287.988,2334.821,new Ambiance général last.wav
+CORTEX,AMBIANCE,A84_v3_cortex_ambiance.wav,14.665,2335.336,2350.001,new Ambiance général last.wav
+CORTEX,AMBIANCE,A85_v3_cortex_ambiance.wav,54.145,2402.137,2456.282,new Ambiance général last.wav
+CORTEX,AMBIANCE,A86_v3_cortex_ambiance.wav,36.453,2495.987,2532.44,new Ambiance général last.wav
+CORTEX,AMBIANCE,A87_v3_cortex_ambiance.wav,38.47,2560.012,2598.482,new Ambiance général last.wav
+CORTEX,AMBIANCE,A88_v3_cortex_ambiance.wav,9.983,2623.987,2633.97,new Ambiance général last.wav
+CORTEX,AMBIANCE,A89_v3_cortex_ambiance.wav,11.96,2656.383,2668.342,new Ambiance général last.wav
+CORTEX,AMBIANCE,A90_v3_cortex_ambiance.wav,73.271,2669.175,2742.445,new Ambiance général last.wav
+CORTEX,AMBIANCE,A91_v3_cortex_ambiance.wav,170.626,2784.421,2955.047,new Ambiance général last.wav
+CORTEX,AMBIANCE,A92_v3_cortex_ambiance.wav,45.237,2960.084,3005.321,new Ambiance général last.wav
+CORTEX,AMBIANCE,A93_v3_cortex_ambiance.wav,12.672,3005.836,3018.508,new Ambiance général last.wav
+CORTEX,AMBIANCE,A94_v3_cortex_ambiance.wav,151.663,3055.991,3207.654,new Ambiance général last.wav
+CORTEX,AMBIANCE,A95_v3_cortex_ambiance.wav,59.106,3232.298,3291.404,new Ambiance général last.wav
+CORTEX,AMBIANCE,A96_v3_cortex_ambiance.wav,37.027,3295.987,3333.014,new Ambiance général last.wav
+CORTEX,AMBIANCE,A97_v3_cortex_ambiance.wav,26.528,3343.985,3370.513,new Ambiance général last.wav
+CORTEX,AMBIANCE,A98_v3_cortex_ambiance.wav,130.39,3375.987,3506.376,new Ambiance général last.wav
+CORTEX,AMBIANCE,A99_v3_cortex_ambiance.wav,18.19,3567.987,3586.177,new Ambiance général last.wav
+CORTEX,AMBIANCE,A100_v3_cortex_ambiance.wav,43.49,3632.024,3675.514,new Ambiance général last.wav
+CORTEX,AMBIANCE,A101_v3_cortex_ambiance.wav,12.975,3679.237,3692.212,new Ambiance général last.wav
+CORTEX,AMBIANCE,A102_v3_cortex_ambiance.wav,90.917,3711.99,3802.906,new Ambiance général last.wav
+CORTEX,AMBIANCE,A103_v3_cortex_ambiance.wav,31.82,3824.143,3855.963,new Ambiance général last.wav
+CORTEX,AMBIANCE,A104_v3_cortex_ambiance.wav,63.138,3859.987,3923.125,new Ambiance général last.wav
 CORTEX,FRAGMENTS,C002_v3_cortex.wav,1.996,36.134,38.129,ambiance opacité fin V6 Cortex.wav
 CORTEX,FRAGMENTS,C003_v3_cortex.wav,5.276,40.044,45.32,ambiance opacité fin V6 Cortex.wav
 CORTEX,FRAGMENTS,C004_v3_cortex.wav,0.996,61.086,62.082,ambiance opacité fin V6 Cortex.wav
@@ -116,6 +151,20 @@ CORTEX,FRAGMENTS,C081_v3_cortex.wav,11.91,1663.982,1675.892,ambiance opacité f
 CORTEX,FRAGMENTS,C083_v3_cortex.wav,7.553,1711.988,1719.541,ambiance opacité fin V6 Cortex.wav
 CORTEX,FRAGMENTS,C088_v3_cortex.wav,11.081,1848.001,1859.082,ambiance opacité fin V6 Cortex.wav
 CORTEX,FRAGMENTS,C089_v3_cortex.wav,8.911,1863.981,1872.892,ambiance opacité fin V6 Cortex.wav
+CORTEX,FRAGMENTS,C107_v3_cortex.wav,5.317,3205.49,3210.807,new cortex last.wav
+CORTEX,FRAGMENTS,C108_v3_cortex.wav,1.507,3211.261,3212.768,new cortex last.wav
+CORTEX,FRAGMENTS,C110_v3_cortex.wav,4.014,3325.501,3329.515,new cortex last.wav
+CORTEX,FRAGMENTS,C112_v3_cortex.wav,10.264,3463.99,3474.254,new cortex last.wav
+CORTEX,FRAGMENTS,C114_v3_cortex.wav,6.264,3778.986,3785.25,new cortex last.wav
+CORTEX,FRAGMENTS,C115_v3_cortex.wav,11.33,3785.804,3797.134,new cortex last.wav
+CORTEX,FRAGMENTS,C116_v3_cortex.wav,5.273,3807.988,3813.26,new cortex last.wav
+CORTEX,FRAGMENTS,C117_v3_cortex.wav,2.141,3813.854,3815.995,new cortex last.wav
+CORTEX,FRAGMENTS,C118_v3_cortex.wav,10.499,3816.417,3826.917,new cortex last.wav
+CORTEX,FRAGMENTS,C124_v3_cortex.wav,6.27,4070.895,4077.165,new cortex last.wav
+CORTEX,FRAGMENTS,C130_v3_cortex.wav,1.277,4413.704,4414.981,new cortex last.wav
+CORTEX,FRAGMENTS,C131_v3_cortex.wav,2.551,4425.767,4428.318,new cortex last.wav
+CORTEX,FRAGMENTS,C133_v3_cortex.wav,10.526,4597.265,4607.791,new cortex last.wav
+CORTEX,FRAGMENTS,C134_v3_cortex.wav,9.259,4753.358,4762.617,new cortex last.wav
 CORTEX,LONG_MOYEN,C001_v3_cortex.wav,16.454,0.0,16.454,ambiance opacité fin V6 Cortex.wav
 CORTEX,LONG_MOYEN,C011_v3_cortex.wav,14.536,161.079,175.615,ambiance opacité fin V6 Cortex.wav
 CORTEX,LONG_MOYEN,C015_v3_cortex.wav,17.465,208.247,225.712,ambiance opacité fin V6 Cortex.wav
@@ -158,6 +207,38 @@ CORTEX,LONG_MOYEN,C085_v3_cortex.wav,15.286,1760.002,1775.288,ambiance opacité
 CORTEX,LONG_MOYEN,C086_v3_cortex.wav,14.486,1783.982,1798.468,ambiance opacité fin V6 Cortex.wav
 CORTEX,LONG_MOYEN,C087_v3_cortex.wav,31.891,1807.98,1839.871,ambiance opacité fin V6 Cortex.wav
 CORTEX,LONG_MOYEN,C090_v3_cortex.wav,26.739,1919.983,1946.722,ambiance opacité fin V6 Cortex.wav
+CORTEX,LONG_MOYEN,C091_v3_cortex.wav,173.101,0.0,173.101,new cortex last.wav
+CORTEX,LONG_MOYEN,C092_v3_cortex.wav,163.211,173.535,336.745,new cortex last.wav
+CORTEX,LONG_MOYEN,C093_v3_cortex.wav,204.266,383.993,588.259,new cortex last.wav
+CORTEX,LONG_MOYEN,C094_v3_cortex.wav,27.487,599.99,627.477,new cortex last.wav
+CORTEX,LONG_MOYEN,C095_v3_cortex.wav,145.974,655.986,801.959,new cortex last.wav
+CORTEX,LONG_MOYEN,C096_v3_cortex.wav,145.208,802.656,947.864,new cortex last.wav
+CORTEX,LONG_MOYEN,C097_v3_cortex.wav,115.62,948.813,1064.433,new cortex last.wav
+CORTEX,LONG_MOYEN,C098_v3_cortex.wav,29.812,1088.021,1117.833,new cortex last.wav
+CORTEX,LONG_MOYEN,C099_v3_cortex.wav,173.112,1151.99,1325.101,new cortex last.wav
+CORTEX,LONG_MOYEN,C100_v3_cortex.wav,163.211,1325.535,1488.745,new cortex last.wav
+CORTEX,LONG_MOYEN,C101_v3_cortex.wav,785.778,1539.522,2325.299,new cortex last.wav
+CORTEX,LONG_MOYEN,C102_v3_cortex.wav,208.132,2367.985,2576.118,new cortex last.wav
+CORTEX,LONG_MOYEN,C103_v3_cortex.wav,14.209,2815.985,2830.195,new cortex last.wav
+CORTEX,LONG_MOYEN,C104_v3_cortex.wav,31.31,2944.015,2975.324,new cortex last.wav
+CORTEX,LONG_MOYEN,C105_v3_cortex.wav,22.077,3071.988,3094.065,new cortex last.wav
+CORTEX,LONG_MOYEN,C106_v3_cortex.wav,21.28,3094.546,3115.826,new cortex last.wav
+CORTEX,LONG_MOYEN,C109_v3_cortex.wav,15.344,3233.498,3248.842,new cortex last.wav
+CORTEX,LONG_MOYEN,C111_v3_cortex.wav,17.217,3401.549,3418.765,new cortex last.wav
+CORTEX,LONG_MOYEN,C113_v3_cortex.wav,26.526,3519.986,3546.513,new cortex last.wav
+CORTEX,LONG_MOYEN,C119_v3_cortex.wav,17.399,3839.988,3857.387,new cortex last.wav
+CORTEX,LONG_MOYEN,C120_v3_cortex.wav,16.496,3860.015,3876.511,new cortex last.wav
+CORTEX,LONG_MOYEN,C121_v3_cortex.wav,14.75,3900.404,3915.154,new cortex last.wav
+CORTEX,LONG_MOYEN,C122_v3_cortex.wav,18.526,3931.645,3950.17,new cortex last.wav
+CORTEX,LONG_MOYEN,C123_v3_cortex.wav,37.185,4006.896,4044.08,new cortex last.wav
+CORTEX,LONG_MOYEN,C125_v3_cortex.wav,13.523,4134.516,4148.039,new cortex last.wav
+CORTEX,LONG_MOYEN,C126_v3_cortex.wav,21.292,4166.781,4188.072,new cortex last.wav
+CORTEX,LONG_MOYEN,C127_v3_cortex.wav,16.067,4224.999,4241.066,new cortex last.wav
+CORTEX,LONG_MOYEN,C128_v3_cortex.wav,21.701,4264.774,4286.475,new cortex last.wav
+CORTEX,LONG_MOYEN,C129_v3_cortex.wav,29.523,4298.776,4328.3,new cortex last.wav
+CORTEX,LONG_MOYEN,C132_v3_cortex.wav,18.453,4455.338,4473.79,new cortex last.wav
+CORTEX,LONG_MOYEN,C135_v3_cortex.wav,16.706,4802.837,4819.542,new cortex last.wav
+CORTEX,LONG_MOYEN,C136_v3_cortex.wav,15.89,4834.765,4850.656,new cortex last.wav
 HIPPOCAMPE,FRAGMENTS,H001_v3_hippocampe.wav,0.766,0.0,0.766,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,FRAGMENTS,H002_v3_hippocampe.wav,4.58,4.981,9.561,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,FRAGMENTS,H003_v3_hippocampe.wav,4.365,11.731,16.096,ambiance opacité fin V6 Hippocampe.wav
@@ -227,6 +308,49 @@ HIPPOCAMPE,FRAGMENTS,H072_v3_hippocampe.wav,9.966,1265.981,1275.946,ambiance opa
 HIPPOCAMPE,FRAGMENTS,H073_v3_hippocampe.wav,9.475,1278.038,1287.513,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,FRAGMENTS,H074_v3_hippocampe.wav,3.815,1288.573,1292.388,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,FRAGMENTS,H076_v3_hippocampe.wav,4.801,1313.987,1318.788,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,FRAGMENTS,H080_v3_hippocampe.wav,2.496,0.0,2.496,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H081_v3_hippocampe.wav,6.174,2.838,9.012,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H083_v3_hippocampe.wav,7.486,44.527,52.014,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H084_v3_hippocampe.wav,8.527,53.987,62.514,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H085_v3_hippocampe.wav,8.989,176.487,185.476,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H086_v3_hippocampe.wav,9.525,209.498,219.024,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H087_v3_hippocampe.wav,8.519,271.505,280.023,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H088_v3_hippocampe.wav,4.014,369.01,373.024,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H089_v3_hippocampe.wav,4.494,439.004,443.499,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H090_v3_hippocampe.wav,3.194,478.061,481.255,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H091_v3_hippocampe.wav,3.234,490.756,493.99,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H092_v3_hippocampe.wav,2.258,531.987,534.246,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H093_v3_hippocampe.wav,3.651,574.998,578.65,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H095_v3_hippocampe.wav,4.863,640.026,644.889,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H097_v3_hippocampe.wav,11.796,671.027,682.823,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H098_v3_hippocampe.wav,4.368,684.988,689.357,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H099_v3_hippocampe.wav,1.369,690.008,691.377,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H100_v3_hippocampe.wav,1.356,701.799,703.155,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H101_v3_hippocampe.wav,0.749,736.361,737.11,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H102_v3_hippocampe.wav,0.707,759.303,760.01,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H105_v3_hippocampe.wav,12.442,845.03,857.471,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H107_v3_hippocampe.wav,12.638,972.989,985.627,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H108_v3_hippocampe.wav,2.278,1104.996,1107.274,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H109_v3_hippocampe.wav,5.804,1156.557,1162.361,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H110_v3_hippocampe.wav,10.027,1208.555,1218.583,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H112_v3_hippocampe.wav,2.503,1272.556,1275.059,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H113_v3_hippocampe.wav,12.379,1302.556,1314.935,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H114_v3_hippocampe.wav,2.725,1337.375,1340.1,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H115_v3_hippocampe.wav,2.486,1341.832,1344.318,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H116_v3_hippocampe.wav,1.76,1357.065,1358.826,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H117_v3_hippocampe.wav,1.566,1360.056,1361.623,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H118_v3_hippocampe.wav,12.303,1372.569,1384.873,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H119_v3_hippocampe.wav,1.025,1402.869,1403.895,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H120_v3_hippocampe.wav,1.525,1425.981,1427.506,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H121_v3_hippocampe.wav,12.638,1461.789,1474.427,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H122_v3_hippocampe.wav,9.037,1525.785,1534.822,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H123_v3_hippocampe.wav,1.525,1551.611,1553.136,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H124_v3_hippocampe.wav,12.638,1649.989,1662.627,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H125_v3_hippocampe.wav,9.037,1713.985,1723.022,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H126_v3_hippocampe.wav,1.927,1734.487,1736.414,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H128_v3_hippocampe.wav,10.221,1832.987,1843.207,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H129_v3_hippocampe.wav,8.903,1847.986,1856.889,new hippocampe last.wav
+HIPPOCAMPE,FRAGMENTS,H130_v3_hippocampe.wav,7.026,1881.237,1888.263,new hippocampe last.wav
 HIPPOCAMPE,LONG_MOYEN,H035_v3_hippocampe.wav,18.107,274.3,292.407,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,LONG_MOYEN,H036_v3_hippocampe.wav,15.777,305.992,321.769,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,LONG_MOYEN,H038_v3_hippocampe.wav,21.635,409.982,431.617,ambiance opacité fin V6 Hippocampe.wav
@@ -237,6 +361,14 @@ HIPPOCAMPE,LONG_MOYEN,H075_v3_hippocampe.wav,17.484,1294.148,1311.632,ambiance o
 HIPPOCAMPE,LONG_MOYEN,H077_v3_hippocampe.wav,20.488,1319.986,1340.474,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,LONG_MOYEN,H078_v3_hippocampe.wav,17.786,1345.982,1363.768,ambiance opacité fin V6 Hippocampe.wav
 HIPPOCAMPE,LONG_MOYEN,H079_v3_hippocampe.wav,14.321,1368.044,1382.365,ambiance opacité fin V6 Hippocampe.wav
+HIPPOCAMPE,LONG_MOYEN,H082_v3_hippocampe.wav,15.844,16.169,32.013,new hippocampe last.wav
+HIPPOCAMPE,LONG_MOYEN,H094_v3_hippocampe.wav,17.059,591.603,608.662,new hippocampe last.wav
+HIPPOCAMPE,LONG_MOYEN,H096_v3_hippocampe.wav,14.121,648.986,663.107,new hippocampe last.wav
+HIPPOCAMPE,LONG_MOYEN,H103_v3_hippocampe.wav,26.172,761.99,788.162,new hippocampe last.wav
+HIPPOCAMPE,LONG_MOYEN,H104_v3_hippocampe.wav,13.264,796.985,810.25,new hippocampe last.wav
+HIPPOCAMPE,LONG_MOYEN,H106_v3_hippocampe.wav,16.649,876.986,893.635,new hippocampe last.wav
+HIPPOCAMPE,LONG_MOYEN,H111_v3_hippocampe.wav,16.999,1238.558,1255.557,new hippocampe last.wav
+HIPPOCAMPE,LONG_MOYEN,H127_v3_hippocampe.wav,22.65,1751.988,1774.638,new hippocampe last.wav
 RECONSTRUCTION,FRAGMENTS,R001_v3_reconstruction.wav,1.988,0.0,1.988,ambiance opacité fin V6 Reconstruction.wav
 RECONSTRUCTION,FRAGMENTS,R002_v3_reconstruction.wav,2.502,2.504,5.006,ambiance opacité fin V6 Reconstruction.wav
 RECONSTRUCTION,FRAGMENTS,R003_v3_reconstruction.wav,1.708,5.556,7.264,ambiance opacité fin V6 Reconstruction.wav
@@ -524,4 +656,103 @@ RECONSTRUCTION,FRAGMENTS,R285_v3_reconstruction.wav,0.892,1771.002,1771.893,ambi
 RECONSTRUCTION,FRAGMENTS,R286_v3_reconstruction.wav,1.021,1773.041,1774.062,ambiance opacité fin V6 Reconstruction.wav
 RECONSTRUCTION,FRAGMENTS,R287_v3_reconstruction.wav,2.262,1775.119,1777.381,ambiance opacité fin V6 Reconstruction.wav
 RECONSTRUCTION,FRAGMENTS,R288_v3_reconstruction.wav,3.387,1778.982,1782.369,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,FRAGMENTS,R289_v3_reconstruction.wav,1.055,0.0,1.055,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R290_v3_reconstruction.wav,1.527,1.781,3.308,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R291_v3_reconstruction.wav,1.534,4.154,5.688,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R292_v3_reconstruction.wav,1.522,6.529,8.051,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R293_v3_reconstruction.wav,7.737,15.493,23.229,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R294_v3_reconstruction.wav,5.744,23.77,29.515,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R295_v3_reconstruction.wav,2.275,31.987,34.262,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R296_v3_reconstruction.wav,2.865,36.148,39.013,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R297_v3_reconstruction.wav,1.139,41.988,43.127,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R298_v3_reconstruction.wav,1.591,47.862,49.453,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R299_v3_reconstruction.wav,1.14,49.861,51.002,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R300_v3_reconstruction.wav,4.152,59.985,64.137,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R301_v3_reconstruction.wav,5.778,71.986,77.764,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R302_v3_reconstruction.wav,3.777,89.486,93.264,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R303_v3_reconstruction.wav,0.933,108.239,109.172,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R304_v3_reconstruction.wav,2.774,163.988,166.762,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R305_v3_reconstruction.wav,8.737,189.641,198.378,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R306_v3_reconstruction.wav,9.519,199.497,209.016,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R307_v3_reconstruction.wav,8.341,209.487,217.828,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R308_v3_reconstruction.wav,8.391,219.485,227.877,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R309_v3_reconstruction.wav,1.521,233.487,235.008,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R310_v3_reconstruction.wav,1.528,237.487,239.015,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R311_v3_reconstruction.wav,1.87,243.486,245.356,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R312_v3_reconstruction.wav,2.776,247.488,250.263,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R313_v3_reconstruction.wav,1.871,255.993,257.863,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R314_v3_reconstruction.wav,1.653,262.986,264.639,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R315_v3_reconstruction.wav,3.067,266.004,269.071,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R316_v3_reconstruction.wav,1.629,270.987,272.615,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R317_v3_reconstruction.wav,0.801,272.986,273.787,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R318_v3_reconstruction.wav,1.81,278.491,280.301,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R319_v3_reconstruction.wav,1.633,280.861,282.493,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R320_v3_reconstruction.wav,2.892,283.495,286.387,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R321_v3_reconstruction.wav,0.912,293.611,294.523,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R322_v3_reconstruction.wav,1.028,296.611,297.639,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R323_v3_reconstruction.wav,2.272,300.738,303.01,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R324_v3_reconstruction.wav,1.513,316.906,318.419,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R325_v3_reconstruction.wav,1.797,329.198,330.995,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R326_v3_reconstruction.wav,3.022,334.739,337.76,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R327_v3_reconstruction.wav,0.984,350.034,351.018,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R328_v3_reconstruction.wav,1.204,354.237,355.441,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R329_v3_reconstruction.wav,1.151,359.424,360.575,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R330_v3_reconstruction.wav,1.727,372.928,374.654,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R331_v3_reconstruction.wav,1.02,380.581,381.6,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R332_v3_reconstruction.wav,1.195,409.494,410.689,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R333_v3_reconstruction.wav,0.667,442.425,443.092,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R334_v3_reconstruction.wav,1.479,463.645,465.124,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R335_v3_reconstruction.wav,1.715,482.173,483.888,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R336_v3_reconstruction.wav,1.083,487.363,488.446,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R337_v3_reconstruction.wav,2.243,489.705,491.948,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R338_v3_reconstruction.wav,1.52,501.931,503.451,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R339_v3_reconstruction.wav,0.772,513.8,514.572,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R340_v3_reconstruction.wav,1.148,534.861,536.009,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R341_v3_reconstruction.wav,1.14,539.549,540.689,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R342_v3_reconstruction.wav,2.039,551.84,553.88,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R343_v3_reconstruction.wav,4.01,557.923,561.934,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R344_v3_reconstruction.wav,2.801,565.97,568.771,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R345_v3_reconstruction.wav,1.649,573.05,574.699,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R346_v3_reconstruction.wav,1.323,575.675,576.998,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R347_v3_reconstruction.wav,1.276,588.673,589.949,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R348_v3_reconstruction.wav,1.639,595.738,597.377,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R350_v3_reconstruction.wav,3.298,618.755,622.054,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R351_v3_reconstruction.wav,1.928,626.175,628.104,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R352_v3_reconstruction.wav,8.823,630.311,639.134,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R353_v3_reconstruction.wav,10.959,644.425,655.384,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R355_v3_reconstruction.wav,4.515,688.434,692.95,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R356_v3_reconstruction.wav,2.266,694.551,696.817,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R357_v3_reconstruction.wav,2.243,707.832,710.075,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R358_v3_reconstruction.wav,2.469,713.605,716.074,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R359_v3_reconstruction.wav,0.637,719.565,720.201,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R360_v3_reconstruction.wav,0.942,770.174,771.117,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R361_v3_reconstruction.wav,1.594,844.26,845.854,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R362_v3_reconstruction.wav,2.059,852.245,854.304,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R363_v3_reconstruction.wav,1.272,860.332,861.604,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R364_v3_reconstruction.wav,1.004,896.949,897.953,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R365_v3_reconstruction.wav,1.025,950.175,951.199,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R366_v3_reconstruction.wav,1.248,952.049,953.297,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R367_v3_reconstruction.wav,0.9,957.363,958.263,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R368_v3_reconstruction.wav,1.534,974.174,975.708,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R369_v3_reconstruction.wav,1.142,1022.701,1023.843,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R370_v3_reconstruction.wav,2.798,1027.922,1030.72,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R371_v3_reconstruction.wav,2.776,1118.174,1120.951,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R372_v3_reconstruction.wav,0.994,1205.799,1206.793,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R373_v3_reconstruction.wav,1.777,1214.174,1215.951,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R374_v3_reconstruction.wav,2.009,1218.442,1220.451,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R375_v3_reconstruction.wav,2.03,1250.173,1252.203,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R376_v3_reconstruction.wav,1.984,1254.174,1256.157,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R377_v3_reconstruction.wav,4.403,1285.916,1290.319,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R378_v3_reconstruction.wav,3.029,1294.174,1297.203,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R379_v3_reconstruction.wav,4.257,1300.173,1304.43,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R380_v3_reconstruction.wav,5.594,1305.232,1310.826,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R381_v3_reconstruction.wav,2.78,1316.173,1318.953,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R382_v3_reconstruction.wav,1.372,1320.175,1321.546,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R383_v3_reconstruction.wav,1.52,1322.681,1324.201,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R384_v3_reconstruction.wav,8.007,1331.692,1339.699,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R385_v3_reconstruction.wav,1.029,1363.675,1364.703,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R386_v3_reconstruction.wav,1.152,1407.175,1408.327,new reconstruction last bon.wav
+RECONSTRUCTION,FRAGMENTS,R387_v3_reconstruction.wav,2.307,1421.173,1423.481,new reconstruction last bon.wav
 RECONSTRUCTION,LONG_MOYEN,R155_v3_reconstruction.wav,15.264,928.98,944.244,ambiance opacité fin V6 Reconstruction.wav
+RECONSTRUCTION,LONG_MOYEN,R349_v3_reconstruction.wav,15.271,600.673,615.944,new reconstruction last bon.wav
+RECONSTRUCTION,LONG_MOYEN,R354_v3_reconstruction.wav,21.823,662.627,684.45,new reconstruction last bon.wav

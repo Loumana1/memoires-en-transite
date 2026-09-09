@@ -7,6 +7,10 @@
 # Tout le reste de SONS_V3/ se reconstruit avec scripts/slice_opacite_v3.py.
 SONS_V3/
 
+# Masters bruts (batch 4, etc.) — jamais dans git (limite GitHub 100 Mo).
+SONS batch 4/
+*.wav
+
 # ---------------------------------------------------------------- Python
 __pycache__/
 *.py[cod]

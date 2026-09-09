@@ -1,22 +1,19 @@
-"""Pool d'ambiances Proto 08 — sélection mélodique A45–A69.
+"""Pool d'ambiances Proto 08 — musicale vs texture (Cortex).
 
-Historique : la sélection était une liste blanche de 15 stems écrite à la main
-(A38, A41, A43, A44 puis quelques-uns au-dessus de A45), coupée en deux pools
-« musicale » et « texture » par une heuristique sur la position dans le master.
-Résultat : le pool texture ne contenait plus que 5 fichiers, dont 4 sous A45,
-et cinq des ambiances préférées de Loumana (A54, A65, A66, A67, A68)
-n'appartenaient à aucun pool — elles ne pouvaient jamais sortir.
+Historique : 22 août — pool mélodique unique A45–A69 pour les deux nappes
+(anti-doublon patch). Problème à l'écoute : deux nappes **musicales**
+différentes en même temps, peu plaisant.
 
-Décision du 22 août 2026 : **un seul pool mélodique**, les ambiances A45 à A69
-qui tiennent au moins `MIN_DUR_S`. La séparation musicale / texture de
-[Q25](docs/Backlog/Q&A.md#q25) tombe, puisque toute cette matière est mélodique.
-Les deux nappes du Cortex tirent dans le même pool ; c'est le patch qui garantit
-qu'elles ne prennent pas le même fichier au même moment.
+24 août 2026 — Loumana désigne deux listes :
+  · **musicale** (HP7) : `FAVORIS_CORTEX` (A53, A54, A59, A64–A68)
+  · **texture** (HP5) : `FAVORIS_TEXTURE_CORTEX` (A04, A16–A21, A38–A41, A49–A50)
 
-Seuil de durée : [Q3](docs/Backlog/Q&A.md#q3) fixe 30 s pour une nappe, mais à
-30 s strict on perdrait A53 (29,5 s) qui fait partie des préférées, ainsi que
-A55 (28,7 s) et A46 (25,9 s). Le seuil est donc à 25 s, ce qui n'exclut que le
-vraiment court — A47 ne dure que 3,9 s.
+Les slots 32 / 33 tirent dans des pools **disjoints**. L'anti-doublon du patch
+reste utile si deux tirages identiques dans un même pool.
+
+Pool mélodique large A45–A69 : Hippocampe / Reconstruction (slot 40 / 41).
+Seuil durée mélodique : [Q3](docs/Backlog/Q&A.md#q3) — 25 s (A53 à 29,5 s inclus).
+Les textures désignées explicitement ne passent pas ce filtre (segments courts OK).
 """
 from __future__ import annotations
 
@@ -33,9 +30,28 @@ ID_MAX = 69
 # En dessous, un fichier ne tient pas comme nappe (voir en-tête).
 MIN_DUR_S = 25.0
 
-# Préférées Loumana pour le Cortex — toutes dans les bornes ci-dessus. Sert de
-# garde-fou : si l'une disparaît du pool, la matière a bougé sans qu'on le voie.
+# Préférées Loumana — nappe **musicale** Cortex (HP7), slot 32.
 FAVORIS_CORTEX = ("A53", "A54", "A59", "A64", "A65", "A66", "A67", "A68")
+
+# Préférées Loumana — nappe **texture** Cortex (HP8), slot 33. 24 août 2026.
+FAVORIS_TEXTURE_CORTEX = (
+    "A04", "A16", "A17", "A18", "A19", "A20", "A21",
+    "A38", "A39", "A40", "A41", "A49", "A50",
+)
+
+# Correctif pics à l'oreille (RMS normalisé mais transitoires forts) — dB relatif slot 33.
+TEXTURE_TRIM_DB: dict[str, float] = {
+    "A17": -4.0,
+    "A18": -6.0,
+    "A19": -5.0,
+    "A21": -3.0,
+}
+
+# Loumana fournira la liste (stems Axx). Tant que vide → comportement actuel
+# (usable_ambiance HIPPOCAMPE tire dans le pool mélodique complet A45–A69).
+# TO DO : coller la liste ici quand Loumana la désigne, ex. :
+#   FAVORIS_HIPPO = ("A48", "A52", "A61")
+FAVORIS_HIPPO: tuple[str, ...] = ()
 
 _ID_RE = re.compile(r"^A(\d+)")
 
@@ -116,29 +132,46 @@ def melodic_pool(root: str, verbose: bool = True) -> list[str]:
     return pool
 
 
-def cortex_pool(root: str, verbose: bool = True) -> list[str]:
-    """Les seules ambiances des deux nappes du Cortex : les préférées Loumana.
+def _pool_from_stems(root: str, stems: tuple[str, ...], label: str,
+                     verbose: bool = True) -> list[str]:
+    """Résout une liste de stems Axx en chemins relatifs (ordre conservé)."""
+    pool: list[str] = []
+    missing: list[str] = []
+    for stem in stems:
+        rel = _rel_wav(root, stem)
+        if rel:
+            pool.append(rel)
+        else:
+            missing.append(stem)
+    if missing:
+        raise SystemExit(
+            f"{SONS_AMB}: {label} — stems absents : {', '.join(missing)}"
+        )
+    if verbose:
+        print(f"  Ambiance {label} : {len(pool)} fichiers")
+    return pool
 
-    Le Cortex est plus étroit que le reste : sur ses 40 secondes, deux nappes
-    seulement, et Loumana a désigné celles qui marchent. L'Hippocampe et la
-    Reconstruction gardent le pool mélodique complet, où ces huit figurent
-    aussi.
-    """
+
+def texture_pool(root: str, verbose: bool = True) -> list[str]:
+    """Nappe texture Cortex (HP5) — liste explicite Loumana."""
+    return _pool_from_stems(root, FAVORIS_TEXTURE_CORTEX, "Cortex texture", verbose)
+
+
+def cortex_pool(root: str, verbose: bool = True) -> list[str]:
+    """Nappe musicale Cortex (HP7) — préférées Loumana (A53–A68 mélodiques)."""
     full = melodic_pool(root, verbose=False)
     by_stem = {os.path.basename(p).split("_")[0].upper(): p for p in full}
     pool = [by_stem[f] for f in FAVORIS_CORTEX if f in by_stem]
+    if len(pool) != len(FAVORIS_CORTEX):
+        manquants = [f for f in FAVORIS_CORTEX if f not in by_stem]
+        raise SystemExit(f"{SONS_AMB}: favoris musicaux Cortex absents : {', '.join(manquants)}")
     if verbose:
-        print(f"  Ambiance Cortex (préférées) : {len(pool)} · "
-              f"Hippocampe / Reconstruction : {len(full)}")
+        print(f"  Ambiance Cortex musicale : {len(pool)} · "
+              f"texture : {len(FAVORIS_TEXTURE_CORTEX)} · "
+              f"Hippo/Recon pool large : {len(full)}")
     return pool
 
 
 def ambiance_paths_by_type(root: str, verbose: bool = True) -> tuple[list[str], list[str]]:
-    """(nappe 1, nappe 2) — mêmes préférées pour les deux slots 32 / 33.
-
-    Les deux nappes partagent la matière ; l'anti-doublon est fait dans le
-    patch, qui retire une carte à la seconde nappe si elle tombe sur le même
-    fichier que la première.
-    """
-    pool = cortex_pool(root, verbose=verbose)
-    return list(pool), list(pool)
+    """(musicale slot 32, texture slot 33) — pools disjoints."""
+    return cortex_pool(root, verbose=verbose), texture_pool(root, verbose=verbose)

@@ -9,6 +9,181 @@ Le prompt du chat = la décision. Le backlog n’est pas un contrat.
 
 ---
 
+## 2026-09-09 (soir) — Proto 07 maintenance · backlog trié
+
+**Prompt :** Corriger V7 (regen, normalisation) · nettoyer backlog autour du chantier 08.
+
+**Changements :**
+- Regen **`prototype_07_fsm_8hp.pd`** — pool `SONS_V3/AMBIANCE/` (104 fichiers → nappes 07).
+- **`normaliser_niveaux.py`** — 757 fragments · `registre_ids.csv` (`niveau_db`, `gain_db`).
+- **`presets07.py`** — `BOUCLE_INJECT` + docstring · **`gen_patch07`** inject L10 depuis preset · **`hippo_motion_07`** `sens` sur couche active.
+- **[`Backlog/TO DO.md`](./Backlog/TO%20DO.md)** — restructuré : §0 infra · §1 legacy 07 · §2 actif 08 · §3 matière · §4 V8 · §5 salle.
+
+**Reste 08 prioritaire :** plans présence · gain lecteur · Hippo anti-doublon Pd · batch 4 favoris nappes.
+
+---
+
+## 2026-09-09 — Batch 4 : découpe précise + catalogue neuf
+
+**Prompt :** Découper `SONS batch 4/` (masters ~1 h) · pool ambiance partagé · Excel neuf pour le collègue.
+
+**Changements :**
+- [`slice_opacite_v3.py`](./scripts/proto07/slice_opacite_v3.py) — `classify_master` : tout `ambiance` → pool `AMBIANCE/` · `--source` · `--precise`.
+- [`slice_batch4.py`](./scripts/slice_batch4.py) — raccourci batch 4 précis.
+- [`gen_catalogue_batch4.py`](./scripts/gen_catalogue_batch4.py) — [`catalogue_batch4.xlsx`](./Matiere/catalogue_batch4.xlsx) vierge (132 samples).
+- Découpe : Cortex 46 · Hippo 51 · Ambiance 35 · **Recon 0** (master `new reconstruction last.wav` silencieux −91 dBFS — à refaire chez Simon).
+
+**Regen matière :** `python3 scripts/slice_batch4.py` · `python3 scripts/gen_catalogue_batch4.py`.
+
+---
+
+## 2026-08-26 — Cortex gelé oreille · HPF voix validé
+
+**Prompt :** Noter l'état validé · HPF voix corrigé (paroles seules, 1×/cycle + piezo) · passage Hippocampe.
+
+**État figé (son / câblage Cortex) :**
+- Nappes : HP7 musicale (+4 dB) · HP8 texture (−2 dB) · pools slot 32/33 · bleed HP1–6 · trim texture.
+- HPF voix **400 Hz** : `cxpair` uniquement · 1×/passage Cortex (8–33 s) · piezo `s6_cx_vhpf_trig` · pas le bleed ni les nappes.
+- Mix global, delay, LPF 12 osc., gestes spatiaux/spectraux : **validés** · pas de réverb hall.
+
+**Docs :** [`Zones/Cortex.md`](./Zones/Cortex.md) §10 · [`etatactuel.md`](./etatactuel.md).
+
+**Suite :** Hippocampe.
+
+---
+
+## 2026-08-24 — Cortex : HPF momentané HP1–6 (400 Hz · rare + piezo)
+
+**Prompt :** HPF 400 Hz aléatoire rare et/ou déclenché piezo/mic sur le groupe HP1–6.
+
+**Changements :**
+- [`presets08.py`](./scripts/proto08/proto08_lib/presets08.py) — `CORTEX_VOIX_HPF_*`.
+- [`gen_libs08.py`](./scripts/proto08/proto08_lib/gen_libs08.py) — `cortex_voix_hpf_08` · `cortex_voix_hpf_trig_08` · piezo → `s6_cx_vhpf_trig`.
+- [`gen_patch08.py`](./scripts/proto08/proto08_lib/gen_patch08.py) — filtre sur sorties HP1–6 avant trim.
+
+**Debug :** `; s6_cx_vhpf_trig bang` · `; s6_input_on 1` · `; s6_rms_sim 0` pour piezo réel.
+
+**Regen :** `python3 scripts/gen_prototype_08_8hp.py` · reload patch.
+
+---
+
+## 2026-08-24 — Cortex : bleed musicale HP1–6 · trim texture · fix C090
+
+**Prompt :** Pas assez de ressenti spatial · bleed musicale dans les baffles voix · baisser source HP7 · textures qui piquent · erreurs console C090.
+
+**Changements :**
+- [`presets08.py`](./scripts/proto08/proto08_lib/presets08.py) — `CORTEX_AMB_MUSICAL_BLEED` 0,14 · `CORTEX_AMB_MUSICAL_HP7_SCALE` 0,794 (−2 dB HP7).
+- [`gen_libs08.py`](./scripts/proto08/proto08_lib/gen_libs08.py) — `cortex_amb_08` bleed HP1–6 · trim slot 33.
+- [`ambiance_catalog.py`](./scripts/shared/ambiance_catalog.py) — `TEXTURE_TRIM_DB` A17/A18/A19/A21.
+- Matière — renommage `SONS_V3/CORTEX/LONG_MOYEN/C090_v3_cortex.wav` (espaces en tête de nom → readsf~ cassé).
+
+**Regen :** `python3 scripts/gen_prototype_08_8hp.py` · reload patch.
+
+---
+
+## 2026-08-24 — Cortex nappes : gains musicale +2 dB / texture −1 dB
+
+**Prompt :** Nappe musicale HP7 plus forte (+2 dB) · texture HP8 plus basse (−1 dB).
+
+**Changements :**
+- [`presets08.py`](./scripts/proto08/proto08_lib/presets08.py) — `CORTEX_AMB_GAIN_MUSICAL` ≈ **4,477** · `CORTEX_AMB_GAIN_TEXTURE` ≈ **3,169** (réf. 3,556).
+- [`gen_patch08.py`](./scripts/proto08/proto08_lib/gen_patch08.py) — gain par nappe (`pamb0` / `pamb1`).
+- [`Zones/Cortex.md`](./Zones/Cortex.md) §10 — gains séparés.
+
+**Regen :** `python3 scripts/gen_prototype_08_8hp.py` · reload patch.
+
+---
+
+## 2026-08-24 — Cortex nappes : pools musicale / texture séparés
+
+**Prompt :** Deux nappes musicales différentes en même temps (pool unique) · liste texture Loumana.
+
+**Changements :**
+- [`ambiance_catalog.py`](./scripts/shared/ambiance_catalog.py) — `FAVORIS_TEXTURE_CORTEX` (13 stems) · slot 32 = musicale · slot 33 = texture.
+- Regen playlists `slot_32.txt` / `slot_33.txt`.
+
+**Regen :** `python3 scripts/gen_prototype_08_8hp.py` · reload patch.
+
+---
+
+## 2026-08-24 — Cortex écoute : nappes +2 dB · bleed HP8 · notes timbre
+
+**Prompt :** Session écoute Cortex (BlackHole / Ableton) — nappes trop basses (+2 dB) · HP8 souvent muet · low end à noter · renfermé = voulu.
+
+**Changements :**
+- [`presets08.py`](./scripts/proto08/proto08_lib/presets08.py) — `CORTEX_AMB_GAIN` 2,825 → **3,556** (+2 dB) · `CORTEX_AMB_HP8_BLEED` **0,32** (musical HP7 → HP8).
+- [`gen_libs08.py`](./scripts/proto08/proto08_lib/gen_libs08.py) — `cortex_amb_08` regénéré avec bleed HP8.
+- [`Zones/Cortex.md`](./Zones/Cortex.md) §10 — carte HP8, notes d'écoute 24 août.
+
+**Documenté, pas codé :** graves parfois excessifs → MB ou EQ cut **master** plus tard ; côté renfermé = nature Cortex.
+
+**Regen :** `python3 scripts/gen_prototype_08_8hp.py` · reload patch.
+
+---
+
+## 2026-08-23 — Hippocampe oreille V1 : wiring lecteur + biais fluide
+
+**Prompt :** Corriger les lacunes de l'implémentation Claude (anti-doublon effectif, table de poids motion).
+
+**Changements :**
+- [`gen_libs08.py`](./scripts/proto08/proto08_lib/gen_libs08.py) — `gen_player_state_08` : arg2=layer 1–4, réception `s6_hippo_path$2`, ouverture forcée au bang (bypass random) ; `gen_hippo_motion_08` : `[list index]` remplace `text get` (table 10 slots fonctionnelle).
+- [`gen_patch08.py`](./scripts/proto08/proto08_lib/gen_patch08.py) — `p1`–`p4` créés avec arg2=1..4.
+- Regen `gen_prototype_08_8hp.py` + `gen_assoc_hippo.py`.
+
+**Reste à l'oreille :** FORCE Hippo 30 s sans doublon basename · recettes 0/4 perceptibles · trim HP7.
+
+---
+
+## 2026-08-23 — Restauration lecteur (bug fan-out i_idx)
+
+**Symptôme persistant :** pas de son, UI vide, pas d'erreur console.
+
+**Cause identifiée :** `[i idx]` partagé, sortie câblée vers **les ~28 branches** `tfi{slot}` en parallèle. Dès qu'un index Hippo arrivait, **tous** les spigots random se fermaient sur **toutes** les couches — lecteur mort.
+
+**Action :** `player_state_08` **restauré** à l'état d'avant (bang → slot → random → text get). Python anti-doublon conservé dans `events.txt` ; wiring Pd index **retiré**.
+
+**Regen obligatoire + reload patch :**
+```bash
+python3 scripts/gen_assoc_hippo.py && python3 scripts/gen_prototype_08_8hp.py
+```
+
+---
+
+
+**Prompt :** Créer un prompt pour qu'une autre IA (Claude) implémente le chantier oreille Hippo.
+
+**Changement :** [`Backlog/prompt_hippo_oreille_v1_08.md`](./Backlog/prompt_hippo_oreille_v1_08.md) · [`spec_hippo_oreille_v1_08.md`](./Backlog/spec_hippo_oreille_v1_08.md). Ordre : anti-doublon → rot/fluide → trim HP7 → FAVORIS_HIPPO (liste vide jusqu'à Loumana). Liens §10 + TO DO.
+
+---
+
+## 2026-08-23 — Hippocampe oreille V1 : implémentation
+
+**Prompt :** Exécuter le chantier oreille Hippo V1 (prompt + plan approuvés).
+
+**Changements :**
+- [`gen_assoc_hippo.py`](./scripts/gen_assoc_hippo.py) — anti-doublon : `active_sources[L1–L4]`, `_pick_other_multi`, démarrage `long_a != long_b`, chemin dans `events.txt`.
+- [`hippo_events_loader.py`](./scripts/proto08/proto08_lib/hippo_events_loader.py) — parse le champ `path` sur les lignes `play`.
+- [`hippo_recipes.py`](./scripts/proto08/proto08_lib/hippo_recipes.py) — constantes `ROT_PAN_SLOW=0.18`, `ROT_PAN_FAST=0.32`, `ROT_ORBIT=0.22` ; recettes 0 et 4 mises à jour.
+- [`gen_libs08.py`](./scripts/proto08/proto08_lib/gen_libs08.py) — `gen_hippo_motion_08` : biais fluide (table 10 slots, 0×4 / 4×3 / 1-2-3×1) ; `gen_hippo_assoc_08` : émet chemin sur `s6_hippo_path{N}`.
+- [`layout08.py`](./scripts/proto08/proto08_lib/layout08.py) — HP7 `trim_db=-3.0` (live : `; s6_trim7 -6`).
+- [`ambiance_catalog.py`](./scripts/shared/ambiance_catalog.py) — `FAVORIS_HIPPO = ()` + commentaire TO DO.
+- [`sons_audit08.py`](./scripts/proto08/proto08_lib/sons_audit08.py) — `usable_ambiance(HIPPOCAMPE)` branche sur `FAVORIS_HIPPO` quand non vide.
+- Regen `gen_assoc_hippo.py` + `gen_prototype_08_8hp.py` — OK sans erreur.
+- [`Zones/Hippocampe.md`](./Zones/Hippocampe.md) §10 + TO DO §1 Hippo oreille mis à jour.
+
+**Reste à l'oreille de Loumana :** valeurs `ROT_*` en salle · liste nappes → `FAVORIS_HIPPO` → regen.
+
+---
+
+
+## 2026-08-23 — Hippocampe : priorités oreille (spatial, nappes, anti-doublon, fluide)
+
+**Prompt :** Calibrer spatiaux un par un ; nappes spécifiques (liste à venir) ; interdire même sample simultané ; HP7 trop fort ; fluide (phi/pan) quasi absent vs sauts.
+
+**Doc :** [`Zones/Hippocampe.md`](./Zones/Hippocampe.md) §10 · TO DO §1 · `etatactuel`. Diagnostic : rot 0,03–0,07 Hz trop lent ; 3/5 recettes = sauts ; `play` assoc sans chemin → doublons ; trim HP7 à tester live.
+
+---
+
 ## 2026-08-23 — Hippocampe : doc alignée sur l'avancement réel (loin du gel)
 
 **Prompt :** Corriger les incohérences doc vs état Hippocampe — pas près d'être clôturé.

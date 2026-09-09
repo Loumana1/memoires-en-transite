@@ -1,8 +1,8 @@
 # Inventaire — SONS_V3 (découpe Opacité V6)
 
-**Généré le :** 2026-08-20
-**Source :** `SONS_V3/WIP/Opacité V6/`
-**Sortie :** `SONS_V3/<ÉTAT>/{FRAGMENTS,AMBIANCE,LONG_MOYEN}/`
+**Généré le :** 2026-09-09
+**Source :** `SONS_V3/WIP/SONS batch 4/`
+**Sortie :** `SONS_V3/<ÉTAT>/{FRAGMENTS,LONG_MOYEN}/` · ambiances → `SONS_V3/AMBIANCE/`
 **Script :** `scripts/slice_opacite_v3.py`
 
 Downmix **mono 48 kHz**. Table brute : [`inventaire_SONS_V3.csv`](./inventaire_SONS_V3.csv) · registre des ID : [`registre_ids.csv`](./registre_ids.csv).
@@ -11,26 +11,24 @@ Downmix **mono 48 kHz**. Table brute : [`inventaire_SONS_V3.csv`](./inventaire_S
 
 | État | Dossier | N |
 |------|---------|---|
-| CORTEX | FRAGMENTS | 90 |
-| CORTEX | AMBIANCE | 27 |
-| CORTEX | LONG_MOYEN | 42 |
-| HIPPOCAMPE | FRAGMENTS | 69 |
-| HIPPOCAMPE | AMBIANCE | 0 |
-| HIPPOCAMPE | LONG_MOYEN | 10 |
-| RECONSTRUCTION | FRAGMENTS | 287 |
-| RECONSTRUCTION | AMBIANCE | 0 |
-| RECONSTRUCTION | LONG_MOYEN | 1 |
+| CORTEX | FRAGMENTS | 62 |
+| CORTEX | LONG_MOYEN | 74 |
+| *(partagé)* | AMBIANCE | 104 |
+| HIPPOCAMPE | FRAGMENTS | 112 |
+| HIPPOCAMPE | LONG_MOYEN | 18 |
+| RECONSTRUCTION | FRAGMENTS | 384 |
+| RECONSTRUCTION | LONG_MOYEN | 3 |
 
-**Total fichiers :** 526
+**Total fichiers :** 757
 
 ## Dernière exécution
 
 | | N |
 |--|--|
-| ID réutilisés | 526 |
-| nouveaux ID | 0 |
-| inchangés sur le disque | 484 |
-| rangés à la main, respectés | 42 |
+| ID réutilisés | 0 |
+| nouveaux ID | 99 |
+| inchangés sur le disque | 0 |
+| rangés à la main, respectés | 0 |
 | déplacés (`--reclasser`) | 0 |
 | ré-exportés (fichier manquant) | 0 |
 | entrées sans segment (conservées) | 0 |
@@ -39,7 +37,7 @@ Downmix **mono 48 kHz**. Table brute : [`inventaire_SONS_V3.csv`](./inventaire_S
 
 | Master | Destination |
 |--------|-------------|
-| Cortex ambiance | `CORTEX/AMBIANCE` (atomes ≥ 2 s) |
+| Cortex ambiance | `SONS_V3/AMBIANCE/` (atomes ≥ 2 s) |
 | Cortex / Hippo / Recon | `FRAGMENTS` si < 13 s · `LONG_MOYEN` si ≥ 13 s |
 | Hippo | collage trou ≤ 1,8 s, max 12 s |
 

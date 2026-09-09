@@ -343,10 +343,27 @@ def gen_hippo_motion_08():
 
     p.obj("tb_tick", 40, 380, "t b b")
     p.con("met", 0, "tb_tick", 0)
-    p.obj("rnd_r", 120, 380, "random 5")
+
+    # Biais fluide : recettes 0 et 4 plus fréquentes que les sauts 1/2/3.
+    # Table de 10 slots : 0 × 4, 4 × 3, 1/2/3 × 1 chacun.
+    # Forcer une recette : ; s6_hippo_motion N (bypass, 0-4).
+    MOTION_WEIGHT_TABLE = [0, 0, 0, 0, 4, 4, 4, 1, 2, 3]
+    wt_path = os.path.join(LIBDIR, "hippo_motion_weights.txt")
+    with open(wt_path, "w", encoding="utf-8") as fh:
+        for v in MOTION_WEIGHT_TABLE:
+            fh.write(f"{v}\n")
+    p.obj("rnd_r", 120, 380, f"random {len(MOTION_WEIGHT_TABLE)}")
     p.con("tb_tick", 0, "rnd_r", 0)
+    # Fichier + read -c : même API que playlists08 (pas de « add » sur text define).
+    p.obj("td_mo", 220, 380, "text define w_motion")
+    p.obj("tg_mo", 340, 380, "text get w_motion")
     p.obj("f_rec", 120, 410, "f 0")
-    p.con("rnd_r", 0, "f_rec", 0)
+    p.con("rnd_r", 0, "tg_mo", 0)
+    p.con("tg_mo", 0, "f_rec", 0)
+    p.obj("lb_wt", 480, 360, "loadbang")
+    p.msg("rd_wt", 480, 380, "read -c pd/lib/hippo_motion_weights.txt")
+    p.con("lb_wt", 0, "rd_wt", 0)
+    p.con("rd_wt", 0, "td_mo", 0)
     p.obj("r_rec", 40, 410, "r s6_hippo_motion")
     p.con("r_rec", 0, "f_rec", 0)
     p.obj("sel_r", 120, 440, "sel 0 1 2 3 4")
@@ -369,7 +386,7 @@ def gen_hippo_motion_08():
     p.con("tb_tick", 1, "rit", 0)
     p.con("rit", 0, "pit", 0)
     p.con("pit", 0, "met", 1)
-    p.text(20, 800, "recettes Q26 · s6_hippo_motion force 0-4")
+    p.text(20, 800, "recettes Q26 · biais fluide 0/4 · s6_hippo_motion force 0-4")
     _w(p, "hippo_motion_08.pd")
 
 
@@ -804,6 +821,15 @@ def gen_presence_08():
     p.obj("s_pf", 480, 430, "s s6_piezo_fade")
     p.con("pt", 2, "s_pf", 0)
 
+    # HPF momentané voix HP1–6 — seulement en Cortex (Q14 / Q15)
+    p.obj("eq_cx", 360, 490, "== 0")
+    p.con("f_et", 0, "eq_cx", 0)
+    p.obj("sp_vh", 360, 520, "spigot")
+    p.con("sp_p", 0, "sp_vh", 0)
+    p.con("eq_cx", 0, "sp_vh", 1)
+    p.obj("s_vh", 440, 520, "s s6_cx_vhpf_trig")
+    p.con("sp_vh", 0, "s_vh", 0)
+
     # INTERRUPTIBLE — un fondu commun pour tous les cuts
     p.obj("rf", 400, 520, "random 66")
     p.obj("af", 400, 545, "+ 35")
@@ -880,10 +906,14 @@ def gen_recon_formes_08():
 
 
 def gen_hippo_assoc_08():
-    """Lit events.txt — planifie play/cut/motion pour l'état Hippocampe."""
+    """Lit events.txt — planifie play/cut/motion pour l'état Hippocampe.
+
+    Pour les events play : bang sur s6_hippo_b{layer}. Index/slot dans events.txt
+    (anti-doublon résolu en Python ; wiring Pd index = TODO propre).
+    """
     events = HEL.load_events(LIBDIR)
-    p = P(720, 120 + len(events) * 48)
-    p.text(20, 8, "hippo_assoc_08 — séquences gen_assoc_hippo.py")
+    p = P(780, 120 + len(events) * 48)
+    p.text(20, 8, "hippo_assoc_08 — séquences gen_assoc_hippo.py · anti-doublon")
     p.obj("r_et", 40, 40, "r s6_etat")
     p.obj("sel", 40, 70, "sel 1")
     p.obj("tb0", 40, 100, "t b b")
@@ -1046,7 +1076,12 @@ def _interruptible_for(rel: str, hippo_map: dict[str, int], slot: int) -> int:
 
 
 def gen_player_state_08():
-    """Lecteur SONS_V3 — listes [text], pas un open par fichier."""
+    """Lecteur SONS_V3 — listes [text], pas un open par fichier.
+
+    NE PAS câbler anti-doublon Hippo ici (s6_hippo_path*, s6_hippo_idx*, arg2…) :
+    abstraction partagée 14×, ~28 branches slot — fan-out = silence total sans
+    erreur console. Voir docs/Zones/Hippocampe.md §10 « Piège ».
+    """
     root = os.path.abspath(os.path.join(LIBDIR, "..", ".."))
     u = audit.usable_files(root)
     all_state = {si: sum((u[(si, di)] for di in range(3)), []) for si in range(4)}
@@ -1072,6 +1107,8 @@ def gen_player_state_08():
 
     gain_map = gain_map_from_registre(root)
     hippo_int = _hippo_interruptible_map(root)
+    cat = audit._catalog()
+    texture_trim = getattr(cat, "TEXTURE_TRIM_DB", {})
 
     slot_specs = []
     for si in range(4):
@@ -1094,9 +1131,16 @@ def gen_player_state_08():
     for s, files in slot_specs:
         with open(os.path.join(pl_dir, f"slot_{s}.txt"), "w", encoding="utf-8") as fh:
             for rel in files:
-                g = fmt_gain(linear_gain_for_rel(rel, gain_map))
+                rel = rel.strip()
+                g = linear_gain_for_rel(rel, gain_map)
+                if s == 33:
+                    stem = os.path.basename(rel).split("_")[0].upper()
+                    extra_db = texture_trim.get(stem, 0.0)
+                    if extra_db:
+                        g *= 10 ** (extra_db / 20.0)
+                g = fmt_gain(g)
                 intr = _interruptible_for(rel, hippo_int, s)
-                fh.write(f"{rel} {os.path.basename(rel)} {g} {intr}\n")
+                fh.write(f"{rel} {os.path.basename(rel).strip()} {g} {intr}\n")
 
     sel_args = " ".join(str(s) for s, _ in slot_specs)
     nslots = len(slot_specs)
@@ -1258,15 +1302,18 @@ def gen_player_state_08():
 
 
 def gen_cortex_amb_08():
-    """2 nappes globales → HP7 (musicale) et HP5 (texture) + respiration LFO."""
+    """2 nappes globales → HP musicale + HP texture + respiration LFO.
+    Musicale : HP7 principal + bleed léger HP1–6 (présence dans le champ voix)."""
     hp_tex = PR.AMBI_TEXTURE_HP - 1
     hp_mus = PR.AMBI_MUSICAL_HP - 1
-    p = P(520, 340)
-    p.text(20, 8, f"cortex_amb_08 HP{PR.AMBI_MUSICAL_HP} musicale HP{PR.AMBI_TEXTURE_HP} texture")
+    bleed = PR.CORTEX_AMB_MUSICAL_BLEED
+    hp7 = PR.CORTEX_AMB_MUSICAL_HP7_SCALE
+    p = P(680, 380)
+    p.text(20, 8, f"cortex_amb_08 HP{PR.AMBI_MUSICAL_HP} musicale + bleed HP1-6 · HP{PR.AMBI_TEXTURE_HP} texture")
     for i in range(2):
         p.obj(f"in{i}", 40 + i * 200, 40, "inlet~")
     for k in range(8):
-        p.obj(f"out{k}", 20 + k * 55, 300, "outlet~")
+        p.obj(f"out{k}", 20 + k * 55, 340, "outlet~")
     specs = [(0, hp_mus, 0.028, 0.14, 0.82), (1, hp_tex, 0.022, 0.10, 0.80)]
     for idx, hp, hz, depth, base in specs:
         x = 40 + idx * 200
@@ -1278,8 +1325,103 @@ def gen_cortex_amb_08():
         p.con(f"lg{idx}", 0, f"la{idx}", 0)
         p.con(f"in{idx}", 0, f"g{idx}", 0)
         p.con(f"la{idx}", 0, f"g{idx}", 1)
-        p.con(f"g{idx}", 0, f"out{hp}", 0)
+        if idx == 0:
+            p.obj("gm7", x, 220, f"*~ {hp7:.4g}")
+            p.con(f"g{idx}", 0, "gm7", 0)
+            p.con("gm7", 0, f"out{hp}", 0)
+            for vb in range(6):
+                p.obj(f"gb{vb}", x + 120, 220 + vb * 22, f"*~ {bleed:.4g}")
+                p.con(f"g{idx}", 0, f"gb{vb}", 0)
+                p.con(f"gb{vb}", 0, f"out{vb}", 0)
+        else:
+            p.con(f"g{idx}", 0, f"out{hp}", 0)
     _w(p, "cortex_amb_08.pd")
+
+
+def gen_cortex_voix_hpf_08():
+    """Crossfade dry ↔ hip~ sur le bus d'un HP voix (HP1–6). Mix via s~ s6_cx_vhpf_mix."""
+    hz = PR.CORTEX_VOIX_HPF_HZ
+    p = P(220, 140)
+    p.text(20, 8, f"cortex_voix_hpf_08 hip~ {hz} Hz · paroles HP1-6 · mix s6_cx_vhpf_mix")
+    p.obj("in", 40, 50, "inlet~")
+    p.obj("out", 40, 110, "outlet~")
+    p.obj("rm", 140, 50, "r~ s6_cx_vhpf_mix")
+    p.obj("hp", 40, 80, f"hip~ {hz}")
+    p.con("in", 0, "hp", 0)
+    p.obj("inv", 140, 80, "-~ 1")
+    p.con("rm", 0, "inv", 0)
+    p.obj("dry", 40, 95, "*~")
+    p.obj("wet", 140, 95, "*~")
+    p.con("in", 0, "dry", 0)
+    p.con("inv", 0, "dry", 1)
+    p.con("hp", 0, "wet", 0)
+    p.con("rm", 0, "wet", 1)
+    p.obj("sum", 40, 120, "+~")
+    p.con("dry", 0, "sum", 0)
+    p.con("wet", 0, "sum", 1)
+    p.con("sum", 0, "out", 0)
+    _w(p, "cortex_voix_hpf_08.pd")
+
+
+def gen_cortex_voix_hpf_trig_08():
+    """HPF voix : 1× par passage Cortex (délai aléatoire) + piezo (s6_cx_vhpf_trig)."""
+    atk = PR.CORTEX_VOIX_HPF_ATTACK_MS
+    hold = PR.CORTEX_VOIX_HPF_HOLD_MS
+    rel = PR.CORTEX_VOIX_HPF_RELEASE_MS
+    dmin = PR.CORTEX_VOIX_HPF_CYCLE_DELAY_MIN
+    drand = PR.CORTEX_VOIX_HPF_CYCLE_DELAY_RAND
+    p = P(560, 280)
+    p.text(20, 8, f"cortex_voix_hpf_trig_08 · {PR.CORTEX_VOIX_HPF_HZ} Hz · voix HP1-6")
+    p.obj("r_et", 40, 40, "r s6_etat")
+    p.obj("ch_et", 40, 70, "change -1")
+    p.con("r_et", 0, "ch_et", 0)
+    p.obj("sel_cx", 40, 100, "sel 0")
+    p.con("ch_et", 0, "sel_cx", 0)
+    p.obj("cx_t", 120, 100, "t b b")
+    p.con("sel_cx", 0, "cx_t", 0)
+    p.obj("nz", 160, 40, "!= 0")
+    p.con("ch_et", 0, "nz", 0)
+    p.obj("sp_off", 240, 40, "spigot")
+    p.con("nz", 0, "sp_off", 0)
+    p.msg("m_off", 320, 40, "0 400")
+    p.obj("ln", 320, 200, "line~")
+    p.con("m_off", 0, "ln", 0)
+    p.con("sp_off", 0, "m_off", 0)
+
+    p.obj("lb", 40, 130, "loadbang")
+    p.msg("m0", 40, 160, "0 10")
+    p.con("lb", 0, "m0", 0)
+    p.con("m0", 0, "ln", 0)
+
+    # 1× par cycle Cortex : délai aléatoire après entrée état 0
+    p.obj("rnd_d", 200, 130, f"random {drand}")
+    p.obj("ad", 200, 160, f"+ {dmin}")
+    p.obj("t2", 200, 190, "t f b")
+    p.obj("d_cy", 280, 190, "delay")
+    p.obj("tb_cy", 360, 190, "t b")
+    p.con("cx_t", 0, "rnd_d", 0)
+    p.con("rnd_d", 0, "ad", 0)
+    p.con("ad", 0, "t2", 0)
+    p.con("t2", 0, "d_cy", 1)
+    p.con("t2", 1, "d_cy", 0)
+    p.con("d_cy", 0, "tb_cy", 0)
+
+    p.obj("r_tr", 40, 220, "r s6_cx_vhpf_trig")
+    p.obj("tb", 440, 190, "t b b")
+    p.con("tb_cy", 0, "tb", 0)
+    p.con("r_tr", 0, "tb", 0)
+    p.msg("m_up", 440, 230, f"1 {atk}")
+    p.msg("m_dn", 440, 290, f"0 {rel}")
+    p.obj("d_hold", 440, 260, f"delay {atk + hold}")
+    p.con("tb", 0, "m_up", 0)
+    p.con("m_up", 0, "ln", 0)
+    p.con("tb", 1, "d_hold", 0)
+    p.con("d_hold", 0, "m_dn", 0)
+    p.con("m_dn", 0, "ln", 0)
+    p.obj("s_mix", 320, 240, "s~ s6_cx_vhpf_mix")
+    p.con("ln", 0, "s_mix", 0)
+    p.text(20, 250, f"1× / cycle · {dmin / 1000:.0f}-{(dmin + drand) / 1000:.0f}s · ; s6_cx_vhpf_trig")
+    _w(p, "cortex_voix_hpf_trig_08.pd")
 
 
 def gen_cortex_amb_behav_08():
@@ -1733,6 +1875,8 @@ def ensure():
     gen_boucle_inject_08()
     gen_player_state_08()
     gen_cortex_amb_08()
+    gen_cortex_voix_hpf_08()
+    gen_cortex_voix_hpf_trig_08()
     gen_cortex_amb_behav_08()
     gen_cortex_pair_08()
 

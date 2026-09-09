@@ -38,7 +38,7 @@ Ce sont les affirmations qui doivent rester vraies même si on remplace toute la
 | | Cible décidée | Implémentation Proto 08 (août 2026) |
 |--|--|--|
 | Paroles | **6 baffles**, 2 fragments superposés chacun → **12 fragments simultanés** | HP1–6, 6 paires, 12 voix — fait |
-| Ambiances | **2 baffles**, une musicale et une texture, **fixes** pendant le Cortex | HP7 musicale, HP5 texture — fait |
+| Ambiances | **2 baffles**, une musicale et une texture, **fixes** pendant le Cortex | HP7 musicale, HP8 texture — fait |
 
 Deux précisions issues de [Q2](../Backlog/Q&A.md#q2), qui ne sont pas dans la spec :
 
@@ -91,39 +91,33 @@ Valeurs, par couche L1 → L6 (`presets07.py`, fonction `_CX`) :
 | `lfo` d'amplitude | `0.06` | OREILLE | |
 | mode spatial | `0` (sec sur le HP d'ancrage) | OREILLE | contourné par `cortex_pair_07` en Cortex |
 
-**Manque identifié : il n'y a pas de vraie réverbération en Cortex.** Simon demande « une réverbération donnant l'impression d'une parole provenant d'une pièce voisine ». Ce qui existe aujourd'hui est un delay à 180 ms avec 6 % de feedback et 10 % de wet — ce n'est pas une pièce, c'est un écho court. C'est probablement la raison principale pour laquelle la parole reste trop nette. → [TO DO](../Backlog/TO%20DO.md), tâche haute priorité.
+**Delay léger = comportement de base (FIGÉ oreille 24 août).** Simon évoque une « pièce voisine » ; en Proto 08 le flou vient surtout du **balayage LPF** (§5), du **contraste premier/arrière-plan** (§5 bis) et d'un **delay court** (wet ~0,05–0,28 selon le plan — voir `PLAN_PREMIER` / `PLAN_ARRIERE` dans `presets08.py`), pas d'une réverb hall. Loumana valide ce delay faible **à la place** d'une vraie réverb : il fait partie de l'équilibre Cortex tel qu'entendu au casque (24 août). Une réverbération longue reste **hors scope** sauf prompt contraire · [TO DO](../Backlog/TO%20DO.md) §1 barré le 23 août.
 
 ---
 
 ## 5. Le balayage de filtre — signature de la zone
 
-`pd/lib/cortex_ctrl_07.pd`. C'est le mécanisme qui fait que le Cortex ne sonne pas comme un filtre passe-bas ordinaire.
+`pd/lib/cortex_ctrl_08.pd` (Proto 08). C'est le mécanisme qui fait que le Cortex ne sonne pas comme un filtre passe-bas ordinaire.
 
-Chaque couche L1–L6 a son propre oscillateur lent qui pilote son LPF, rafraîchi toutes les 50 ms :
+**Proto 08 : déjà 12 oscillateurs** (L1–L12), rafraîchis toutes les 50 ms. Fréquences : `0,063 + i × 0,019` Hz pour `i = 0…11` (non harmoniques volontairement). Deux **plages** selon le plan de présence :
+- **Premier plan** (couches paires L1, L3, …) : **800 → 2000 Hz** (`CORTEX_LPF_AVANT`)
+- **Arrière-plan** (couches impaires L2, L4, …) : **500 → 1000 Hz** (`CORTEX_LPF_ARRIERE`)
 
-```text
-LPF(couche n) = clip( 1250 + 750 · sin(2π · f_n · t) , 500 , 2000 )
-```
+Pendant un **échange avant/arrière** (`CORTEX_SWAP`), les deux plages **glissent** l'une vers l'autre sur la paire concernée.
+
+Référence Proto 07 (6 couches) — remplacée :
 
 | Couche | Fréquence du LFO | Période |
 |--------|------------------|---------|
 | L1 | 0,070 Hz | ~14,3 s |
-| L2 | 0,090 Hz | ~11,1 s |
-| L3 | 0,110 Hz | ~9,1 s |
-| L4 | 0,130 Hz | ~7,7 s |
-| L5 | 0,150 Hz | ~6,7 s |
+| … | … | … |
 | L6 | 0,170 Hz | ~5,9 s |
 
-Les fréquences sont volontairement non harmoniques entre elles, donc les six couches ne sont jamais ouvertes ni fermées en même temps. C'est ce qui produit la sensation de masse qui respire.
+**Statut oreille 24 août :** le balayage sur **12 couches** convainc tel quel — pas besoin de revenir à 6. La crainte « trop de mouvement » ne se vérifie pas à l'écoute actuelle.
 
-**À étendre à 12 couches** depuis [Q1](../Backlog/Q&A.md#q1) = A. Ne pas se contenter de prolonger la suite de 0,020 Hz en 0,020 : avec douze oscillateurs il faut vérifier qu'aucune paire n'est dans un rapport simple, sinon deux couches respirent ensemble et la masse se met à pulser. C'est un réglage à faire à l'oreille, pas une formule.
+**Piste future (non codée) :** garder **2000 Hz** comme plafond habituel ; dans **certains cas rares** (aléatoire, peu fréquent), autoriser une ouverture jusqu'à **~5000 Hz** sur une couche — à tester avant implémentation.
 
-**Statut : OREILLE.** À figer en priorité. Trois choses à décider :
-- la **borne haute** (2000 Hz aujourd'hui) : c'est elle qui laisse passer l'intelligibilité aux moments d'ouverture ;
-- la **borne basse** (500 Hz) ;
-- la **vitesse** : le balayage doit-il rester audible comme un mouvement, ou devenir assez lent pour être perçu seulement comme une instabilité ?
-
-Le paramètre `presets07.py → lpf=1500` n'est qu'une valeur initiale, écrasée par `cortex_ctrl_07` dès que l'état Cortex démarre. Ne pas la prendre pour le réglage réel.
+**Encore ouvert :** vitesse des osc., borne basse 500 Hz, figer les valeurs en **FIGÉ**.
 
 ---
 
@@ -142,7 +136,7 @@ Référence 07 (remplacée par les plans) : HPF 450–630 Hz, LPF 500–2000 via
 
 **Architecture Proto 08.** Sous `cortex_pair_08`, chaque fragment passe par son propre `fx_router` avec le preset de plan choisi par le moteur, **puis** les deux sorties sont sommées. Deux gains séparés et interchangeables (C5–C7). Le gain de normalisation (`gain_db` du registre) s'applique **avant** le preset de plan, sur le `*~` en sortie de `readsf~`.
 
-**Révision à l'oreille.** Les chiffres ci-dessus sont les **defaults Proto 08**. Une vraie réverb « pièce voisine » sur l'arrière-plan reste un plus ([TO DO](../Backlog/TO%20DO.md) §1). L'intelligibilité cible ([Q18](../Backlog/Q&A.md#q18)) peut affiner filtre/réverb sans rouvrir Q10.
+**Révision à l'oreille.** Les chiffres ci-dessus sont les **defaults Proto 08**. Le delay court de l'arrière-plan **remplace** une réverb hall pour Loumana (24 août) — voir §4. L'intelligibilité cible ([Q18](../Backlog/Q&A.md#q18)) peut encore affiner filtre/delay sans rouvrir Q10.
 
 **Priorité.** Indispensable depuis [Q1](../Backlog/Q&A.md#q1) = A : 12 voix au même plan = bruit, pas superposition.
 
@@ -193,7 +187,7 @@ player_state_07 → *~ 0.25 → gate Cortex → AM lente → HP (4..8), direct
 | AM par nappe | 0,030 · … · 0,074 Hz, profondeur 0,10 | OREILLE — **acceptée** ([Q15](../Backlog/Q&A.md#q15)) |
 | mouvement spatial | **aucun en Cortex** — baffle fixe | **TRANCHÉ** ([Q16](../Backlog/Q&A.md#q16)) |
 
-Conforme à l'interdiction de Simon : pas de delay, pas de découpe rapide, pas de granulaire. [Q15](../Backlog/Q&A.md#q15) : la **modulation d'amplitude lente** (13–33 s) est **acceptée** — ce n'est pas une découpe. **Idée future :** HPF bref ~350 Hz au déclenchement piézo ([Q15](../Backlog/Q&A.md#q15), [Q14](../Backlog/Q&A.md#q14)) — hors V1.
+Conforme à l'interdiction de Simon : pas de delay, pas de découpe rapide, pas de granulaire. [Q15](../Backlog/Q&A.md#q15) : la **modulation d'amplitude lente** (13–33 s) est **acceptée** — ce n'est pas une découpe. **HPF bref ~400 Hz** sur les **paroles** HP1–6 seulement (pas bleed / nappes) : **1× par passage Cortex** + piezo/micro ([Q14](../Backlog/Q&A.md#q14)).
 
 Écarts avec la cible décidée le 20 août :
 
@@ -234,7 +228,7 @@ Le **contraste parole/milieu** (ex. Congo au premier plan + texture « européen
 | `SE_DEPLACER` (texture) | **Non en Cortex** — baffle fixe ; pas de circulation spatiale |
 | `RECOUVRIR` musicale + texture | **Mutex** — jamais les deux en recouvrement actif en même temps |
 
-**Future (piézo, [Q14](../Backlog/Q&A.md#q14)) :** HPF momentané ~350 Hz sur les nappes — effet bref, non V1.
+**Future (piézo, [Q14](../Backlog/Q&A.md#q14)) :** ~~HPF momentané ~350 Hz sur les nappes~~ → **implémenté** sur les **paroles** HP1–6 (~400 Hz) · §10.
 
 ### Sélection (futur sélecteur)
 
@@ -366,10 +360,20 @@ Les étapes son ci-dessus se font **sans** logique C1…C11.
 | Rôle | Baffles | Détail |
 |------|---------|--------|
 | Parole | HP1–6 | 6 paires L1–L12, 2 fragments superposés par baffle |
-| Ambiance texture | **HP5** | fixe, pool mélodique A45–A69 |
-| Ambiance musicale | **HP7** | fixe, non adjacent à HP5 ([Q25](../Backlog/Q&A.md#q25)) |
+| Ambiance texture | **HP8** | fixe, **`FAVORIS_TEXTURE_CORTEX`** (13 stems · slot 33) |
+| Ambiance musicale | **HP7** | fixe, **`FAVORIS_CORTEX`** (8 stems · slot 32) |
 
-**12 voix sur 8 baffles.** Douze couches de signal, huit haut-parleurs. HP5 porte à la fois la paire de parole L9/L10 **et** la nappe texture (couches différentes, même sortie).
+**12 voix sur 8 baffles.** Douze couches de signal, huit haut-parleurs.
+
+### Carte nappes (24 août)
+
+| HP | Rôle |
+|----|------|
+| **HP7** | Nappe **musicale** (slot 32) |
+| **HP8** | Nappe **texture** (slot 33) |
+| **HP5** | Paroles L9+L10 seulement (plus de texture) |
+
+HP7 et HP8 sont voisins dans l'octogone — choix oreille Loumana (écarte l'ancien [Q25](../Backlog/Q&A.md#q25) non-adjacent). **Bleed musicale HP7 → HP1–6** (~14 % par baffle voix, HP7 principal −2 dB) pour étendre le milieu dans le champ des paroles.
 
 ### Spatialisation — choix retenus
 
@@ -390,9 +394,11 @@ Les étapes son ci-dessus se font **sans** logique C1…C11.
 | LPF continu 12 voix | 12 osc. non harmoniques, 500–2000 Hz | `cortex_ctrl_08` |
 | Temporels | `EMERGER` 6–10 s, `RECOUVRIR` 3–6 s, pulse supprimé | `cortex_pair_08`, `cortex_amb_behav_08` |
 | Spectraux événementiels | RIPPLE, DOMINO, CLUSTER, MUR_TREMBLE · 65 % / passage · override LPF 200 ms | `cortex_motion_08` |
-| Nappes | gain ~2,825 (+3 dB), AM lente, mutex RECOUVRIR musicale/texture | `cortex_amb_08` |
+| Nappes | gains séparés · AM lente · mutex RECOUVRIR · bleed HP1–6 · texture HP8 / musicale HP7 | `cortex_amb_08` |
+| HPF voix momentané | hip~ **400 Hz** · paroles seulement · 1×/cycle Cortex + piezo | `cortex_voix_hpf_08`, `cortex_voix_hpf_trig_08` |
 
-Debug gestes spectraux : `; s6_spec_recipe RIPPLE` (ou DOMINO_OUVERTURE, CLUSTER_BREATHE, MUR_TREMBLE).
+Debug gestes spectraux : `; s6_spec_recipe RIPPLE` (ou DOMINO_OUVERTURE, CLUSTER_BREATHE, MUR_TREMBLE).  
+Debug HPF voix : `; s6_cx_vhpf_trig bang`.
 
 ### État d'avancement — FIGÉ le 23 août 2026
 
@@ -407,7 +413,8 @@ Deux chantiers distincts. Ne pas les mélanger.
 | Gestes temporels EMERGER / RECOUVRIR | **FAIT** |
 | Voyage phi + échange avant/arrière | **FAIT** |
 | Gestes spectraux (4 recettes) | **FAIT** |
-| Nappes A45–A69, gain, mutex | **FAIT** |
+| Nappes : pools disjoints, gains, bleed, trim texture | **FIGÉ** (24–26 août) |
+| HPF voix 400 Hz (1×/cycle + piezo) | **FIGÉ** (26 août) |
 | Plans de présence (2 chaînes FX complètes) | **PARTIEL** — gains alternés ; presets FX par plan incomplets |
 | Réverb « pièce voisine » | **ABSENT** |
 | Bornes LPF / rotation / nappes marquées FIGÉ | **PAS ENCORE** (oreille) |
@@ -437,5 +444,25 @@ Deux chantiers distincts. Ne pas les mélanger.
 - **Plans de présence** §5 bis : **prompt prêt** — [`../Backlog/prompt_cortex_plans_presence_08.md`](../Backlog/prompt_cortex_plans_presence_08.md) (§9 étape 2).
 - **Figer** bornes LPF, rotation 6 paires, niveaux nappes à l'oreille (§9 étape 3).
 - Sélecteur par tags — **hors chantier son** ; voir §B et [`../Matiere/Attributs.md`](../Matiere/Attributs.md) §7.
+
+### Notes d'écoute — 24–26 août 2026 (Loumana)
+
+**Mix global Cortex.** Équilibre paroles / nappes / spatialisation **validé** au casque (chaîne BlackHole → Ableton 8 mono). **Cortex son/câblage : gelé** pour cette session — passage à Hippocampe.
+
+**Caractère renfermé.** Le côté « boîte » / sourd / peu aéré fait **partie de la nature du son Cortex** (LPF plans arrière, fragments filtrés, densité 12 voix). Ce n'est pas un défaut à corriger dans le moteur pour l'instant.
+
+**Delay, pas réverb.** Le delay faible (plans §5 bis) **tient lieu** de la « pièce voisine » — pas de réverb hall en chantier · §4.
+
+**Balayage LPF 12 couches.** Convinquant tel quel ; plafond habituel 2000 Hz ; ouverture rare à 5000 Hz = piste future §5.
+
+**Low end.** Parfois trop de graves — **reporté** : MB ou EQ cut **master** plus tard, hors patch.
+
+**Nappes.** Gains séparés : musicale HP7 **+4 dB** (`CORTEX_AMB_GAIN_MUSICAL` ≈ 5,638) · texture HP8 **−2 dB** (`CORTEX_AMB_GAIN_TEXTURE` ≈ 2,826) · référence 3,556 · live : `; s6_amb_gain 0` cumule en dB relatif sur les deux.
+
+**Bleed musicale.** HP7 → **HP1–6** à ~14 % par baffle (`CORTEX_AMB_MUSICAL_BLEED`) · source HP7 −2 dB (`CORTEX_AMB_MUSICAL_HP7_SCALE` ≈ 0,794). Étend le milieu dans le champ des paroles sans dupliquer la texture.
+
+**Pools nappes.** Slot **32** = musicale (`A53, A54, A59, A64–A68`) · slot **33** = texture (`A04, A16–A21, A38–A41, A49, A50`) · listes dans `scripts/shared/ambiance_catalog.py`. Trim pics texture : `TEXTURE_TRIM_DB` (A17, A18, A19, A21).
+
+**HPF voix momentané (26 août — validé).** hip~ **400 Hz** sur les **paroles** (`cxpair` → `cortex_voix_hpf_08`) — **pas** sur bleed ni nappes (évite d'affaiblir l'ambiance musicale). Déclencheurs : **1× par passage Cortex** (délai aléatoire 8–33 s après entrée état 0) · **piezo/micro** (`s6_cx_vhpf_trig`, même seuil que Q14). Enveloppe ≈ 600 ms / 2,8 s / 2 s. Constantes : `CORTEX_VOIX_HPF_*` dans `presets08.py`.
 
 Spec gestes spectraux : [`../Backlog/spec_cortex_motion_spectral_08.md`](../Backlog/spec_cortex_motion_spectral_08.md).
