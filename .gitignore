@@ -38,7 +38,15 @@ venv/
 # Écrit par launch.sh à chaque démarrage (trace du device audio retenu).
 deploy/debian/derniere_carte.log
 
+# HRTF CIPIC source (re-téléchargeable via extract_hrtf_cipic.py)
+pd/lib/hrtf/subject_021.sofa
+pd/lib/hrtf/*.npz
+
 # ---------------------------------------------------------------- système
 .DS_Store
 ._*
 *.swp
+
+# ---------------------------------------------------------------- privé
+# Contient SSH, mots de passe, IPs Tailscale — ne JAMAIS committer.
+rasberry.txt
